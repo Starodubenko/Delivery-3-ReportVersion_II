@@ -47,6 +47,7 @@ public class AjaxClientRegistration implements Action {
                 client.setAvatar(0);
                 client.setDiscount(discountDao.findById(4));
                 clientDao.insert(client);
+                client = clientDao.findByLogin(client.getLogin());
 
                 LOGGER.info("Client created successful, {}", client);
                 request.getSession().setAttribute("user", client);

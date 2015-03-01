@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ attribute name="balance" type="java.math.BigDecimal" %>
 <link rel='stylesheet' href='<c:url value="/style/payment.css"/>'>
 <fmt:setLocale value="${locale}"/>
 
@@ -7,7 +8,7 @@
     <c:if test="${not empty user}">
         <div class="eWalet panel panel-default">
             <label class="balance"> <fmt:message key="payment.message.your.balance"/>: </label>
-            <label class="balance-value"> ${user.getVirtualBalance()} </label>
+            <label class="balance-value"> ${balance} </label>
             <br>
             <button class="topup btn btn-primary" data-toggle="modal" data-target="#Payment">
                 <fmt:message key="button.topup"/>

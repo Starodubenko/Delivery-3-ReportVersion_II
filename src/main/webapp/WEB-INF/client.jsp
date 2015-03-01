@@ -15,7 +15,7 @@
     <t:gbody>
         <c:if test="${empty user}"><c:redirect url="/do/welcome"/></c:if>
         <div class="client-info">
-            <t:payment/>
+            <t:payment balance="${clientBalance}"/>
         </div>
 
         <div class="panel panel-default border client-avatar">

@@ -21,7 +21,7 @@ $('#goRegistration').click(function () {
                         function (data) {
                             $("#"+key+"Div").addClass("has-error");
                             $("#"+key+"Input").html(data);
-                            $("#"+key+"Input").show().delay(1500).fadeOut();
+                            //$("#"+key+"Input").show().delay(1500).fadeOut();
                         })
                 });
             }

@@ -17,7 +17,7 @@
     </t:gHead>
     <t:gbody>
         <div class="client-info">
-            <t:payment/>
+            <t:payment balance="${clientBalance}"/>
             <p class="text-center error-message" id="paymentInput"></p>
         </div>
 

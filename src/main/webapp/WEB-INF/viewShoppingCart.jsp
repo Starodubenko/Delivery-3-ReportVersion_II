@@ -13,7 +13,7 @@
     </t:gHead>
     <t:gbody>
         <div class="client-info">
-            <t:payment/>
+            <t:payment balance="${clientBalance}"/>
         </div>
 
         <div class="goods-list panel panel-default">

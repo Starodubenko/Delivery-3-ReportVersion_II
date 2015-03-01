@@ -97,7 +97,9 @@ public class OrderOperations2Action implements Action {
                     orderChange = true;
                 }
 
-                if (clientChange) clientDao.updateEntity(order.getUser());
+                if (clientChange) {
+                    clientDao.updateEntity(order.getUser());
+                }
                 if (orderChange) orderDao.updateEntity(order);
                 daoManager.commit();
             }
@@ -110,15 +112,10 @@ public class OrderOperations2Action implements Action {
         jsonObject.put("newStatus", order.getStatus().getStatusName());
         request.setAttribute("json",jsonObject);
         return json;
-
-//        if (actor.equals(CLIENT)) return reviewOrdersClient;
-//        if (actor.equals(DISPATCHER)) return reviewOrdersDispatcher;
-//        return null;
     }
 
     private BigDecimal fundsOperation(Order2 order, String operation) {
 
-        if (order.getUser().getVirtualBalance().compareTo(order.getTotalSum()) >= 0) {
             BigDecimal orderCost = order.getTotalSum();
             Client client = order.getUser();
 
@@ -129,7 +126,6 @@ public class OrderOperations2Action implements Action {
                     return client.getVirtualBalance().add(orderCost);
                 }
             }
-        }
         return order.getUser().getVirtualBalance();
     }
 }

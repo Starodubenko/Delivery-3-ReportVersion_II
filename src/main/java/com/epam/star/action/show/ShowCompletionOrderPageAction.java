@@ -6,10 +6,12 @@ import com.epam.star.action.ActionResult;
 import com.epam.star.action.MappedAction;
 import com.epam.star.dao.H2dao.DaoFactory;
 import com.epam.star.dao.H2dao.DaoManager;
+import com.epam.star.dao.H2dao.H2ClientDao;
 import com.epam.star.dao.H2dao.H2OrderDao2;
 import com.epam.star.dao.util.PaginatedList;
 import com.epam.star.dao.util.Pagination;
 import com.epam.star.entity.Cart;
+import com.epam.star.entity.Client;
 import com.epam.star.entity.Order2;
 import com.epam.star.entity.Period;
 import org.slf4j.Logger;
@@ -35,13 +37,16 @@ public class ShowCompletionOrderPageAction implements Action {
         DaoManager daoManager = DaoFactory.getInstance().getDaoManager();
 
         H2OrderDao2 orderDao2 = daoManager.getOrderDao2();
+        H2ClientDao clientDao = daoManager.getClientDao();
 
+        Client user = (Client)request.getSession().getAttribute("user");
         Pagination pagination = new Pagination();
         PaginatedList<Order2> orders = pagination.paginationEntity(request, orderDao2, "orders");
 
         List<Period> periods = daoManager.getPeriodDao().getAllPeriods();
         request.setAttribute("periods", periods);
         request.setAttribute("ordersPaginatedList",orders);
+        request.setAttribute("clientBalance", clientDao.findById(user.getId()).getVirtualBalance());
 
         daoManager.closeConnection();
 

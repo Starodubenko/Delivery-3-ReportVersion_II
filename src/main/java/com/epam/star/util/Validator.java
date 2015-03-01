@@ -11,17 +11,22 @@ import java.util.regex.Pattern;
 public class Validator {
 
     private final String USER_NAME_FIRST_CHARACTER_NOT_NUMBER = "^[a-zA-Z][a-zA-Z0-9-_\\.]{1,}$";
-    private final String USER_NAME_LANGTH_NOT_MORE_20_SIMBOLS = "[a-zA-Z0-9-_\\.]{1,19}$";
-    private final String USER_NAME_LANGTH_NOT_LESS_4_SIMBOLS = "^[a-zA-Z0-9-_\\.]{4,}";
+    private final String USER_NAME_LANGTH_NOT_MORE_20_SIMBOLS = "(.){0,20}$";
+    private final String USER_NAME_LANGTH_NOT_LESS_4_SIMBOLS = "^(.){4,}";
+    private final String USER_NAME_NOT_ALLOW_CHARACTERS = "^[a-zA-Z0-9-_\\.]{0,}$";
 
     private final String USER_PASSWORD_NUMBER_REQUIRED = "^(?=.*\\d).*$";
     private final String USER_PASSWORD_UPPERCASE_REQUIRED = "^(?=.*[A-Z]).*$";
-    private final String USER_PASSWORD_NOT_LESS_6_SIMBOLS = "^[a-zA-Z0-9]{6,}";
-    private final String USER_PASSWORD_NOT_MORE_20_SIMBOLS = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).*$";
-    private final String USER_NAMES_HAVE_NUMBER = "^[a-zA-Zа-яА-я]{1,}$";
-    private final String USER_NAMES_MORE_20 = "^[a-zA-Zа-яА-я]{1,20}$";
+    private final String USER_PASSWORD_LOWERCASE_REQUIRED = "^(?=.*[a-z]).*$";
+    private final String USER_PASSWORD_NOT_ALLOW_CHARACTERS = "^[a-zA-Z0-9]{0,}$";
+    private final String USER_PASSWORD_NOT_LESS_6_SIMBOLS = "^(.){6,}$";
+//    private final String USER_PASSWORD_NOT_MORE_20_SIMBOLS = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).*$";
+    private final String USER_PASSWORD_NOT_MORE_20_SIMBOLS = "^(.){0,20}$";
+    private final String USER_NAMES_NOT_ALLOW_CHARACTERS = "^[a-zA-Zа-яА-я]{1,}$";
+    private final String USER_NAMES_MORE_20 = "^(.){0,20}$";
 
-    private final String ADDRESS_LANGTH_NOT_MORE_20_SIMBOLS = "[a-zA-Z0-9а-яА-я-_\\.\\s]{1,19}$";
+    private final String ADDRESS_LANGTH_NOT_MORE_20_SIMBOLS = "(.){0,20}$";
+    private final String ADDRESS_NOT_ALLOW_CHARACTERS = "[a-zA-Z0-9а-яА-я-\\s\\/]{0,}$";
     private final String ADDRESS = "^[a-zA-Z][a-zA-Z0-9-_\\.\\ ]{1,19}$";
     private final String DATE = "(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\\d\\d";
     private final String TIME = "^([0-1]\\d|2[0-3])(:[0-5]\\d){2}$";
@@ -68,14 +73,19 @@ public class Validator {
                 results.put("login.already.occupied", "false");
                 return false;
             } else {
-                matcher = Pattern.compile(USER_NAME_LANGTH_NOT_LESS_4_SIMBOLS).matcher(name);
-                if (!matcher.matches()) results.put("login.less.4", String.valueOf(matcher.matches()));
+                matcher = Pattern.compile(USER_NAME_NOT_ALLOW_CHARACTERS).matcher(name);
+                if (!matcher.matches()) results.put("login.illegal.characters", String.valueOf(matcher.matches()));
                 else {
-                    matcher = Pattern.compile(USER_NAME_FIRST_CHARACTER_NOT_NUMBER).matcher(name);
-                    if (!matcher.matches()) results.put("login.first.is.number", String.valueOf(matcher.matches()));
+                    matcher = Pattern.compile(USER_NAME_LANGTH_NOT_LESS_4_SIMBOLS).matcher(name);
+                    if (!matcher.matches()) results.put("login.less.4", String.valueOf(matcher.matches()));
                     else {
-                        matcher = Pattern.compile(USER_NAME_LANGTH_NOT_MORE_20_SIMBOLS).matcher(name);
-                        if (!matcher.matches()) results.put("login.more.then.20", String.valueOf(matcher.matches()));
+                        matcher = Pattern.compile(USER_NAME_FIRST_CHARACTER_NOT_NUMBER).matcher(name);
+                        if (!matcher.matches()) results.put("login.first.is.number", String.valueOf(matcher.matches()));
+                        else {
+                            matcher = Pattern.compile(USER_NAME_LANGTH_NOT_MORE_20_SIMBOLS).matcher(name);
+                            if (!matcher.matches())
+                                results.put("login.more.then.20", String.valueOf(matcher.matches()));
+                        }
                     }
                 }
                 return matcher.matches();
@@ -89,20 +99,31 @@ public class Validator {
             results.put("password.is.required.field", "false");
             return false;
         } else {
-            matcher = Pattern.compile(USER_PASSWORD_NOT_LESS_6_SIMBOLS).matcher(password);
-            if (!matcher.matches()) results.put("password.less.6", String.valueOf(matcher.matches()));
+            matcher = Pattern.compile(USER_PASSWORD_NOT_ALLOW_CHARACTERS).matcher(password);
+            if (!matcher.matches()) results.put("password.illegal.characters", String.valueOf(matcher.matches()));
             else {
-                matcher = Pattern.compile(USER_PASSWORD_NUMBER_REQUIRED).matcher(password);
-                if (!matcher.matches()) results.put("password.havent.got.number", String.valueOf(matcher.matches()));
+                matcher = Pattern.compile(USER_PASSWORD_NOT_LESS_6_SIMBOLS).matcher(password);
+                if (!matcher.matches()) results.put("password.less.6", String.valueOf(matcher.matches()));
                 else {
-                    matcher = Pattern.compile(USER_PASSWORD_UPPERCASE_REQUIRED).matcher(password);
+                    matcher = Pattern.compile(USER_PASSWORD_NUMBER_REQUIRED).matcher(password);
                     if (!matcher.matches())
-                        results.put("password.havent.got.uppercase", String.valueOf(matcher.matches()));
+                        results.put("password.havent.got.number", String.valueOf(matcher.matches()));
                     else {
-                        matcher = Pattern.compile(USER_PASSWORD_NOT_MORE_20_SIMBOLS).matcher(password);
-                        if (!matcher.matches()) results.put("password.more.then.20", String.valueOf(matcher.matches()));
+                        matcher = Pattern.compile(USER_PASSWORD_UPPERCASE_REQUIRED).matcher(password);
+                        if (!matcher.matches())
+                            results.put("password.havent.got.uppercase", String.valueOf(matcher.matches()));
                         else {
-                            if (password.equals(oldPass)) results.put("password.same.as.oldpassword", "false");
+                            matcher = Pattern.compile(USER_PASSWORD_LOWERCASE_REQUIRED).matcher(password);
+                            if (!matcher.matches())
+                                results.put("password.havent.got.lowercase", String.valueOf(matcher.matches()));
+                            else {
+                                matcher = Pattern.compile(USER_PASSWORD_NOT_MORE_20_SIMBOLS).matcher(password);
+                                if (!matcher.matches())
+                                    results.put("password.more.then.20", String.valueOf(matcher.matches()));
+                                else {
+                                    if (password.equals(oldPass)) results.put("password.same.as.oldpassword", "false");
+                                }
+                            }
                         }
                     }
                 }
@@ -127,11 +148,11 @@ public class Validator {
 
     public boolean checkUserFirstName(String firstname) {
         if (!firstname.equals("")) {
-            matcher = Pattern.compile(USER_NAMES_HAVE_NUMBER).matcher(firstname);
-            if (!matcher.matches()) results.put("firstname.have.number", String.valueOf(matcher.matches()));
+            matcher = Pattern.compile(USER_NAMES_NOT_ALLOW_CHARACTERS).matcher(firstname);
+            if (!matcher.matches()) results.put("firstname.illegal.characters", String.valueOf(matcher.matches()));
             else {
                 matcher = Pattern.compile(USER_NAMES_MORE_20).matcher(firstname);
-                if (!matcher.matches()) results.put("firstname.more.then.10", String.valueOf(matcher.matches()));
+                if (!matcher.matches()) results.put("firstname.more.then.20", String.valueOf(matcher.matches()));
             }
             return matcher.matches();
         }
@@ -140,11 +161,11 @@ public class Validator {
 
     public boolean checkUserLastName(String lastname) {
         if (!lastname.equals("")) {
-            matcher = Pattern.compile(USER_NAMES_HAVE_NUMBER).matcher(lastname);
-            if (!matcher.matches()) results.put("lastname.have.number", String.valueOf(matcher.matches()));
+            matcher = Pattern.compile(USER_NAMES_NOT_ALLOW_CHARACTERS).matcher(lastname);
+            if (!matcher.matches()) results.put("lastname.illegal.characters", String.valueOf(matcher.matches()));
             else {
                 matcher = Pattern.compile(USER_NAMES_MORE_20).matcher(lastname);
-                if (!matcher.matches()) results.put("lastname.more.then.10", String.valueOf(matcher.matches()));
+                if (!matcher.matches()) results.put("lastname.more.then.20", String.valueOf(matcher.matches()));
             }
             return matcher.matches();
         }
@@ -153,11 +174,11 @@ public class Validator {
 
     public boolean checkUserMiddleName(String middlename) {
         if (!middlename.equals("")) {
-            matcher = Pattern.compile(USER_NAMES_HAVE_NUMBER).matcher(middlename);
-            if (!matcher.matches()) results.put("middlename.have.number", String.valueOf(matcher.matches()));
+            matcher = Pattern.compile(USER_NAMES_NOT_ALLOW_CHARACTERS).matcher(middlename);
+            if (!matcher.matches()) results.put("middlename.illegal.characters", String.valueOf(matcher.matches()));
             else {
                 matcher = Pattern.compile(USER_NAMES_MORE_20).matcher(middlename);
-                if (!matcher.matches()) results.put("middlename.more.then.10", String.valueOf(matcher.matches()));
+                if (!matcher.matches()) results.put("middlename.more.then.20", String.valueOf(matcher.matches()));
             }
             return matcher.matches();
         }
@@ -169,8 +190,12 @@ public class Validator {
             results.put("address.is.required.field", "false");
             return false;
         } else {
-            matcher = Pattern.compile(ADDRESS_LANGTH_NOT_MORE_20_SIMBOLS).matcher(address);
-            if (!matcher.matches()) results.put("address.more.then.20", String.valueOf(matcher.matches()));
+            matcher = Pattern.compile(ADDRESS_NOT_ALLOW_CHARACTERS).matcher(address);
+            if (!matcher.matches()) results.put("address.illegal.characters", String.valueOf(matcher.matches()));
+            else {
+                matcher = Pattern.compile(ADDRESS_LANGTH_NOT_MORE_20_SIMBOLS).matcher(address);
+                if (!matcher.matches()) results.put("address.more.then.20", String.valueOf(matcher.matches()));
+            }
             return matcher.matches();
         }
     }

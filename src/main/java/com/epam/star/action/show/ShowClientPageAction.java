@@ -49,6 +49,7 @@ public class ShowClientPageAction implements Action {
         session.setAttribute("goods", goods);
         session.setAttribute("ordersCount", clientOrdersCount);
         session.setAttribute("clientAvatar", clientAvatar);
+        request.setAttribute("clientBalance", user.getVirtualBalance());
 
         request.setAttribute("orderSuccessful",session.getAttribute("orderSuccessful"));
         request.setAttribute("orderNumber",session.getAttribute("orderNumber"));
