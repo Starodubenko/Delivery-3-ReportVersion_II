@@ -1,0 +1,21 @@
+body {
+    background: url("img/background.jpg");
+    background-size: 100%;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    font-family: "Times new Roman";
+    font-size: 15px;
+}
+
+.main {
+    width: 1282px;
+    min-height: 800px;
+    margin: 20px auto;
+    /*background-color: #FFE1A5;*/
+}
+
+.clear {
+    clear: both;
+}
