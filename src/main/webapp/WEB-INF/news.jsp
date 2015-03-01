@@ -20,9 +20,6 @@
             <hr class="hr-header">
             <div class="news-block-content panel panel-default">
                 Проект "Live water" "закончен" !
-                <%--Стародубенко Родион--%>
-                <%--Викторович--%>
-                <%--защищает проект 5.01.2015г.--%>
             </div>
             <a class="news-article-link" href="#news-article">Статья</a>
 
@@ -34,10 +31,7 @@
             </div>
             <hr class="hr-header">
             <div class="news-block-content panel panel-default">
-                Проект "Live water" после долгого и крапотливого труда наконец-то "закончен".
-                <%--Стародубенко Родион--%>
-                <%--Викторович--%>
-                <%--защищает проект 5.01.2015г.--%>
+                Проект "Live water" "закончен" !
             </div>
             <a class="news-article-link" href="#news-article">Статья</a>
 
@@ -49,8 +43,7 @@
             </div>
             <hr class="hr-header">
             <div class="news-block-content panel panel-default">
-                Проект "Live water" после долгого и крапотливого труда наконец-то "закончен".
-                <%--Стародубенко Родион  Викторович защищает проект 5.01.2015г.--%>
+                Проект "Live water" "закончен" !
             </div>
             <a class="news-article-link" href="#news-article">Статья</a>
 

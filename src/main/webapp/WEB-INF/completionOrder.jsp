@@ -96,10 +96,6 @@
 
         </div>
         <div class="clear"></div>
-
-        <%--<div class="ordered-goods">--%>
-                <%--<tOrder:ordersBlock2 ordersPaginatedList="${ordersPaginatedList}"/>--%>
-        <%--</div>--%>
     </t:gbody>
 
     <script src="<c:url value="/webjars/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"/>"></script>

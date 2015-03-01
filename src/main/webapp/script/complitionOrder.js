@@ -5,6 +5,10 @@ $('.datepicker').datepicker({
     startDate: '+0d'
 });
 
+$(function(){
+    $('textarea').html("");
+});
+
 $('#create').click(function () {
 
     $('div').removeClass("has-error");
