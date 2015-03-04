@@ -22,6 +22,10 @@
                 ${good.goodsName}
         </div>
 
+        <div class="goods-price form-group text-center">
+                ${good.price}  x
+        </div>
+
         <div class="goods-count form-group text-center">
             <input type="text" name="goods-count" class="form-control GoodsCount" maxlength="4" value="${count}">
         </div>

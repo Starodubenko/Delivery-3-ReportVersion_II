@@ -6,18 +6,20 @@
 
 <fmt:bundle basename="i18n.messages">
     <c:if test="${not empty user}">
-        <div class="eWalet panel panel-default">
-            <label class="balance"> <fmt:message key="payment.message.your.balance"/>: </label>
-            <label class="balance-value"> ${balance} </label>
-            <br>
-            <button class="topup btn btn-primary" data-toggle="modal" data-target="#Payment">
-                <fmt:message key="button.topup"/>
-            </button>
+        <div class="client-info">
+            <div class="eWalet panel panel-default">
+                <label class="balance"> <fmt:message key="payment.message.your.balance"/>: </label>
+                <label class="balance-value"> ${balance} </label>
+                <br>
+                <button class="topup btn btn-primary" data-toggle="modal" data-target="#Payment">
+                    <fmt:message key="button.topup"/>
+                </button>
+            </div>
+            <p class="text-center error-message" id="paymentInput"></p>
         </div>
     </c:if>
 
-    <div class="modal fade" id="Payment" tabindex="-1" role="dialog" aria-labelledby="PaymentLabel"
-         aria-hidden="true">
+    <div class="modal fade" id="Payment" tabindex="-1" role="dialog" aria-labelledby="PaymentLabel" aria-hidden="true">
         <form id="payment-form" onsubmit="return false;">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -46,6 +48,6 @@
                 </div>
             </div>
         </form>
-        <script src="<c:url value="/script/payment.js"/>"></script>
     </div>
+    <script src="<c:url value="/script/payment.js"/>"></script>
 </fmt:bundle>

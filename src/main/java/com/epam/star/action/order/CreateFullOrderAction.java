@@ -69,14 +69,14 @@ public class CreateFullOrderAction implements Action {
                     request.getSession().setAttribute("shoppingCart", cart);
                     jsonObject.put("goToPC", "client");
                     request.getSession().setAttribute("orderSuccessful", "ok");
-                    request.getSession().setAttribute("orderNumber",order.getNumber());
+                    request.getSession().setAttribute("orderNumber", order.getNumber());
                 }
             }
             daoManager.commit();
         } catch (Exception e) {
             daoManager.rollback();
-            request.setAttribute("message", "during.creating.error.occurred");
-            return message;
+            jsonObject.put("final-message", "during.creating.error.occurred");
+            LOGGER.error("During creating the order error occurred on the server{}");
         } finally {
             daoManager.closeConnection();
         }
@@ -101,6 +101,7 @@ public class CreateFullOrderAction implements Action {
 
         Cart cart = (Cart) request.getSession().getAttribute("shoppingCart");
 
+
         Order2 order = null;
         String idString = request.getParameter("id");
         int userId = -1;
@@ -111,36 +112,41 @@ public class CreateFullOrderAction implements Action {
         if (user == null) daoManager.getEmployeeDao().findById(userId);
         if (user == null) user = (Client) request.getSession().getAttribute("user");
 
-        PeriodDao periodDao = daoManager.getPeriodDao();
-        StatusDao statusDao = daoManager.getStatusDao();
+        if (cart != null && user != null) {
+            PeriodDao periodDao = daoManager.getPeriodDao();
+            StatusDao statusDao = daoManager.getStatusDao();
 
-        order = new Order2();
-        order.setGoods(cart.getGoods());
-        order.setNumber(rnd.nextInt(999999));
-        order.setUser(user);
-        order.setPeriod(periodDao.findById(Integer.valueOf(request.getParameter("deliverytime"))));
+            order = new Order2();
+            order.setGoods(cart.getGoods());
+            order.setNumber(rnd.nextInt(999999));
+            order.setUser(user);
+            order.setPeriod(periodDao.findById(Integer.valueOf(request.getParameter("deliverytime"))));
 
-        validator.checkDate(request.getParameter("deliverydate"));
+            validator.checkDate(request.getParameter("deliverydate"));
 
-        order.setOrderDate(new Date());
-        order.setAdditionalInfo(new String(request.getParameter("additionalinformation").getBytes("ISO-8859-1"), "UTF-8"));
-        boolean isOnline = debitFunds(request);
-        if (isOnline) {
-            order.setPaid(true);
-        } else {
-            order.setPaid(false);
-        }
-        order.setDiscount(user.getDiscount());
-        order.setStatus(statusDao.findByStatusName("waiting"));
-
-        if (validator.isValide()) {
-            order.setDeliveryDate(new SimpleDateFormat("dd.MM.yyyy").parse(request.getParameter("deliverydate")));
-            return order;
-        } else {
-            Map<String, String> invalidFields = validator.getInvalidFields();
-            for (Map.Entry<String, String> field : invalidFields.entrySet()) {
-                jsonObject.put(field.getKey(), field.getValue());
+            order.setOrderDate(new Date());
+            order.setAdditionalInfo(new String(request.getParameter("additionalinformation").getBytes("ISO-8859-1"), "UTF-8"));
+            boolean isOnline = debitFunds(request);
+            if (isOnline) {
+                order.setPaid(true);
+            } else {
+                order.setPaid(false);
             }
+            order.setDiscount(user.getDiscount());
+            order.setStatus(statusDao.findByStatusName("waiting"));
+
+            if (validator.isValide()) {
+                order.setDeliveryDate(new SimpleDateFormat("dd.MM.yyyy").parse(request.getParameter("deliverydate")));
+                return order;
+            } else {
+                Map<String, String> invalidFields = validator.getInvalidFields();
+                for (Map.Entry<String, String> field : invalidFields.entrySet()) {
+                    jsonObject.put(field.getKey(), field.getValue());
+                }
+            }
+        } else {
+            jsonObject.put("final-message", "user.need.reenter");
+            LOGGER.error("Create order, User not authorized{}");
         }
         return null;
     }

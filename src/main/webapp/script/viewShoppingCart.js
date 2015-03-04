@@ -35,7 +35,20 @@ $(document).ready(function () {
             });
     });
 
-    $('.goods-list').on('click', '.button-continue-order', function () {
-        location.href = "completion-order";
+    //$('.goods-list').on('click', '.button-continue-order', function () {
+    //    location.href = "completion-order";
+    //});
+
+    $('.button-continue-order').click(function(){
+        if ($('.goods-list .goods').children('form:visible').size() < 1)
+            $('#EmptyCart').modal('toggle');
+    });
+
+    $('#EmptyCart-Go-To-Shop').click(function(){
+        location.href = "services";
+    });
+
+    $('#EmptyCart-Ok').click(function(){
+        $('#EmptyCart').modal('toggle');
     });
 });

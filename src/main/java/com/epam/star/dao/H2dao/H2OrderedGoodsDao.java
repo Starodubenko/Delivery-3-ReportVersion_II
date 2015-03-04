@@ -2,6 +2,7 @@ package com.epam.star.dao.H2dao;
 
 import com.epam.star.dao.MappedDao;
 import com.epam.star.dao.OrderedGoodsDao;
+import com.epam.star.entity.Goods;
 import com.epam.star.entity.OrderedGoods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,6 +78,26 @@ public class H2OrderedGoodsDao extends AbstractH2Dao implements OrderedGoodsDao{
         return goods;
     }
 
+    public OrderedGoods findByOrderNumberAndGoods(int orderNumber, Goods goods) {
+        String sql = "SELECT * FROM ORDERED_GOODS WHERE ORDER_NUMBER = " + orderNumber + " AND GOODS_ID = " + goods.getId();
+        OrderedGoods good = null;
+        PreparedStatement prstm = null;
+        ResultSet resultSet = null;
+        try {
+            prstm = conn.prepareStatement(sql);
+            resultSet = prstm.executeQuery();
+
+            while (resultSet.next()) {
+                good = getEntityFromResultSet(resultSet);
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        } finally {
+            closeStatement(prstm, resultSet);
+        }
+        return good;
+    }
+
     @Override
     public OrderedGoods findById(int ID) throws DaoException {
         String sql = "SELECT * FROM ORDERED_GOODS WHERE id = " + ID;
@@ -123,6 +144,19 @@ public class H2OrderedGoodsDao extends AbstractH2Dao implements OrderedGoodsDao{
             prstm.setBoolean(1, true);
             prstm.setInt(2, ID);
             prstm.executeUpdate();
+            status = "Ordered goods deleted successfully ";
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+        return status;
+    }
+
+    public String fullDeleteEntity(int ID) throws DaoException {
+        String status = "Ordered goods do not deleted";
+
+        try (PreparedStatement prstm = conn.prepareStatement(FULL_DELETE_GOODS)){
+            prstm.setInt(1, ID);
+            prstm.execute();
             status = "Ordered goods deleted successfully ";
         } catch (SQLException e) {
             throw new DaoException(e);

@@ -27,6 +27,7 @@ public class ShowShoppingCartPageAction implements Action {
 
         H2ClientDao clientDao = daoManager.getClientDao();
         Client user = (Client)request.getSession().getAttribute("user");
+        if (user != null)
         request.setAttribute("clientBalance", clientDao.findById(user.getId()).getVirtualBalance());
 
         daoManager.closeConnection();

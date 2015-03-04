@@ -7,8 +7,8 @@ import com.epam.star.action.MappedAction;
 import com.epam.star.dao.ContactDao;
 import com.epam.star.dao.H2dao.DaoFactory;
 import com.epam.star.dao.H2dao.DaoManager;
-import com.epam.star.entity.Cart;
 import com.epam.star.entity.Contact;
+import com.epam.star.entity.Order2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +33,7 @@ public class ShowWelcomePageAction implements Action{
         request.getSession().setAttribute("contacts", contacts);
 
         if (request.getSession().getAttribute("shoppingCart") == null)
-            request.getSession().setAttribute("shoppingCart", new Cart());
+            request.getSession().setAttribute("shoppingCart", new Order2());
 
         daoManager.closeConnection();
 

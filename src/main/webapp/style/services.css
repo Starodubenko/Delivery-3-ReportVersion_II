@@ -69,3 +69,16 @@
     pointer-events: none;
     cursor: default;
 }
+
+.go-to-cart{
+    background-color: #FF7A00;
+    color: #FFFFFF;
+}
+
+.adding-button{
+
+}
+
+.clear {
+    clear: both;
+}

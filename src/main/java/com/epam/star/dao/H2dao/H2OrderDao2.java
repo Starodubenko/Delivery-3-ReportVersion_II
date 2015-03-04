@@ -3,6 +3,7 @@ package com.epam.star.dao.H2dao;
 import com.epam.star.dao.GoodsDao;
 import com.epam.star.dao.MappedDao;
 import com.epam.star.dao.Order2Dao;
+import com.epam.star.entity.Client;
 import com.epam.star.entity.Goods;
 import com.epam.star.entity.Order2;
 import com.epam.star.entity.OrderedGoods;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @MappedDao("Order2")
-public class H2OrderDao2 extends AbstractH2Dao implements Order2Dao {
+public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Order2Dao {
     private static final Logger LOGGER = LoggerFactory.getLogger(H2OrderDao2.class);
     private static final String INSERT_ORDER = "INSERT INTO  USER_ORDER VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String RANGE_ORDERS = "SELECT * FROM ORDERS LIMIT ? OFFSET ?";
@@ -176,6 +177,27 @@ public class H2OrderDao2 extends AbstractH2Dao implements Order2Dao {
     }
 
 
+    public Order2 findCart(T user) {
+        String sqlOrder = "SELECT * FROM USER_ORDER WHERE STATUS_ID = 5 AND USER_ID = " + user.getId();
+        Order2 order = null;
+        PreparedStatement prstm = null;
+        ResultSet resultSet = null;
+        try {
+            prstm = conn.prepareStatement(sqlOrder);
+            resultSet = prstm.executeQuery();
+
+            if (resultSet.next())
+                order = getEntityFromResultSet(resultSet);
+
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        } finally {
+            closeStatement(prstm, resultSet);
+        }
+        return order;
+    }
+
+
     public Order2 findById(int ID) throws DaoException {
         String sqlOrder = "SELECT * FROM USER_ORDER WHERE id = " + ID;
         Order2 order = null;
@@ -225,12 +247,12 @@ public class H2OrderDao2 extends AbstractH2Dao implements Order2Dao {
             prstm.setString(1, null);
             prstm.setInt(2, order.getUser().getId());
             prstm.setInt(3, order.getNumber());
-            prstm.setInt(4, order.getPeriod().getId());
-            prstm.setDate(5, order.getDeliveryDate());
-            prstm.setDate(6, order.getOrderDate());
+            if (order.getPeriod() != null) prstm.setInt(4, order.getPeriod().getId()); else prstm.setString(4, null);
+            if (order.getDeliveryDate() != null) prstm.setDate(5, order.getDeliveryDate()); else prstm.setString(5, null);
+            if (order.getOrderDate() != null) prstm.setDate(6, order.getOrderDate()); else prstm.setString(6, null);
             prstm.setBoolean(7, order.isPaid());
-            prstm.setInt(8, order.getDiscount().getId());
-            prstm.setString(9, order.getAdditionalInfo());
+            if (order.getDiscount() != null) prstm.setInt(8, order.getDiscount().getId()); else prstm.setString(8, null);
+            if (order.getAdditionalInfo() != null) prstm.setString(9, order.getAdditionalInfo()); else prstm.setString(9, null);
             prstm.setInt(10, order.getStatus().getId());
             prstm.setBoolean(11, order.isDeleted());
             prstm.execute();
@@ -262,12 +284,12 @@ public class H2OrderDao2 extends AbstractH2Dao implements Order2Dao {
             prstm.setInt(1, order.getId());
             prstm.setInt(2, order.getUser().getId());
             prstm.setInt(3, order.getNumber());
-            prstm.setInt(4, order.getPeriod().getId());
-            prstm.setDate(5, order.getDeliveryDate());
-            prstm.setDate(6, order.getOrderDate());
+            if (order.getPeriod() != null) prstm.setInt(4, order.getPeriod().getId()); else prstm.setString(4, null);
+            if (order.getDeliveryDate() != null) prstm.setDate(5, order.getDeliveryDate()); else prstm.setString(5, null);
+            if (order.getOrderDate() != null) prstm.setDate(6, order.getOrderDate()); else prstm.setString(6, null);
             prstm.setBoolean(7, order.isPaid());
-            prstm.setInt(8, order.getDiscount().getId());
-            prstm.setString(9, order.getAdditionalInfo());
+            if (order.getDiscount() != null) prstm.setInt(8, order.getDiscount().getId()); else prstm.setString(8, null);
+            if (order.getAdditionalInfo() != null) prstm.setString(9, order.getAdditionalInfo()); else prstm.setString(9, null);
             prstm.setInt(10, order.getStatus().getId());
             prstm.setBoolean(11, order.isDeleted());
             prstm.setInt(12, order.getId());
@@ -349,12 +371,12 @@ public class H2OrderDao2 extends AbstractH2Dao implements Order2Dao {
             order.setId(resultSet.getInt("id"));
             order.setUser(clientDao.findById(resultSet.getInt("user_id")));
             order.setNumber(resultSet.getInt("number"));
-            order.setPeriod(periodDao.findById(resultSet.getInt("period_id")));
-            order.setDeliveryDate(resultSet.getDate("delivery_date"));
-            order.setOrderDate(resultSet.getDate("order_date"));
+            if (resultSet.getString("period_id") != null) order.setPeriod(periodDao.findById(resultSet.getInt("period_id")));
+            if (resultSet.getString("delivery_date") != null) order.setDeliveryDate(resultSet.getDate("delivery_date"));
+            if (resultSet.getString("order_date") != null) order.setOrderDate(resultSet.getDate("order_date"));
             order.setPaid(resultSet.getBoolean("paid"));
-            order.setDiscount(discountDao.findById(resultSet.getInt("discount_id")));
-            order.setAdditionalInfo(resultSet.getString("additional_info"));
+            if (resultSet.getString("discount_id") != null) order.setDiscount(discountDao.findById(resultSet.getInt("discount_id")));
+            if (resultSet.getString("additional_info") != null) order.setAdditionalInfo(resultSet.getString("additional_info"));
             order.setStatus(statusDao.findById(resultSet.getInt("status_id")));
             order.setDeleted(resultSet.getBoolean("deleted"));
 
@@ -378,5 +400,17 @@ public class H2OrderDao2 extends AbstractH2Dao implements Order2Dao {
             throw new DaoException(e);
         }
         return orders;
+    }
+
+    public boolean isAlreadyExist(int id) {
+        String sql = "SELECT * FROM USER_ORDER where ID =" + id;
+        try (PreparedStatement prstm = conn.prepareStatement(sql)){
+            try(ResultSet resultSet = prstm.executeQuery()){
+                if (resultSet.next()) return true;
+            }
+        } catch (Exception e) {
+            throw new DaoException(e);
+        }
+        return false;
     }
 }

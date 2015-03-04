@@ -8,9 +8,11 @@ import com.epam.star.dao.ClientDao;
 import com.epam.star.dao.EmployeeDao;
 import com.epam.star.dao.H2dao.DaoFactory;
 import com.epam.star.dao.H2dao.DaoManager;
+import com.epam.star.dao.H2dao.H2OrderDao2;
 import com.epam.star.dao.PositionDao;
-import com.epam.star.entity.Cart;
 import com.epam.star.entity.Client;
+import com.epam.star.entity.Goods;
+import com.epam.star.entity.Order2;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
+import java.util.Map;
 
 @MappedAction("POST/ajaxLogin")
 public class AjaxLoginAction implements Action {
@@ -32,6 +35,7 @@ public class AjaxLoginAction implements Action {
         EmployeeDao employeeDao = daoManager.getEmployeeDao();
         ClientDao clientDao = daoManager.getClientDao();
         PositionDao positionDao = daoManager.getPositionDao();
+        H2OrderDao2 orderDao2 = daoManager.getOrderDao2();
 
         String login = request.getParameter("authenticationLogin");
         String password = request.getParameter("authenticationPassword");
@@ -61,9 +65,14 @@ public class AjaxLoginAction implements Action {
             json.put("loginError", "login.error");
         }
 
-        if (request.getSession().getAttribute("shoppingCart") == null)
-            request.getSession().setAttribute("shoppingCart", new Cart());
+        Order2 cart = (Order2) request.getSession().getAttribute("shoppingCart");
+        Order2 userCart = orderDao2.findCart(user);
+        for (Map.Entry<Goods, Integer> goods : cart.getGoods().entrySet()) {
+            userCart.addGoods(goods.getKey());
+            userCart.setGoodsCount(goods.getKey(),goods.getValue());
+        }
 
+        request.getSession().setAttribute("shoppingCart", userCart);
         request.setAttribute("json", json);
 
         daoManager.closeConnection();

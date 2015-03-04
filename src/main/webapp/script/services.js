@@ -46,55 +46,6 @@ $(function(){
 });
 
 $(document).ready(function () {
-    //$('#Goods-block').on('click', '#gBack', function () {
-    //    var page = $('#goodsPageNumber').val() - 1;
-    //    var rows = $('#goodsrows').val();
-    //
-    //    $('.gNumbered').removeClass("active");
-    //    $("li.gNumbered[value=" + page + "]").addClass("active");
-    //    $.get("ajaxChangeGoodsPage",
-    //        {
-    //            goodspage: page,
-    //            goodsrows: rows
-    //        },
-    //        function (data) {
-    //            $('#Goods').html(data);
-    //        })
-    //});
-    //
-    //$('#Goods-block').on('click', '.gNumbered', function () {
-    //    $('.gNumbered').removeClass("active");
-    //    $(this).addClass("active");
-    //
-    //    var page = $(this).attr('value');
-    //    var rows = $('#goodsrows').val();
-    //
-    //    $.get("ajaxChangeGoodsPage",
-    //        {
-    //            goodspage: page,
-    //            goodsrows: rows
-    //        },
-    //        function (data) {
-    //            $('#Goods').html(data);
-    //        })
-    //});
-    //
-    //
-    //$('#Goods-block').on('click', '#gNext', function () {
-    //    var page = $('#goodsPageNumber').val() - 1 + 2;
-    //    var rows = $('#goodsrows').val();
-    //
-    //    $('.gNumbered').removeClass("active");
-    //    $("li.gNumbered[value=" + page + "]").addClass("active");
-    //    $.get("ajaxChangeGoodsPage",
-    //        {
-    //            goodspage: page,
-    //            goodsrows: rows
-    //        },
-    //        function (data) {
-    //            $('#Goods').html(data);
-    //        })
-    //});
 
     $("#Goods").on('click', '.adding-button', function () {
 
@@ -111,6 +62,8 @@ $(document).ready(function () {
                         },
                         function (data) {
                             button.text(data.trim());
+                            button.css("background-color", "#FF7A00");
+                            button.css("color", "#FFFFFF");
                             button.removeClass("adding-button");
                             button.addClass("go-to-cart");
                         });

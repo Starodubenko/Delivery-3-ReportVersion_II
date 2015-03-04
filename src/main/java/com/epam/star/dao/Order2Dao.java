@@ -12,4 +12,6 @@ public interface Order2Dao extends Dao<Order2> {
     List<Order2> findAllByClientId(int clientId);
 
     int getClientOrdersCount(int id);
+
+//    void findCart(T user);
 }

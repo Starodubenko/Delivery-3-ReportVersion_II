@@ -16,10 +16,7 @@
         <link rel='stylesheet' href='<c:url value="/style/registration.css"/>'>
     </t:gHead>
     <t:gbody>
-        <div class="client-info">
-            <t:payment balance="${clientBalance}"/>
-            <p class="text-center error-message" id="paymentInput"></p>
-        </div>
+        <t:payment balance="${clientBalance}"/>
 
         <c:if test="${not empty user}">
             <form class="panel panel-default create-order-panel" id="createForm" onsubmit="return false;">
@@ -29,7 +26,9 @@
                         <div class="center">
                             <label for="Date"><fmt:message key="orders.message.delivery.date"/></label>
                         </div>
-                        <input type="text" name="deliverydate" placeholder="Date" class="form-control datepicker" id="Date">
+                        <input type="text" name="deliverydate" placeholder="Date" class="form-control datepicker"
+                               id="Date">
+
                         <p class="text-center error-message" id="dateInput"></p>
                     </div>
                     <div class="orderText form-group">
@@ -65,7 +64,8 @@
                     <label>
                         <fmt:message key="message.orders.sum"/>:
                         <label class="old-cost">${shoppingCart.getTotalSum()} </label>
-                        <label>${shoppingCart.getTotalSum() * (1 - user.getDiscount().getPercentage() / 100)} (-${user.getDiscount().getPercentage()}%)</label>
+                        <label>${shoppingCart.getTotalSum() * (1 - user.getDiscount().getPercentage() / 100)}
+                            (-${user.getDiscount().getPercentage()}%)</label>
                     </label>
                 </div>
                 <div class="payment-option form-group">
@@ -92,7 +92,7 @@
             <p style="margin-top: 300px; margin-left: 250px; font-size: 25px"><fmt:message key="message.unlogin"/></p>
         </c:if>
 
-        <div class="final-message text-center">
+        <div id="final-messageInput" class="text-center error-message">
 
         </div>
         <div class="clear"></div>

@@ -6,11 +6,12 @@
     <div class="center footer-block panel panel-default">
         <div class="contacts panel panel-default">
             <c:forEach var="contact" items="${contacts}">
-                <div>
-                    <label class="part right">${contact.part}:</label>
-                    <label class="number">${contact.telephone} -</label>
-                    <label >${contact.owner}</label>
+                <div class="contact">
+                    <label class="part left">${contact.part}:</label>
+                    <label class="number left">${contact.telephone}</label>
+                    <label class="left"> - ${contact.owner}</label>
                 </div>
+                <br/>
             </c:forEach>
         </div>
 

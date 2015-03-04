@@ -10,7 +10,6 @@ import com.epam.star.dao.H2dao.H2ClientDao;
 import com.epam.star.dao.H2dao.H2OrderDao2;
 import com.epam.star.dao.util.PaginatedList;
 import com.epam.star.dao.util.Pagination;
-import com.epam.star.entity.Cart;
 import com.epam.star.entity.Client;
 import com.epam.star.entity.Order2;
 import com.epam.star.entity.Period;
@@ -31,7 +30,7 @@ public class ShowCompletionOrderPageAction implements Action {
     @Override
     public ActionResult execute(HttpServletRequest request) throws ActionException, SQLException {
 
-        Cart cart = (Cart)request.getSession().getAttribute("shoppingCart");
+        Order2 cart = (Order2)request.getSession().getAttribute("shoppingCart");
         if (cart.getGoodsCount() < 1) return shoppingCart;
 
         DaoManager daoManager = DaoFactory.getInstance().getDaoManager();
@@ -46,6 +45,8 @@ public class ShowCompletionOrderPageAction implements Action {
         List<Period> periods = daoManager.getPeriodDao().getAllPeriods();
         request.setAttribute("periods", periods);
         request.setAttribute("ordersPaginatedList",orders);
+
+        if (user != null)
         request.setAttribute("clientBalance", clientDao.findById(user.getId()).getVirtualBalance());
 
         daoManager.closeConnection();

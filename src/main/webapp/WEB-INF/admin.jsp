@@ -57,8 +57,8 @@
             <div class="panel panel-default table-data-base">
                 <c:if test="${not empty entityName}"><t:genericEntityBlock/></c:if>
             </div>
-
         </div>
+        <div class="clear"></div>
 
         <%--<div class="panel panel-default log">--%>
         <%--<div class="center"><label>Log</label></div>--%>

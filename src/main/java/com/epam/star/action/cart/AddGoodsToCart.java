@@ -8,7 +8,7 @@ import com.epam.star.dao.H2dao.DaoFactory;
 import com.epam.star.dao.H2dao.DaoManager;
 import com.epam.star.dao.H2dao.H2GoodsDao;
 import com.epam.star.entity.Goods;
-import com.epam.star.entity.interfaces.ShoppingCart;
+import com.epam.star.entity.Order2;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +33,7 @@ public class AddGoodsToCart implements Action{
             HttpSession session = request.getSession();
             JSONObject jsonObject = new JSONObject();
 
-            ShoppingCart shoppingCart = (ShoppingCart) session.getAttribute("shoppingCart");
+            Order2 shoppingCart = (Order2) session.getAttribute("shoppingCart");
             int goodsId = Integer.parseInt(request.getParameter("id"));
 
             Goods goods = goodsDao.findById(goodsId);

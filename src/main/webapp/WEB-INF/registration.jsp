@@ -11,6 +11,7 @@
         <link rel="stylesheet" href="<c:url value="/style/registration.css"/> ">
     </t:gHead>
     <t:gbody>
+        <c:if test="${not empty user}"><c:redirect url="/do/welcome"/></c:if>
         <div class="border">
             <form id="regForm" class="registration" method="post" onsubmit="return false;">
                 <div class="form-group input-block" id="loginDiv">
@@ -78,6 +79,24 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="Reg-successful" tabindex="-1" role="dialog" aria-labelledby="RegLabel"
+             aria-hidden="true"
+                data-backdrop="static" data-keyboard="false">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title text-center" id="RegLabel"><fmt:message
+                                    key="message.registration.successful"/></h4>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" id="Reg-Ok" style="float: left"><fmt:message key="button.go.back.to.welcome"/></button>
+                            <button class="btn btn-primary" id="Reg-Go-To-PC"><fmt:message key="button.go.to.pc"/></button>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
         <script src="<c:url value="/script/registration.js"/>"></script>
     </t:gbody>
     </html>

@@ -87,4 +87,8 @@
         <filter-name>CacheControl</filter-name>
         <url-pattern>/image/*</url-pattern>
     </filter-mapping>
+
+    <listener>
+        <listener-class>com.epam.star.listener.SessionListener</listener-class>
+    </listener>
 </web-app>

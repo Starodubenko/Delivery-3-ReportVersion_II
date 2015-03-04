@@ -8,7 +8,10 @@ $('#goRegistration').click(function () {
         if (typeof data != "object") {
             $('#message').html(data);
         } else {
-            if (data.goToPC != null) window.location.replace(data.goToPC);
+            if (data.goToPC != null) {
+                //window.location.replace(data.goToPC);
+                $('#Reg-successful').modal('toggle');
+            }
             else {
 
                 $(".input-block").addClass("has-success");
@@ -31,4 +34,12 @@ $('#goRegistration').click(function () {
 
 $(function () {
     $('[data-toggle="tooltip"]').tooltip();
+});
+
+$('#Reg-Go-To-PC').click(function(){
+   location.href = "client";
+});
+
+$('#Reg-Ok').click(function(){
+    location.href = "welcome";
 });

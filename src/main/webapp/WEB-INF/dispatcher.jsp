@@ -61,8 +61,8 @@
             <div class="panel panel-default table-data-base">
                 <c:if test="${not empty entityName}"><t:genericEntityBlock/></c:if>
             </div>
-
         </div>
+        <div class="clear"></div>
 
         <div class="modal fade bs-example-modal-lg" id="myModel" tabindex="-1" role="dialog"
              aria-labelledby="myModalLabel" aria-hidden="true">

@@ -14,19 +14,19 @@
     </t:gHead>
     <t:gbody>
         <c:if test="${empty user}"><c:redirect url="/do/welcome"/></c:if>
-        <div class="client-info">
-            <t:payment balance="${clientBalance}"/>
-        </div>
+        <t:payment balance="${clientBalance}"/>
 
         <div class="panel panel-default border client-avatar">
             <div class="image-block">
-                <img class="avatar panel panel-default" src="/image/${clientAvatar.getId()}/${clientAvatar.getFilename()}">
+                <img class="avatar panel panel-default"
+                     src="/image/${clientAvatar.getId()}/${clientAvatar.getFilename()}">
             </div>
 
             <a href="<c:url value="/do/editProfile"/>"><fmt:message key="client.edit.profile"/></a>
         </div>
 
-        <div class="order-successful-message panel panel-default" <c:if test="${orderSuccessful ne 'ok'}">style="display: none"</c:if>>
+        <div class="order-successful-message panel panel-default"
+             <c:if test="${orderSuccessful ne 'ok'}">style="display: none"</c:if>>
             <div>Ваш заказ №${orderNumber} создан, ожидайте подтвеждения от диспетчера.</div>
             <button>Закрыть</button>
         </div>

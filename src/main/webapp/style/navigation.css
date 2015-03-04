@@ -133,20 +133,24 @@
 }
 
 .fancyNav {
-    margin: 0px;
+    margin: 0;
 }
 
 .shopping-cart{
+    font: 20px/1 Lobster, Arial, sans-serif;
+    font-weight: lighter;
     float: right;
     margin-top: 0px;
     margin-right: 20px;
-    font-size: 20px;
+    /*font-size: 20px;*/
     width: 260px;
 }
 
 .shopping-cart > div{
     text-align: right;
     width: 260px;
+    margin-top: 5px;
+    margin-bottom: 10px;
 }
 
 .farm-label{

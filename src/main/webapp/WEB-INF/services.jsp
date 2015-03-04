@@ -13,15 +13,11 @@
         <link rel="stylesheet" href="<c:url value="/style/services.css"/>">
     </t:gHead>
     <t:gbody>
-        <h1 class="services-header">Товары</h1>
-
-        <div class="services-content">
-            Выберите товар, который после обработки поступит курьеру для последующей доставки.
-        </div>
-
         <div class="panel panel-default goods">
             <tGoods:goodsShowcase goodsPaginatedList="${goodsPaginatedList}"/>
         </div>
+
+        <div class="clear"></div>
     </t:gbody>
     <script src="<c:url value="/script/services.js"/>"></script>
     </html>
