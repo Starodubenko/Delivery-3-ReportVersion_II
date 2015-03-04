@@ -67,10 +67,10 @@ $('.orderList').on('click', '.order-function-button', function () {
                 },
                 function (data) {
                     var count = $(button).closest('tr').children('td').size();
-                    $($(button).closest('tr').children('td').get(count-3)).children('label').text(data.trim());
+                    $($(button).closest('tr').children('td').get(count - 3)).children('label').text(data.trim());
                     if (operation == "canceled")
-                        $($(button).closest('tr').children('td').get(count-1)).children('a').get(0).setAttribute('href',"/do/editOrder?id="+id);
-                    else $($(button).closest('tr').children('td').get(count-1)).children('a').get(0).removeAttribute('href');
+                        $($(button).closest('tr').children('td').get(count - 1)).children('a').get(0).setAttribute('href', "/do/editOrder?id=" + id);
+                    else $($(button).closest('tr').children('td').get(count - 1)).children('a').get(0).removeAttribute('href');
                     $.get("getOperationButton",
                         {
                             operation: operation,
@@ -90,17 +90,23 @@ $('.orderList').on('click', 'button.repeat', function () {
 
     $.get("orderOperation2",
         {
-            actor:"client",
-            typeOfOperation:className,
-            id:id
+            actor: "client",
+            typeOfOperation: className,
+            id: id
         },
         function (data) {
             location.href = "shoppingCart";
         });
 });
 
-$('.order-successful-message > button').click(function(){
-   $(this).closest('div').slideUp();
+$('.order-successful-message > button').click(function () {
+    $(this).closest('div').slideUp();
+});
+
+$('#browse-orders').click(function () {
+    if ($('#browse-orders').closest('#accordion').children('div').children('.collapse').hasClass('in'))
+        $(this).children('img').prop('src', "/style/img/plus.png");
+    else $(this).children('img').prop('src', "/style/img/minus.png");
 });
 
 

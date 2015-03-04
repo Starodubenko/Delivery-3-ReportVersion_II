@@ -44,6 +44,7 @@
                 <div class="panel-heading edit-panel-heading">
                     <h4 class="panel-title">
                         <a id="browse-orders" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                            <img src="<c:url value="/style/img/plus.png"/>"/>
                             <fmt:message key="client.information.orders.browse"/>
                         </a>
                     </h4>

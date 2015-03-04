@@ -116,7 +116,8 @@ public class OrderOperations2Action implements Action {
 
     private BigDecimal fundsOperation(Order2 order, String operation) {
 
-            BigDecimal orderCost = order.getTotalSum();
+            BigDecimal orderCost = order.getTotalSum().multiply(
+                    new BigDecimal(order.getDiscount().getPercentage()).divide(new BigDecimal(100)));
             Client client = order.getUser();
 
             if (operation.equals(WITHDRAW)){

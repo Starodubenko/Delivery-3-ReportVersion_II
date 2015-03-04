@@ -42,6 +42,7 @@ $(document).ready(function () {
     $('.button-continue-order').click(function(){
         if ($('.goods-list .goods').children('form:visible').size() < 1)
             $('#EmptyCart').modal('toggle');
+        else location.href = "completion-order";
     });
 
     $('#EmptyCart-Go-To-Shop').click(function(){

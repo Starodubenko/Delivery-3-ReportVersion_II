@@ -45,7 +45,7 @@ public class PaymentAction implements Action {
             if (currentStatus.equals(notActivatedStatus)) {
                 Client user = (Client) request.getSession().getAttribute("user");
 
-                BigDecimal userBal = user.getVirtualBalance();
+                BigDecimal userBal = clientDao.findById(user.getId()).getVirtualBalance();
                 BigDecimal payBal = payCard.getBalance();
                 BigDecimal newBal = userBal.add(payBal);
 
