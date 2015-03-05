@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,18 +58,16 @@ public class H2PositionDao extends AbstractH2Dao implements PositionDao {
     public Position findByPositionName(String name) throws DaoException {
         String sql = "SELECT * FROM positions WHERE position_name = " + "'" + name + "'";
         Position position = null;
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
-        try {
-            prstm = conn.prepareStatement(sql);
-            resultSet = prstm.executeQuery();
-
-            if (resultSet.next())
-                position = getEntityFromResultSet(resultSet);
-        } catch (SQLException e) {
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                if (resultSet.next()) {
+                    position = getEntityFromResultSet(resultSet);
+                }
+            }
+            LOGGER.info("Period found by Position name successfully{}", position);
+        } catch (Exception e) {
+            LOGGER.error("Error of Period finding by Position name{}", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return position;
     }
@@ -79,18 +76,16 @@ public class H2PositionDao extends AbstractH2Dao implements PositionDao {
     public Position findById(int ID) throws DaoException {
         String sql = "SELECT * FROM positions WHERE id = " + ID;
         Position position = null;
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
-        try {
-            prstm = conn.prepareStatement(sql);
-            resultSet = prstm.executeQuery();
-
-            if (resultSet.next())
-                position = getEntityFromResultSet(resultSet);
-        } catch (SQLException e) {
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                if (resultSet.next()) {
+                    position = getEntityFromResultSet(resultSet);
+                }
+            }
+            LOGGER.info("Period found by ID successfully{}", position);
+        } catch (Exception e) {
+            LOGGER.error("Error of Period finding by ID{}", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return position;
     }
@@ -105,7 +100,9 @@ public class H2PositionDao extends AbstractH2Dao implements PositionDao {
             prstm.setBoolean(3, position.isDeleted());
             prstm.execute();
             statuss = "Position added successfully";
-        } catch (SQLException e) {
+            LOGGER.info("Position added successfully{}", position);
+        } catch (Exception e) {
+            LOGGER.error("Error of Position adding{}", e);
             throw new DaoException(e);
         }
         return statuss;
@@ -120,7 +117,9 @@ public class H2PositionDao extends AbstractH2Dao implements PositionDao {
             prstm.setInt(2, ID);
             prstm.executeUpdate();
             status = "Position marked as deleted";
+            LOGGER.info("Position marked as deleted successfully{}", ID);
         } catch (Exception e) {
+            LOGGER.error("Error of Position marking as deleted{}", e);
             throw new DaoException(e);
         }
 
@@ -136,7 +135,9 @@ public class H2PositionDao extends AbstractH2Dao implements PositionDao {
             prstm.setBoolean(3, position.isDeleted());
             prstm.setInt(4, position.getId());
             prstm.executeUpdate();
-        } catch (SQLException e) {
+            LOGGER.info("Position updated successfully{}", position);
+        } catch (Exception e) {
+            LOGGER.error("Error of Position updating{}", e);
             throw new DaoException(e);
         }
         return null;
@@ -149,7 +150,9 @@ public class H2PositionDao extends AbstractH2Dao implements PositionDao {
             position.setId(resultSet.getInt("id"));
             position.setPositionName(resultSet.getString("position_name"));
             position.setDeleted(resultSet.getBoolean("deleted"));
-        } catch (SQLException e) {
+            LOGGER.info("Position created from result set successfully{}", position);
+        } catch (Exception e) {
+            LOGGER.error("Error of Position creating from result set{}", e);
             throw new DaoException(e);
         }
         return position;
@@ -164,7 +167,9 @@ public class H2PositionDao extends AbstractH2Dao implements PositionDao {
                 while (resultSet.next())
                     positions.add(getEntityFromResultSet(resultSet));
             }
-        } catch (SQLException e) {
+            LOGGER.info("All Positions found successfully{}", positions);
+        } catch (Exception e) {
+            LOGGER.error("Error of Positions finding", e);
             throw new DaoException(e);
         }
         return positions;

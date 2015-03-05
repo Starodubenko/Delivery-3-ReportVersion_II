@@ -53,22 +53,19 @@ public class H2PeriodDao extends AbstractH2Dao implements PeriodDao {
     }
 
     public List<Period> getAllPeriods() {
-        List<Period> result = new ArrayList<>();
-
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
-        try {
-            prstm = conn.prepareStatement("SELECT * FROM period");
-            resultSet = prstm.executeQuery();
-            while (resultSet.next()) {
-                result.add(getEntityFromResultSet(resultSet));
+        String sql = "SELECT * FROM PERIOD";
+        List<Period> periods = new ArrayList<>();
+        try (PreparedStatement prstm = conn.prepareStatement(sql)){
+            try(ResultSet resultSet = prstm.executeQuery()){
+                while (resultSet.next())
+                    periods.add(getEntityFromResultSet(resultSet));
             }
-        } catch (SQLException e) {
+            LOGGER.info("All Periods found successfully{}", periods);
+        } catch (Exception e) {
+            LOGGER.error("Error of Periods finding", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
-        return result;
+        return periods;
     }
 
     @Override
@@ -76,18 +73,16 @@ public class H2PeriodDao extends AbstractH2Dao implements PeriodDao {
 
         String sql = "SELECT * FROM period WHERE period = " + "'" + period + "'";
         Period periodResult = null;
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
-        try {
-            prstm = conn.prepareStatement(sql);
-            resultSet = prstm.executeQuery();
-
-            if (resultSet.next())
-                periodResult = getEntityFromResultSet(resultSet);
-        } catch (SQLException e) {
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                if (resultSet.next()) {
+                    periodResult = getEntityFromResultSet(resultSet);
+                }
+            }
+            LOGGER.info("Period found by period successfully{}", periodResult);
+        } catch (Exception e) {
+            LOGGER.error("Error of Period finding by period{}", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return periodResult;
     }
@@ -96,18 +91,16 @@ public class H2PeriodDao extends AbstractH2Dao implements PeriodDao {
     public Period findById(int ID) throws DaoException {
         String sql = "SELECT * FROM period WHERE id = " + ID;
         Period period = null;
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
-        try {
-            prstm = conn.prepareStatement(sql);
-            resultSet = prstm.executeQuery();
-
-            if (resultSet.next())
-                period = getEntityFromResultSet(resultSet);
-        } catch (SQLException e) {
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                if (resultSet.next()) {
+                    period = getEntityFromResultSet(resultSet);
+                }
+            }
+            LOGGER.info("Period found by ID successfully{}", period);
+        } catch (Exception e) {
+            LOGGER.error("Error of Period finding by ID{}", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return period;
     }
@@ -122,7 +115,9 @@ public class H2PeriodDao extends AbstractH2Dao implements PeriodDao {
             prstm.setBoolean(3, period.isDeleted());
             prstm.execute();
             statuss = "Period added successfully";
-        } catch (SQLException e) {
+            LOGGER.info("Period added successfully{}", period);
+        } catch (Exception e) {
+            LOGGER.error("Error of Period adding{}", e);
             throw new DaoException(e);
         }
         return statuss;
@@ -137,7 +132,9 @@ public class H2PeriodDao extends AbstractH2Dao implements PeriodDao {
             prstm.setInt(2, ID);
             prstm.executeUpdate();
             status = "Period marked as deleted";
+            LOGGER.info("Period marked as deleted successfully{}", ID);
         } catch (Exception e) {
+            LOGGER.error("Error of Period marking as deleted{}", e);
             throw new DaoException(e);
         }
 
@@ -154,7 +151,9 @@ public class H2PeriodDao extends AbstractH2Dao implements PeriodDao {
             prstm.setBoolean(3, period.isDeleted());
             prstm.setInt(4, period.getId());
             prstm.executeUpdate();
-        } catch (SQLException e) {
+            LOGGER.info("Period updated successfully{}", period);
+        } catch (Exception e) {
+            LOGGER.error("Error of Period updating{}", e);
             throw new DaoException(e);
         } finally {
             closeStatement(prstm, null);
@@ -169,7 +168,9 @@ public class H2PeriodDao extends AbstractH2Dao implements PeriodDao {
             period.setId(resultSet.getInt("id"));
             period.setPeriod(resultSet.getTime("period"));
             period.setDeleted(resultSet.getBoolean("deleted"));
-        } catch (SQLException e) {
+            LOGGER.info("Period created from result set successfully{}", period.getPeriod());
+        } catch (Exception e) {
+            LOGGER.error("Error of Period creating from result set{}", e);
             throw new DaoException(e);
         }
         return period;
@@ -184,7 +185,9 @@ public class H2PeriodDao extends AbstractH2Dao implements PeriodDao {
                 while (resultSet.next())
                     periods.add(getEntityFromResultSet(resultSet));
             }
-        } catch (SQLException e) {
+            LOGGER.info("All Periods found successfully{}", periods);
+        } catch (Exception e) {
+            LOGGER.error("Error of Periods finding", e);
             throw new DaoException(e);
         }
         return periods;

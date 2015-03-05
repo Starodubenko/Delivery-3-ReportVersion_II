@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,18 +58,16 @@ public class H2StatusDao extends AbstractH2Dao implements StatusDao {
     public Status findByStatusName(String name) throws DaoException {
         String sql = "SELECT * FROM status WHERE status_name = " + "'" + name + "'";
         Status status = null;
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
-        try {
-            prstm = conn.prepareStatement(sql);
-            resultSet = prstm.executeQuery();
-
-            if (resultSet.next())
-                status = getEntityFromResultSet(resultSet);
-        } catch (SQLException e) {
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                if (resultSet.next()) {
+                    status = getEntityFromResultSet(resultSet);
+                }
+            }
+            LOGGER.info("Status found by status name successfully{}", status);
+        } catch (Exception e) {
+            LOGGER.error("Error of Status finding by status name{}", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return status;
     }
@@ -79,18 +76,16 @@ public class H2StatusDao extends AbstractH2Dao implements StatusDao {
     public Status findById(int ID) throws DaoException {
         String sql = "SELECT * FROM status WHERE id = " + ID;
         Status status = null;
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
-        try {
-            prstm = conn.prepareStatement(sql);
-            resultSet = prstm.executeQuery();
-
-            if (resultSet.next())
-                status = getEntityFromResultSet(resultSet);
-        } catch (SQLException e) {
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                if (resultSet.next()) {
+                    status = getEntityFromResultSet(resultSet);
+                }
+            }
+            LOGGER.info("Status found by ID successfully{}", status);
+        } catch (Exception e) {
+            LOGGER.error("Error of Status finding by ID{}", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return status;
     }
@@ -105,7 +100,9 @@ public class H2StatusDao extends AbstractH2Dao implements StatusDao {
             prstm.setBoolean(3, status.isDeleted());
             prstm.execute();
             statuss = "Status added successfully";
-        } catch (SQLException e) {
+            LOGGER.info("Status added successfully{}", status);
+        } catch (Exception e) {
+            LOGGER.error("Error of Status adding{}", e);
             throw new DaoException(e);
         }
         return statuss;
@@ -120,7 +117,9 @@ public class H2StatusDao extends AbstractH2Dao implements StatusDao {
             prstm.setInt(2, ID);
             prstm.executeUpdate();
             status = "Status marked as deleted";
+            LOGGER.info("Status marked as deleted{}", ID);
         } catch (Exception e) {
+            LOGGER.error("Error of Status marking as deleted{}", e);
             throw new DaoException(e);
         }
 
@@ -136,7 +135,9 @@ public class H2StatusDao extends AbstractH2Dao implements StatusDao {
             prstm.setBoolean(3, status.isDeleted());
             prstm.setInt(4, status.getId());
             prstm.executeUpdate();
-        } catch (SQLException e) {
+            LOGGER.info("Status updated successfully{}", status);
+        } catch (Exception e) {
+            LOGGER.error("Error of Status updating{}", e);
             throw new DaoException(e);
         }
         return null;
@@ -149,7 +150,9 @@ public class H2StatusDao extends AbstractH2Dao implements StatusDao {
             status.setId(resultSet.getInt("id"));
             status.setStatusName(resultSet.getString("status_name"));
             status.setDeleted(resultSet.getBoolean("deleted"));
-        } catch (SQLException e) {
+            LOGGER.info("Status created from result set successfully{}", status);
+        } catch (Exception e) {
+            LOGGER.error("Error of Status creating from result set{}", e);
             throw new DaoException(e);
         }
         return status;
@@ -164,7 +167,9 @@ public class H2StatusDao extends AbstractH2Dao implements StatusDao {
                 while (resultSet.next())
                     statuses.add(getEntityFromResultSet(resultSet));
             }
-        } catch (SQLException e) {
+            LOGGER.info("All Statuses found successfully{}", statuses);
+        } catch (Exception e) {
+            LOGGER.error("Error of Statuses finding", e);
             throw new DaoException(e);
         }
         return statuses;

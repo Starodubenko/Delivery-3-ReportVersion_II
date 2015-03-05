@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,18 +67,16 @@ public class H2ClientDao extends AbstractH2Dao implements ClientDao {
     public Client findByLogin(String login) throws DaoException {
         String sql = "select * from USERS where login = " + "'" + login + "'";
 
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
         Client client = null;
-        try {
-            prstm = conn.prepareStatement(sql);
-            resultSet = prstm.executeQuery();
-            if (resultSet.next()) ;
-            client = getEntityFromResultSet(resultSet);
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                if (resultSet.next())
+                    client = getEntityFromResultSet(resultSet);
+            }
+            LOGGER.info("Client found by login{}", client);
         } catch (Exception e) {
+            LOGGER.error("Error of Client finding by login{}", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return client;
     }
@@ -88,37 +85,34 @@ public class H2ClientDao extends AbstractH2Dao implements ClientDao {
     public Client findByName(String name) throws DaoException {
         String sql = "select * from USERS where firstname = " + "'" + name + "'";
 
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
         Client client = null;
-        try {
-            prstm = conn.prepareStatement(sql);
-            resultSet = prstm.executeQuery();
-            if (resultSet.next()) ;
-            client = getEntityFromResultSet(resultSet);
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                if (resultSet.next())
+                    client = getEntityFromResultSet(resultSet);
+            }
+            LOGGER.info("Client found by name{}", client);
         } catch (Exception e) {
+            LOGGER.error("Error of Client finding by name{}", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return client;
     }
 
     @Override
-    public Client findBySurnameName(String surName) throws DaoException {
+    public Client findBySurname(String surName) throws DaoException {
         String sql = "select * from USERS where surname = " + "'" + surName + "'";
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
+
         Client client = null;
-        try {
-            prstm = conn.prepareStatement(sql);
-            resultSet = prstm.executeQuery();
-            if (resultSet.next()) ;
-            client = getEntityFromResultSet(resultSet);
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                if (resultSet.next())
+                    client = getEntityFromResultSet(resultSet);
+            }
+            LOGGER.info("Client found by surname{}", client);
         } catch (Exception e) {
+            LOGGER.error("Error of Client finding by surname{}", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return client;
     }
@@ -126,18 +120,17 @@ public class H2ClientDao extends AbstractH2Dao implements ClientDao {
     @Override
     public Client findByAddress(String address) throws DaoException {
         String sql = "select * from USERS where address= " + "'" + address + "'";
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
+
         Client client = null;
-        try {
-            prstm = conn.prepareStatement(sql);
-            resultSet = prstm.executeQuery();
-            if (resultSet.next()) ;
-            client = getEntityFromResultSet(resultSet);
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                if (resultSet.next())
+                    client = getEntityFromResultSet(resultSet);
+            }
+            LOGGER.info("Client found by address{}", client);
         } catch (Exception e) {
+            LOGGER.error("Error of Client finding by address{}", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return client;
     }
@@ -147,11 +140,14 @@ public class H2ClientDao extends AbstractH2Dao implements ClientDao {
         String sql = "select * from USERS where telephone = " + "'" + telephone + "'";
 
         Client client = null;
-        try (PreparedStatement prstm = conn.prepareStatement(sql);
-             ResultSet resultSet =prstm.executeQuery()){
-            if (resultSet.next()) ;
-            client = getEntityFromResultSet(resultSet);
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                if (resultSet.next())
+                    client = getEntityFromResultSet(resultSet);
+            }
+            LOGGER.info("Client found by telephone{}", client);
         } catch (Exception e) {
+            LOGGER.error("Error of Client finding by telephone{}", e);
             throw new DaoException(e);
         }
         return client;
@@ -160,17 +156,19 @@ public class H2ClientDao extends AbstractH2Dao implements ClientDao {
     @Override
     public Client findByMobilephone(String mobilephone) throws DaoException {
         String sql = "select * from USERS where surname = " + "'" + mobilephone + "'";
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
-        try {
-            prstm = conn.prepareStatement(sql);
-            resultSet = prstm.executeQuery();
+
+        Client client = null;
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                if (resultSet.next())
+                    client = getEntityFromResultSet(resultSet);
+            }
+            LOGGER.info("Client found by mobilephone{}", client);
         } catch (Exception e) {
+            LOGGER.error("Error of Client finding by mobilephone{}", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
-        return getEntityFromResultSet(resultSet);
+        return client;
     }
 
     @Override
@@ -180,12 +178,14 @@ public class H2ClientDao extends AbstractH2Dao implements ClientDao {
                 " where POSITION_ID = 11 and Lower(LOGIN) = " + "Lower('" + login + "')" + " and PASSWORD = " + "'" + password + "'";
 
         Client client = null;
-        try (PreparedStatement prstm = conn.prepareStatement(sql);
-             ResultSet resultSet = prstm.executeQuery()){
-
-            if (resultSet.next())
-                client = getEntityFromResultSet(resultSet);
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                if (resultSet.next())
+                    client = getEntityFromResultSet(resultSet);
+            }
+            LOGGER.info("Client found by credentials{}", client);
         } catch (Exception e) {
+            LOGGER.error("Error of Client finding by credentials{}", e);
             throw new DaoException(e);
         }
         return client;
@@ -195,31 +195,31 @@ public class H2ClientDao extends AbstractH2Dao implements ClientDao {
     public boolean alreadyExist(String login) {
 
         String sql = "SELECT LOGIN FROM USERS where Lower(LOGIN) = " + "Lower('" + login + "')";
-        try (PreparedStatement prstm = conn.prepareStatement(sql)){
-            try(ResultSet resultSet = prstm.executeQuery()){
-                if (resultSet.next()) return true;
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                LOGGER.info("Client is already exist{}", resultSet.next());
+                return resultSet.next();
             }
         } catch (Exception e) {
+            LOGGER.error("Error of Client finding by exist{}", e);
             throw new DaoException(e);
         }
-        return false;
     }
 
     @Override
     public Client findById(int ID) throws DaoException {
         String sql = "select * from users where id = " + ID;
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
+
         Client client = null;
-        try {
-            prstm = conn.prepareStatement(sql);
-            resultSet = prstm.executeQuery();
-            if (resultSet.next())
-                client = getEntityFromResultSet(resultSet);
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                if (resultSet.next())
+                    client = getEntityFromResultSet(resultSet);
+            }
+            LOGGER.info("Client found by ID{}", client);
         } catch (Exception e) {
+            LOGGER.error("Error of Client finding by ID{}", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return client;
     }
@@ -228,7 +228,7 @@ public class H2ClientDao extends AbstractH2Dao implements ClientDao {
     public String insert(Client client) {
         String status = "Client do not added";
 
-        try (PreparedStatement prstm = conn.prepareStatement(ADD_CLIENT)){
+        try (PreparedStatement prstm = conn.prepareStatement(ADD_CLIENT)) {
             prstm.setString(1, null);
             prstm.setString(2, client.getLogin());
             prstm.setString(3, client.getPassword());
@@ -249,7 +249,9 @@ public class H2ClientDao extends AbstractH2Dao implements ClientDao {
             prstm.setBoolean(18, client.isDeleted());
             prstm.execute();
             status = "Client added successfully";
+            LOGGER.info("Client added successfully{}", client);
         } catch (Exception e) {
+            LOGGER.error("Error of Client adding{}", e);
             throw new DaoException(e);
         }
         return status;
@@ -260,12 +262,14 @@ public class H2ClientDao extends AbstractH2Dao implements ClientDao {
     public String deleteEntity(int ID) throws DaoException {
         String status = "Client do not deleted";
 
-        try (PreparedStatement prstm = conn.prepareStatement(DELETE_CLIENT)){
+        try (PreparedStatement prstm = conn.prepareStatement(DELETE_CLIENT)) {
             prstm.setBoolean(1, true);
             prstm.setInt(2, ID);
             prstm.execute();
-            status = "Client successfully deleted";
+            status = "Client deleted successfully";
+            LOGGER.info("Client marked as deleted successfully{}", ID);
         } catch (Exception e) {
+            LOGGER.error("Error of Client marking as deleted{}", e);
             throw new DaoException(e);
         }
         return status;
@@ -275,7 +279,7 @@ public class H2ClientDao extends AbstractH2Dao implements ClientDao {
     public String updateEntity(Client client) {
         String status = "Client do not updated";
 
-        try (PreparedStatement prstm = conn.prepareStatement(UPDATE_CLIENT)){
+        try (PreparedStatement prstm = conn.prepareStatement(UPDATE_CLIENT)) {
             prstm.setInt(1, client.getId());
             prstm.setString(2, client.getLogin());
             prstm.setString(3, client.getPassword());
@@ -293,7 +297,9 @@ public class H2ClientDao extends AbstractH2Dao implements ClientDao {
             prstm.setInt(15, client.getId());
             prstm.executeUpdate();
             status = "Client updated successfully";
+            LOGGER.info("Client updated successfully{}", client);
         } catch (Exception e) {
+            LOGGER.error("Error of Client updating{}", e);
             throw new DaoException(e);
         }
         return status;
@@ -304,14 +310,14 @@ public class H2ClientDao extends AbstractH2Dao implements ClientDao {
 
         String columns = NECESSARY_COLUMNS;
 
-        if (needAditionalColumns == true){
+        if (needAditionalColumns == true) {
             columns = columns + ADDITIONAL_COLUMNS;
         }
 
-        String result = String.format(FIND_BY_PARAMETERS_WITHOUT_COLUMNS,columns);
+        String result = String.format(FIND_BY_PARAMETERS_WITHOUT_COLUMNS, columns);
 
-        result = String.format(result+"%s", ORDER_BY);
-        result = String.format(result+"%s", "%s" + LIMIT_OFFSET);
+        result = String.format(result + "%s", ORDER_BY);
+        result = String.format(result + "%s", "%s" + LIMIT_OFFSET);
 
         return result;
     }
@@ -362,7 +368,9 @@ public class H2ClientDao extends AbstractH2Dao implements ClientDao {
             client.setVirtualBalance(new BigDecimal(resultSet.getInt("virtual_balance")));
             client.setDiscount(discountDao.findById(resultSet.getInt("discount")));
             client.setDeleted(resultSet.getBoolean("deleted"));
+            LOGGER.info("Client created from resultset successfully{}", client);
         } catch (Exception e) {
+            LOGGER.error("Error of Client creating from resultset{}", e);
             throw new DaoException(e);
         }
         return client;
@@ -372,12 +380,14 @@ public class H2ClientDao extends AbstractH2Dao implements ClientDao {
     public List<Client> findAll() {
         String sql = "SELECT * FROM USERS";
         List<Client> clients = new ArrayList<>();
-        try (PreparedStatement prstm = conn.prepareStatement(sql)){
-            try(ResultSet resultSet = prstm.executeQuery()){
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
                 while (resultSet.next())
                     clients.add(getEntityFromResultSet(resultSet));
             }
-        } catch (SQLException e) {
+            LOGGER.info("All clients found successfully{}", clients);
+        } catch (Exception e) {
+            LOGGER.error("Error of Clients finding", e);
             throw new DaoException(e);
         }
         return clients;

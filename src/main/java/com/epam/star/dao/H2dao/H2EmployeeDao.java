@@ -84,18 +84,18 @@ public class H2EmployeeDao extends AbstractH2Dao implements EmployeeDao {
     @Override
     public Employee findById(int ID) throws DaoException {
         String sql = "select * from users where id = " + ID;
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
+
         Employee employee = null;
-        try {
-            prstm = conn.prepareStatement(sql);
-            resultSet = prstm.executeQuery();
-            if (resultSet.next())
-                employee = getEntityFromResultSet(resultSet);
-        } catch (SQLException e) {
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                if (resultSet.next()) {
+                    employee = getEntityFromResultSet(resultSet);
+                }
+            }
+            LOGGER.info("Employee found by ID successfully{}", employee);
+        } catch (Exception e) {
+            LOGGER.error("Error of Employee finding by ID{}", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return employee;
     }
@@ -125,7 +125,9 @@ public class H2EmployeeDao extends AbstractH2Dao implements EmployeeDao {
             prstm.setBoolean(18, employee.isDeleted());
             prstm.execute();
             status = "Employee added successfully";
-        } catch (SQLException e) {
+            LOGGER.info("Employee inserted successfully{}", employee);
+        } catch (Exception e) {
+            LOGGER.error("Error of Employee inserting{}", e);
             throw new DaoException(e);
         }
         return status;
@@ -140,7 +142,9 @@ public class H2EmployeeDao extends AbstractH2Dao implements EmployeeDao {
             prstm.setInt(2, ID);
             prstm.execute();
             status = "Employee deleted successfully ";
-        } catch (SQLException e) {
+            LOGGER.info("Employee marked as deleted successfully{}", ID);
+        } catch (Exception e) {
+            LOGGER.error("Error of Employee marking as deleted{}", e);
             throw new DaoException(e);
         }
         return status;
@@ -172,7 +176,9 @@ public class H2EmployeeDao extends AbstractH2Dao implements EmployeeDao {
             prstm.setInt(19, employee.getId());
             prstm.executeUpdate();
             status = "Employee updated successfully";
-        } catch (SQLException e) {
+            LOGGER.info("Employee updated successfully{}", employee);
+        } catch (Exception e) {
+            LOGGER.error("Error of Employee updating{}", e);
             throw new DaoException(e);
         }
         return status;
@@ -203,8 +209,9 @@ public class H2EmployeeDao extends AbstractH2Dao implements EmployeeDao {
             employee.setVirtualBalance(new BigDecimal(resultSet.getInt("virtual_balance")));
             employee.setDiscount(discountDao.findById(resultSet.getInt("discount")));
             employee.setDeleted(resultSet.getBoolean("deleted"));
+            LOGGER.info("Employee created from resultset successfully{}", employee);
         } catch (Exception e) {
-            LOGGER.error("Error during create entity - Employee",e);
+            LOGGER.error("Error of Employee creating from resultset{}", e);
             throw new DaoException(e);
         }
         return employee;
@@ -219,7 +226,9 @@ public class H2EmployeeDao extends AbstractH2Dao implements EmployeeDao {
                 while (resultSet.next())
                     employees.add(getEntityFromResultSet(resultSet));
             }
-        } catch (SQLException e) {
+            LOGGER.info("All employees found successfully{}", employees);
+        } catch (Exception e) {
+            LOGGER.error("Error of employees finding", e);
             throw new DaoException(e);
         }
         return employees;

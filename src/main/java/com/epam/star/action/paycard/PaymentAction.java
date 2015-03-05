@@ -62,19 +62,16 @@ public class PaymentAction implements Action {
                 }
                 if (!userRole.equals(clientRole))
                     employeeDao.updateEntity((Employee) user);
-//                request.setAttribute("message", "card.activation.successful");
                 jsonObject.put("message", "card.activation.successful");
                 jsonObject.put("balanceVal", user.getVirtualBalance());
                 jsonObject.put("cardVal", payCard.getBalance());
             } else {
                 LOGGER.error("The payment card have status: {}", payCard.getStatusPayCard().getStatusName());
-//                request.setAttribute("message", "card.already.activated");
                 jsonObject.put("message", "card.already.activated");
             }
             daoManager.commit();
         } catch (Exception e) {
             daoManager.rollback();
-//            request.setAttribute("message", "payment.error");
             jsonObject.put("message", "payment.error");
         } finally {
             daoManager.closeConnection();

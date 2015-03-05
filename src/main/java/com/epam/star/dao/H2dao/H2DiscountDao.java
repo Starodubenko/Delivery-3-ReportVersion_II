@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,18 +60,16 @@ public class H2DiscountDao extends AbstractH2Dao implements DiscountDao {
     public Discount findByName(String name) throws DaoException {
         String sql = "SELECT * FROM DISCOUNT WHERE DISCOUNT.NAME = " + "'" + name + "'";
         Discount discount = null;
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
-        try {
-            prstm = conn.prepareStatement(sql);
-            resultSet = prstm.executeQuery();
-
-            if (resultSet.next())
-                discount = getEntityFromResultSet(resultSet);
-        } catch (SQLException e) {
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                if (resultSet.next()) {
+                    discount = getEntityFromResultSet(resultSet);
+                }
+            }
+            LOGGER.info("Discount found by name successfully{}", discount);
+        } catch (Exception e) {
+            LOGGER.error("Error of Discount finding by name{}", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return discount;
     }
@@ -81,18 +78,16 @@ public class H2DiscountDao extends AbstractH2Dao implements DiscountDao {
     public Discount findByPercentage(Integer percentage) {
         String sql = "SELECT * FROM DISCOUNT WHERE DISCOUNT.DISCOUNT_PERCENTAGE = " + percentage;
         Discount discount = null;
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
-        try {
-            prstm = conn.prepareStatement(sql);
-            resultSet = prstm.executeQuery();
-
-            if (resultSet.next())
-                discount = getEntityFromResultSet(resultSet);
-        } catch (SQLException e) {
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                if (resultSet.next()) {
+                    discount = getEntityFromResultSet(resultSet);
+                }
+            }
+            LOGGER.info("Discount found by ID successfully{}", discount);
+        } catch (Exception e) {
+            LOGGER.error("Error of Discount finding by ID{}", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return discount;
     }
@@ -101,18 +96,16 @@ public class H2DiscountDao extends AbstractH2Dao implements DiscountDao {
     public Discount findById(int ID) throws DaoException {
         String sql = "SELECT * FROM DISCOUNT WHERE ID = " + ID;
         Discount discount = null;
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
-        try {
-            prstm = conn.prepareStatement(sql);
-            resultSet = prstm.executeQuery();
-
-            if (resultSet.next())
-                discount = getEntityFromResultSet(resultSet);
-        } catch (SQLException e) {
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                if (resultSet.next()) {
+                    discount = getEntityFromResultSet(resultSet);
+                }
+            }
+            LOGGER.info("Discount found by ID successfully{}", discount);
+        } catch (Exception e) {
+            LOGGER.error("Error of Discount finding by ID{}", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return discount;
     }
@@ -128,7 +121,9 @@ public class H2DiscountDao extends AbstractH2Dao implements DiscountDao {
             prstm.setBoolean(4, discount.isDeleted());
             prstm.execute();
             message = "Status added successfully";
-        } catch (SQLException e) {
+            LOGGER.info("Discount inserted successfully{}", discount);
+        } catch (Exception e) {
+            LOGGER.error("Error of Discount inserting{}", e);
             throw new DaoException(e);
         }
         return message;
@@ -143,7 +138,9 @@ public class H2DiscountDao extends AbstractH2Dao implements DiscountDao {
             prstm.setInt(2, ID);
             prstm.execute();
             status = "Status deleted successfully ";
-        } catch (SQLException e) {
+            LOGGER.info("Discount marked as deleted successfully{}", ID);
+        } catch (Exception e) {
+            LOGGER.error("Error of Discount marking as deleted{}", e);
             throw new DaoException(e);
         }
         return status;
@@ -159,7 +156,9 @@ public class H2DiscountDao extends AbstractH2Dao implements DiscountDao {
             prstm.setBoolean(4, discount.isDeleted());
             prstm.setInt(5, discount.getId());
             prstm.executeUpdate();
-        } catch (SQLException e) {
+            LOGGER.info("Discount updated successfully{}", discount);
+        } catch (Exception e) {
+            LOGGER.error("Error of Discount updating{}", e);
             throw new DaoException(e);
         }
         return null;
@@ -173,7 +172,9 @@ public class H2DiscountDao extends AbstractH2Dao implements DiscountDao {
             discount.setName(resultSet.getString("name"));
             discount.setPercentage(resultSet.getInt("discount_percentage"));
             discount.setDeleted(resultSet.getBoolean("deleted"));
-        } catch (SQLException e) {
+            LOGGER.info("Discount creating from result set was successfully{}", discount);
+        } catch (Exception e) {
+            LOGGER.error("Error of Discount creating from result set{}", e);
             throw new DaoException(e);
         }
         return discount;
@@ -188,7 +189,9 @@ public class H2DiscountDao extends AbstractH2Dao implements DiscountDao {
                 while (resultSet.next())
                     discounts.add(getEntityFromResultSet(resultSet));
             }
-        } catch (SQLException e) {
+            LOGGER.info("All discounts were found{}", discounts);
+        } catch (Exception e) {
+            LOGGER.error("Error of Discounts finding{}", e);
             throw new DaoException(e);
         }
         return discounts;

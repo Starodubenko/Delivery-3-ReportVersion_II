@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,19 +57,18 @@ public class H2ContactDao extends AbstractH2Dao implements ContactDao {
     @Override
     public List<Contact> getContacts() throws DaoException {
         List<Contact> result = new ArrayList<>();
+        String sql = "SELECT * FROM CONTACTS";
 
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
-        try {
-            prstm = conn.prepareStatement("SELECT * FROM CONTACTS");
-            resultSet = prstm.executeQuery();
-            while (resultSet.next()) {
-                result.add(getEntityFromResultSet(resultSet));
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                while (resultSet.next()) {
+                    result.add(getEntityFromResultSet(resultSet));
+                }
             }
-        } catch (SQLException e) {
+            LOGGER.info("Contacts found{}", result);
+        } catch (Exception e) {
+            LOGGER.error("Error of Clients finding{}", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return result;
     }
@@ -78,24 +76,27 @@ public class H2ContactDao extends AbstractH2Dao implements ContactDao {
     @Override
     public Contact findById(int ID) throws DaoException {
         String sql = "select * from contacts where id = " + "'" + ID + "'";
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
-        try {
-            prstm = conn.prepareStatement(sql);
-            resultSet = prstm.executeQuery();
-        } catch (SQLException e) {
+
+        Contact contact = null;
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                if (resultSet.next()) {
+                    contact = getEntityFromResultSet(resultSet);
+                }
+            }
+            LOGGER.info("Contacts found by ID successfully{}", contact);
+        } catch (Exception e) {
+            LOGGER.error("Error of Contact finding by ID{}", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
-        return getEntityFromResultSet(resultSet);
+        return contact;
     }
 
     @Override
     public String insert(Contact contact) {
         String status = "Contact do not added";
 
-        try (PreparedStatement prstm = conn.prepareStatement(ADD_CONTACT)){
+        try (PreparedStatement prstm = conn.prepareStatement(ADD_CONTACT)) {
             prstm.setString(1, null);
             prstm.setString(2, contact.getTelephone());
             prstm.setString(3, contact.getOwner());
@@ -103,7 +104,9 @@ public class H2ContactDao extends AbstractH2Dao implements ContactDao {
             prstm.setBoolean(5, contact.isDeleted());
             prstm.execute();
             status = "Contact added successfully";
-        } catch (SQLException e) {
+            LOGGER.info("Contact added successfully{}", contact);
+        } catch (Exception e) {
+            LOGGER.error("Error of Contact adding{}", e);
             throw new DaoException(e);
         }
         return status;
@@ -113,12 +116,14 @@ public class H2ContactDao extends AbstractH2Dao implements ContactDao {
     public String deleteEntity(int ID) throws DaoException {
         String status = "Contact do not deleted";
 
-        try (PreparedStatement prstm = conn.prepareStatement(DELETE_CONTACT)){
+        try (PreparedStatement prstm = conn.prepareStatement(DELETE_CONTACT)) {
             prstm.setBoolean(1, true);
             prstm.setInt(2, ID);
             prstm.execute();
-            status = "Contact deleted successfully ";
-        } catch (SQLException e) {
+            status = "Contact deleted successfully";
+            LOGGER.info("Contact marked as deleted successfully{}", ID);
+        } catch (Exception e) {
+            LOGGER.error("Error of Contact marking as deleted{}", e);
             throw new DaoException(e);
         }
         return status;
@@ -128,7 +133,7 @@ public class H2ContactDao extends AbstractH2Dao implements ContactDao {
     public String updateEntity(Contact contact) {
         String status = "Contact do not updated";
 
-        try (PreparedStatement prstm = conn.prepareStatement(UPDATE_CONTACT)){
+        try (PreparedStatement prstm = conn.prepareStatement(UPDATE_CONTACT)) {
             prstm.setInt(1, contact.getId());
             prstm.setString(2, contact.getTelephone());
             prstm.setString(3, contact.getOwner());
@@ -137,7 +142,9 @@ public class H2ContactDao extends AbstractH2Dao implements ContactDao {
             prstm.setInt(6, contact.getId());
             prstm.executeUpdate();
             status = "Contact updated successfully";
-        } catch (SQLException e) {
+            LOGGER.info("Contact updated successfully{}", contact);
+        } catch (Exception e) {
+            LOGGER.error("Error of Contact updating{}", e);
             throw new DaoException(e);
         }
         return status;
@@ -152,7 +159,9 @@ public class H2ContactDao extends AbstractH2Dao implements ContactDao {
             contact.setOwner(resultSet.getString("owner"));
             contact.setPart(resultSet.getString("part"));
             contact.setDeleted(resultSet.getBoolean("deleted"));
-        } catch (SQLException e) {
+            LOGGER.info("Contact updated successfully{}", contact);
+        } catch (Exception e) {
+            LOGGER.error("Error of Contact updating{}", e);
             throw new DaoException(e);
         }
         return contact;
@@ -162,12 +171,14 @@ public class H2ContactDao extends AbstractH2Dao implements ContactDao {
     public List<Contact> findAll() {
         String sql = "SELECT * FROM CONTACTS";
         List<Contact> contacts = new ArrayList<>();
-        try (PreparedStatement prstm = conn.prepareStatement(sql)){
-            try(ResultSet resultSet = prstm.executeQuery()){
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
                 while (resultSet.next())
                     contacts.add(getEntityFromResultSet(resultSet));
             }
-        } catch (SQLException e) {
+            LOGGER.info("Contact updated successfully{}", contacts);
+        } catch (Exception e) {
+            LOGGER.error("Error of Contact updating{}", e);
             throw new DaoException(e);
         }
         return contacts;
@@ -178,14 +189,14 @@ public class H2ContactDao extends AbstractH2Dao implements ContactDao {
 
         String columns = NECESSARY_COLUMNS;
 
-        if (needAditionalColumns == true){
+        if (needAditionalColumns == true) {
             columns = columns + ADDITIONAL_COLUMNS;
         }
 
-        String result = String.format(FIND_BY_PARAMETERS_WITHOUT_COLUMNS,columns);
+        String result = String.format(FIND_BY_PARAMETERS_WITHOUT_COLUMNS, columns);
 
-        result = String.format(result+"%s", ORDER_BY);
-        result = String.format(result+"%s", LIMIT_OFFSET);
+        result = String.format(result + "%s", ORDER_BY);
+        result = String.format(result + "%s", LIMIT_OFFSET);
 
         return result;
     }

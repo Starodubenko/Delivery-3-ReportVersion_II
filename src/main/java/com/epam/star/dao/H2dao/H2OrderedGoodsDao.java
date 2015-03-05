@@ -102,18 +102,16 @@ public class H2OrderedGoodsDao extends AbstractH2Dao implements OrderedGoodsDao{
     public OrderedGoods findById(int ID) throws DaoException {
         String sql = "SELECT * FROM ORDERED_GOODS WHERE id = " + ID;
         OrderedGoods goods = null;
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
-        try {
-            prstm = conn.prepareStatement(sql);
-            resultSet = prstm.executeQuery();
-
-            if (resultSet.next())
-                goods = getEntityFromResultSet(resultSet);
-        } catch (SQLException e) {
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                if (resultSet.next()) {
+                    goods = getEntityFromResultSet(resultSet);
+                }
+            }
+            LOGGER.info("Ordered goods found by ID successfully{}", goods);
+        } catch (Exception e) {
+            LOGGER.error("Error of Ordered goods finding by ID{}", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return goods;
     }
@@ -129,8 +127,10 @@ public class H2OrderedGoodsDao extends AbstractH2Dao implements OrderedGoodsDao{
             prstm.setInt(4, goods.getGoodsCount());
             prstm.setBoolean(5, goods.isDeleted());
             prstm.execute();
-            status = "Goods added successfully";
-        } catch (SQLException e) {
+            status = "Ordered goods added successfully";
+            LOGGER.info("Ordered goods added successfully{}", goods);
+        } catch (Exception e) {
+            LOGGER.error("Error of Ordered goods adding{}", e);
             throw new DaoException(e);
         }
         return status;
@@ -145,7 +145,9 @@ public class H2OrderedGoodsDao extends AbstractH2Dao implements OrderedGoodsDao{
             prstm.setInt(2, ID);
             prstm.executeUpdate();
             status = "Ordered goods deleted successfully ";
-        } catch (SQLException e) {
+            LOGGER.info("Ordered goods marked as deleted successfully{}", ID);
+        } catch (Exception e) {
+            LOGGER.error("Error of Ordered goods marking as deleted{}", e);
             throw new DaoException(e);
         }
         return status;
@@ -158,7 +160,9 @@ public class H2OrderedGoodsDao extends AbstractH2Dao implements OrderedGoodsDao{
             prstm.setInt(1, ID);
             prstm.execute();
             status = "Ordered goods deleted successfully ";
-        } catch (SQLException e) {
+            LOGGER.info("Ordered goods deleted by ID from data base successfully{}", ID);
+        } catch (Exception e) {
+            LOGGER.error("Error of Ordered goods deleting by ID from data base{}", e);
             throw new DaoException(e);
         }
         return status;
@@ -176,8 +180,10 @@ public class H2OrderedGoodsDao extends AbstractH2Dao implements OrderedGoodsDao{
             prstm.setBoolean(5, goods.isDeleted());
             prstm.setInt(6, goods.getId());
             prstm.executeUpdate();
-            status = "Goods updated successfully";
-        } catch (SQLException e) {
+            status = "Ordered goods updated successfully";
+            LOGGER.info("Ordered goods updated successfully{}", goods);
+        } catch (Exception e) {
+            LOGGER.error("Error of Ordered goods updating{}", e);
             throw new DaoException(e);
         }
         return status;
@@ -195,7 +201,9 @@ public class H2OrderedGoodsDao extends AbstractH2Dao implements OrderedGoodsDao{
             goods.setGoods(goodsDao.findById(resultSet.getInt("goods_id")));
             goods.setGoodsCount(resultSet.getInt("goods_count"));
             goods.setDeleted(resultSet.getBoolean("deleted"));
-        } catch (SQLException e) {
+            LOGGER.info("Ordered goods created from result set successfully{}", goods);
+        } catch (Exception e) {
+            LOGGER.error("Error of Ordered goods creating from result set{}", e);
             throw new DaoException(e);
         }
         return goods;
@@ -210,7 +218,9 @@ public class H2OrderedGoodsDao extends AbstractH2Dao implements OrderedGoodsDao{
                 while (resultSet.next())
                     orderedGoods.add(getEntityFromResultSet(resultSet));
             }
-        } catch (SQLException e) {
+            LOGGER.info("All Ordered goods found successfully{}", orderedGoods);
+        } catch (Exception e) {
+            LOGGER.error("Error of Ordered goods finding", e);
             throw new DaoException(e);
         }
         return orderedGoods;

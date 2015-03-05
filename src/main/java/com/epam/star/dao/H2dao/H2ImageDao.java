@@ -3,16 +3,19 @@ package com.epam.star.dao.H2dao;
 import com.epam.star.dao.ImageDao;
 import com.epam.star.dao.MappedDao;
 import com.epam.star.entity.Image;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 @MappedDao("Image")
 public class H2ImageDao extends AbstractH2Dao implements ImageDao {
+    private static final Logger LOGGER = LoggerFactory.getLogger(H2ImageDao.class);
+
     private static final String ID = "id";
     private static final String FILENAME = "filename";
     private static final String CONTENT = "content";
@@ -110,7 +113,9 @@ public class H2ImageDao extends AbstractH2Dao implements ImageDao {
             image.setFilename(resultSet.getString(FILENAME));
             image.setContent(resultSet.getBytes(CONTENT));
             image.setDeleted(resultSet.getBoolean(DELETED));
-        } catch (SQLException e) {
+            LOGGER.info("Image created from result set successfully{}", image);
+        } catch (Exception e) {
+            LOGGER.error("Error of Image creating from result set{}", e);
             throw new DaoException(e);
         }
         return image;
@@ -125,7 +130,9 @@ public class H2ImageDao extends AbstractH2Dao implements ImageDao {
                 while (resultSet.next())
                     images.add(getEntityFromResultSet(resultSet));
             }
-        } catch (SQLException e) {
+            LOGGER.info("All images found successfully{}", images);
+        } catch (Exception e) {
+            LOGGER.error("Error of images finding", e);
             throw new DaoException(e);
         }
         return images;
@@ -133,47 +140,53 @@ public class H2ImageDao extends AbstractH2Dao implements ImageDao {
 
     @Override
     public Image findByFilename(String filename) throws DaoException {
+        Image image = null;
         try (PreparedStatement preparedStatement = conn.prepareStatement(FIND_BY_FILENAME)) {
             preparedStatement.setString(1, filename);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    return getEntityFromResultSet(resultSet);
+                    image =  getEntityFromResultSet(resultSet);
                 }
             }
-        } catch (SQLException e) {
+            LOGGER.info("Image found by file name successfully{}", image);
+        } catch (Exception e) {
+            LOGGER.error("Error of Image finding by file name{}", e);
             throw new DaoException(e);
         }
-        return null;
+        return image;
     }
 
     public Image findLastAddedImage() throws DaoException {
+        Image image = null;
         try (PreparedStatement preparedStatement = conn.prepareStatement(GET_LAST_ELEMENT)) {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    return getEntityFromResultSet(resultSet);
+                    image =  getEntityFromResultSet(resultSet);
                 }
             }
-        } catch (SQLException e) {
+            LOGGER.info("Last image found successfully{}", image);
+        } catch (Exception e) {
+            LOGGER.error("Error of last image finding{}", e);
             throw new DaoException(e);
         }
-        return null;
+        return image;
     }
 
     @Override
     public Image findById(int ID) {
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
+
         Image image = null;
-        try {
-            prstm = conn.prepareStatement(FIND_BY_ID);
+        try (PreparedStatement prstm = conn.prepareStatement(FIND_BY_ID)) {
             prstm.setInt(1, ID);
-            resultSet = prstm.executeQuery();
-            if (resultSet.next())
-                image = getEntityFromResultSet(resultSet);
-        } catch (SQLException e) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                if (resultSet.next()) {
+                    image = getEntityFromResultSet(resultSet);
+                }
+            }
+            LOGGER.info("Image found by ID successfully{}", image);
+        } catch (Exception e) {
+            LOGGER.error("Error of Image finding by ID{}", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return image;
     }
@@ -189,7 +202,9 @@ public class H2ImageDao extends AbstractH2Dao implements ImageDao {
             prstm.setBoolean(4, image.isDeleted());
             prstm.execute();
             status = "Image added successfully";
-        } catch (SQLException e) {
+            LOGGER.info("Image added successfully{}", image);
+        } catch (Exception e) {
+            LOGGER.error("Error of Image adding{}", e);
             throw new DaoException(e);
         }
         return status;
@@ -204,7 +219,9 @@ public class H2ImageDao extends AbstractH2Dao implements ImageDao {
             prstm.setInt(2, ID);
             prstm.execute();
             status = "Image successfully deleted";
-        } catch (SQLException e) {
+            LOGGER.info("Image marked as deleted successfully{}", ID);
+        } catch (Exception e) {
+            LOGGER.error("Error of Image marking as deleted{}", e);
             throw new DaoException(e);
         }
         return status;

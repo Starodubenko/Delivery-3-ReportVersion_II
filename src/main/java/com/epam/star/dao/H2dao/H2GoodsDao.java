@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,19 +56,17 @@ public class H2GoodsDao extends AbstractH2Dao implements GoodsDao {
 
     public List<Goods> getAllGoods() {
         List<Goods> result = new ArrayList<>();
+        String sql = "SELECT * FROM GOODS";
 
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
-        try {
-            prstm = conn.prepareStatement("SELECT * FROM goods");
-            resultSet = prstm.executeQuery();
-            while (resultSet.next()) {
-                result.add(getEntityFromResultSet(resultSet));
+        try (PreparedStatement prstm = conn.prepareStatement(sql)){
+            try(ResultSet resultSet = prstm.executeQuery()){
+                while (resultSet.next())
+                    result.add(getEntityFromResultSet(resultSet));
             }
-        } catch (SQLException e) {
+            LOGGER.info("All employees found successfully{}", result);
+        } catch (Exception e) {
+            LOGGER.error("Error of employees finding", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return result;
     }
@@ -78,18 +75,16 @@ public class H2GoodsDao extends AbstractH2Dao implements GoodsDao {
     public Goods findByGoodsName(String name) throws DaoException {
         String sql = "SELECT * FROM goods WHERE goods_name = " + "'" + name + "'";
         Goods goods = null;
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
-        try {
-            prstm = conn.prepareStatement(sql);
-            resultSet = prstm.executeQuery();
-
-            if (resultSet.next())
-                goods = getEntityFromResultSet(resultSet);
-        } catch (SQLException e) {
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                if (resultSet.next()) {
+                    goods = getEntityFromResultSet(resultSet);
+                }
+            }
+            LOGGER.info("Goods found by name successfully{}", goods);
+        } catch (Exception e) {
+            LOGGER.error("Error of Goods finding by name{}", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return goods;
     }
@@ -97,20 +92,16 @@ public class H2GoodsDao extends AbstractH2Dao implements GoodsDao {
     public List<Goods> findByGoodsNameRange(String name) throws DaoException {
         String sql = "SELECT * FROM goods WHERE lower(goods_name) LIKE lower('%" + name + "%')";
         List<Goods> goods = new ArrayList<>();
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
-        if (!name.equals("")) {
-            try {
-                prstm = conn.prepareStatement(sql);
-                resultSet = prstm.executeQuery();
-
-                while (resultSet.next())
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                while (resultSet.next()) {
                     goods.add(getEntityFromResultSet(resultSet));
-            } catch (SQLException e) {
-                throw new DaoException(e);
-            } finally {
-                closeStatement(prstm, resultSet);
+                }
             }
+            LOGGER.info("Goods found by name successfully{}", goods);
+        } catch (Exception e) {
+            LOGGER.error("Error of Goods finding by name{}", e);
+            throw new DaoException(e);
         }
         return goods;
     }
@@ -119,18 +110,16 @@ public class H2GoodsDao extends AbstractH2Dao implements GoodsDao {
     public Goods findById(int ID) throws DaoException {
         String sql = "SELECT * FROM goods WHERE id = " + ID;
         Goods goods = null;
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
-        try {
-            prstm = conn.prepareStatement(sql);
-            resultSet = prstm.executeQuery();
-
-            if (resultSet.next())
-                goods = getEntityFromResultSet(resultSet);
-        } catch (SQLException e) {
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                if (resultSet.next()) {
+                    goods = getEntityFromResultSet(resultSet);
+                }
+            }
+            LOGGER.info("Goods found by ID successfully{}", goods);
+        } catch (Exception e) {
+            LOGGER.error("Error of Goods finding by ID{}", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return goods;
     }
@@ -147,7 +136,9 @@ public class H2GoodsDao extends AbstractH2Dao implements GoodsDao {
             prstm.setBoolean(5, goods.isDeleted());
             prstm.execute();
             status = "Goods added successfully";
-        } catch (SQLException e) {
+            LOGGER.info("Goods added successfully{}", goods);
+        } catch (Exception e) {
+            LOGGER.error("Error of Goods adding{}", e);
             throw new DaoException(e);
         }
         return status;
@@ -161,8 +152,10 @@ public class H2GoodsDao extends AbstractH2Dao implements GoodsDao {
             prstm.setBoolean(1, true);
             prstm.setInt(2, ID);
             prstm.execute();
-            status = "Status deleted successfully ";
-        } catch (SQLException e) {
+            status = "Goods deleted successfully ";
+            LOGGER.info("Goods marked as deleted successfully{}", ID);
+        } catch (Exception e) {
+            LOGGER.error("Error of Goods marking as deleted{}", e);
             throw new DaoException(e);
         }
         return status;
@@ -181,7 +174,9 @@ public class H2GoodsDao extends AbstractH2Dao implements GoodsDao {
             prstm.setInt(6, goods.getId());
             prstm.executeUpdate();
             status = "Goods updated successfully";
-        } catch (SQLException e) {
+            LOGGER.info("Goods updated successfully{}", goods);
+        } catch (Exception e) {
+            LOGGER.error("Error of Goods updating{}", e);
             throw new DaoException(e);
         }
         return status;
@@ -199,7 +194,9 @@ public class H2GoodsDao extends AbstractH2Dao implements GoodsDao {
             goods.setPrice(resultSet.getBigDecimal("price"));
             goods.setImage(imageDao.findById(resultSet.getInt("image")));
             goods.setDeleted(resultSet.getBoolean("deleted"));
-        } catch (SQLException e) {
+            LOGGER.info("Goods created from result set successfully{}", goods);
+        } catch (Exception e) {
+            LOGGER.error("Error of Goods creating from result set{}", e);
             throw new DaoException(e);
         }
         return goods;
@@ -214,7 +211,9 @@ public class H2GoodsDao extends AbstractH2Dao implements GoodsDao {
                 while (resultSet.next())
                     goods.add(getEntityFromResultSet(resultSet));
             }
-        } catch (SQLException e) {
+            LOGGER.info("All goods found successfully{}", goods);
+        } catch (Exception e) {
+            LOGGER.error("Error of goods finding", e);
             throw new DaoException(e);
         }
         return goods;

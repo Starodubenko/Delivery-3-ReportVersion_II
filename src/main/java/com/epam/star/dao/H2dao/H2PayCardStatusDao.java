@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,18 +58,16 @@ public class H2PayCardStatusDao extends AbstractH2Dao implements PayCardStatusDa
     public StatusPayCard findByStatusName(String name) throws DaoException {
         String sql = "SELECT * FROM status_card WHERE status_name = " + "'" + name + "'";
         StatusPayCard statusPayCard = null;
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
-        try {
-            prstm = conn.prepareStatement(sql);
-            resultSet = prstm.executeQuery();
-
-            if (resultSet.next())
-                statusPayCard = getEntityFromResultSet(resultSet);
-        } catch (SQLException e) {
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                if (resultSet.next()) {
+                    statusPayCard = getEntityFromResultSet(resultSet);
+                }
+            }
+            LOGGER.info("Status pay card found by status name successfully{}", statusPayCard);
+        } catch (Exception e) {
+            LOGGER.error("Error of Status pay card finding by status name{}", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return statusPayCard;
     }
@@ -84,7 +81,9 @@ public class H2PayCardStatusDao extends AbstractH2Dao implements PayCardStatusDa
                 while (resultSet.next())
                     statusPayCards.add(getEntityFromResultSet(resultSet));
             }
-        } catch (SQLException e) {
+            LOGGER.info("All Statuses pay cards found successfully{}", statusPayCards);
+        } catch (Exception e) {
+            LOGGER.error("Error of Statuses pay cards finding", e);
             throw new DaoException(e);
         }
         return statusPayCards;
@@ -94,18 +93,16 @@ public class H2PayCardStatusDao extends AbstractH2Dao implements PayCardStatusDa
     public StatusPayCard findById(int ID) throws DaoException {
         String sql = "SELECT * FROM status_card WHERE id = " + ID;
         StatusPayCard statusPayCard = null;
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
-        try {
-            prstm = conn.prepareStatement(sql);
-            resultSet = prstm.executeQuery();
-
-            if (resultSet.next())
-                statusPayCard = getEntityFromResultSet(resultSet);
-        } catch (SQLException e) {
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                if (resultSet.next()) {
+                    statusPayCard = getEntityFromResultSet(resultSet);
+                }
+            }
+            LOGGER.info("Pay card found by ID successfully{}", statusPayCard);
+        } catch (Exception e) {
+            LOGGER.error("Error of Pay card finding by ID{}", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return statusPayCard;
     }
@@ -120,7 +117,9 @@ public class H2PayCardStatusDao extends AbstractH2Dao implements PayCardStatusDa
             prstm.setBoolean(3, statusPayCard.isDeleted());
             prstm.execute();
             statuss = "StatusPayCard added successfully";
-        } catch (SQLException e) {
+            LOGGER.info("Pay card status added successfully{}", statusPayCard);
+        } catch (Exception e) {
+            LOGGER.error("Error of Pay card status adding{}", e);
             throw new DaoException(e);
         }
         return statuss;
@@ -135,7 +134,9 @@ public class H2PayCardStatusDao extends AbstractH2Dao implements PayCardStatusDa
             prstm.setInt(2, ID);
             prstm.executeUpdate();
             status = "Status pay card marked as deleted";
+            LOGGER.info("Pay card status marked as deleted successfully{}", ID);
         } catch (Exception e) {
+            LOGGER.error("Error of Pay card status marking as deleted{}", e);
             throw new DaoException(e);
         }
 
@@ -151,7 +152,9 @@ public class H2PayCardStatusDao extends AbstractH2Dao implements PayCardStatusDa
             prstm.setBoolean(3, statusPayCard.isDeleted());
             prstm.setInt(4, statusPayCard.getId());
             prstm.executeUpdate();
-        } catch (SQLException e) {
+            LOGGER.info("Pay card status updated successfully{}", statusPayCard);
+        } catch (Exception e) {
+            LOGGER.error("Error of Pay card status updating{}", e);
             throw new DaoException(e);
         }
         return null;
@@ -164,7 +167,9 @@ public class H2PayCardStatusDao extends AbstractH2Dao implements PayCardStatusDa
             statusPayCard.setId(resultSet.getInt("id"));
             statusPayCard.setStatusName(resultSet.getString("status_name"));
             statusPayCard.setDeleted(resultSet.getBoolean("deleted"));
-        } catch (SQLException e) {
+            LOGGER.info("Pay card status created from result set successfully{}", statusPayCard);
+        } catch (Exception e) {
+            LOGGER.error("Error of Pay card status creating from result set{}", e);
             throw new DaoException(e);
         }
         return statusPayCard;

@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -87,20 +86,15 @@ public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Orde
                 "order_date = CAST(GETDATE() AS DATE) AND not DELETED " +
                 "ORDER BY USER_ORDER.ORDER_DATE DESC, USER_ORDER.ID DESC";
         List<Order2> orders = new ArrayList<>();
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
-
-        try {
-            prstm = conn.prepareStatement(sql);
-            resultSet = prstm.executeQuery();
-
-            while (resultSet.next()) {
-                orders.add(getEntityFromResultSet(resultSet));
+        try (PreparedStatement prstm = conn.prepareStatement(sql)){
+            try(ResultSet resultSet = prstm.executeQuery()){
+                while (resultSet.next())
+                    orders.add(getEntityFromResultSet(resultSet));
             }
-        } catch (SQLException e) {
+            LOGGER.info("All Orders found by UserID successfully{}", orders);
+        } catch (Exception e) {
+            LOGGER.error("Error of Orders finding by UserID", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return orders;
     }
@@ -113,20 +107,15 @@ public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Orde
                 "order_date != CAST(GETDATE() AS DATE) AND not DELETED " +
                 "ORDER BY USER_ORDER.ORDER_DATE DESC, USER_ORDER.ID DESC";
         List<Order2> orders = new ArrayList<>();
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
-
-        try {
-            prstm = conn.prepareStatement(sql);
-            resultSet = prstm.executeQuery();
-
-            while (resultSet.next()) {
-                orders.add(getEntityFromResultSet(resultSet));
+        try (PreparedStatement prstm = conn.prepareStatement(sql)){
+            try(ResultSet resultSet = prstm.executeQuery()){
+                while (resultSet.next())
+                    orders.add(getEntityFromResultSet(resultSet));
             }
-        } catch (SQLException e) {
+            LOGGER.info("All Orders found by UserID successfully{}", orders);
+        } catch (Exception e) {
+            LOGGER.error("Error of Orders finding by UserID", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return orders;
     }
@@ -139,81 +128,70 @@ public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Orde
                 "user_id = " + id + " AND not DELETED " +
                 "ORDER BY USER_ORDER.ORDER_DATE DESC, USER_ORDER.ID DESC";
         List<Order2> orders = new ArrayList<>();
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
-        try {
-            prstm = conn.prepareStatement(sql);
-            resultSet = prstm.executeQuery();
-
-            while (resultSet.next()) {
-                Order2 order = getEntityFromResultSet(resultSet);
-                orders.add(order);
+        try (PreparedStatement prstm = conn.prepareStatement(sql)){
+            try(ResultSet resultSet = prstm.executeQuery()){
+                while (resultSet.next())
+                    orders.add(getEntityFromResultSet(resultSet));
             }
-        } catch (SQLException e) {
+            LOGGER.info("All Orders found by UserID successfully{}", orders);
+        } catch (Exception e) {
+            LOGGER.error("Error of Orders finding by UserID", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return orders;
     }
 
 
     public int getClientOrdersCount(int id) {
+        String sql = "SELECT COUNT(*) FROM USER_ORDER where user_id = " + id;
 
         int result = 0;
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
-        try {
-            prstm = conn.prepareStatement("SELECT COUNT(*) FROM USER_ORDER where user_id = " + id);
-            resultSet = prstm.executeQuery();
-            while (resultSet.next())
-                result = resultSet.getInt("count(*)");
-        } catch (SQLException e) {
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                if (resultSet.next()) {
+                    result = resultSet.getInt("count(*)");
+                }
+            }
+            LOGGER.info("Order count got successfully{}", result);
+        } catch (Exception e) {
+            LOGGER.error("Error of Order count getting{}", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return result;
     }
 
 
     public Order2 findCart(T user) {
-        String sqlOrder = "SELECT * FROM USER_ORDER WHERE STATUS_ID = 5 AND USER_ID = " + user.getId();
+        String sql = "SELECT * FROM USER_ORDER WHERE STATUS_ID = 5 AND USER_ID = " + user.getId();
         Order2 order = null;
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
-        try {
-            prstm = conn.prepareStatement(sqlOrder);
-            resultSet = prstm.executeQuery();
-
-            if (resultSet.next())
-                order = getEntityFromResultSet(resultSet);
-
-        } catch (SQLException e) {
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                if (resultSet.next()) {
+                    order = getEntityFromResultSet(resultSet);
+                }
+            }
+            LOGGER.info("Cart found by UserID successfully{}", order);
+        } catch (Exception e) {
+            LOGGER.error("Error of Cart finding by UserID{}", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return order;
     }
 
 
     public Order2 findById(int ID) throws DaoException {
-        String sqlOrder = "SELECT * FROM USER_ORDER WHERE id = " + ID;
+        String sql = "SELECT * FROM USER_ORDER WHERE id = " + ID;
         Order2 order = null;
-        PreparedStatement prstm = null;
-        ResultSet resultSet = null;
-        try {
-            prstm = conn.prepareStatement(sqlOrder);
-            resultSet = prstm.executeQuery();
-
-            if (resultSet.next())
-                order = getEntityFromResultSet(resultSet);
-
-        } catch (SQLException e) {
+        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = prstm.executeQuery()) {
+                if (resultSet.next()) {
+                    order = getEntityFromResultSet(resultSet);
+                }
+            }
+            LOGGER.info("Order found by ID successfully{}", order);
+        } catch (Exception e) {
+            LOGGER.error("Error of Order finding by ID{}", e);
             throw new DaoException(e);
-        } finally {
-            closeStatement(prstm, resultSet);
         }
         return order;
     }
@@ -221,21 +199,19 @@ public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Orde
     private Map<Goods, Integer> getGoodsForOrder(Connection conn, int number){
         Map<Goods, Integer> goods = new HashMap<>();
         String sqlGoods = "SELECT * FROM ORDERED_GOODS WHERE ORDER_NUMBER = ?";
-
             try(PreparedStatement prstm = conn.prepareStatement(sqlGoods)){
                 prstm.setInt(1, number);
-
                 try(ResultSet resultSet = prstm.executeQuery()){
                     while (resultSet.next()) {
                         OrderedGoods orderedGoods = getOrderedGoodsFromResultSet(resultSet);
                         goods.put(orderedGoods.getGoods(), orderedGoods.getGoodsCount());
                     }
                 }
-
-            }catch (Exception e){
+                LOGGER.info("Goods for order found by Number successfully{}", goods);
+            } catch (Exception e) {
+                LOGGER.error("Error of Goods for order finding by Number{}", e);
                 throw new DaoException(e);
             }
-
         return goods;
     }
 
@@ -257,7 +233,9 @@ public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Orde
             prstm.setBoolean(11, order.isDeleted());
             prstm.execute();
             status = "Order added successfully";
-        } catch (SQLException e) {
+            LOGGER.info("Order added successfully{}", order);
+        } catch (Exception e) {
+            LOGGER.error("Error of Order adding{}", e);
             throw new DaoException(e);
         }
         return status;
@@ -271,7 +249,9 @@ public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Orde
             prstm.setInt(2, ID);
             prstm.executeUpdate();
             status = "Order deleted successfully ";
-        } catch (SQLException e) {
+            LOGGER.info("Order marked as deleted successfully{}", ID);
+        } catch (Exception e) {
+            LOGGER.error("Error of Order marking as deleted{}", e);
             throw new DaoException(e);
         }
         return status;
@@ -294,7 +274,9 @@ public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Orde
             prstm.setBoolean(11, order.isDeleted());
             prstm.setInt(12, order.getId());
             prstm.executeUpdate();
-        } catch (SQLException e) {
+            LOGGER.info("Order updated successfully{}", order);
+        } catch (Exception e) {
+            LOGGER.error("Error of Order updating{}", e);
             throw new DaoException(e);
         }
         return null;
@@ -354,7 +336,9 @@ public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Orde
             goods.setGoods(goodsDao.findById(resultSet.getInt("goods_id")));
             goods.setGoodsCount(resultSet.getInt("goods_count"));
             goods.setDeleted(resultSet.getBoolean("deleted"));
-        } catch (SQLException e) {
+            LOGGER.info("Ordered goods created from result set successfully{}", goods);
+        } catch (Exception e) {
+            LOGGER.error("Error of Ordered goods creating from result set{}", e);
             throw new DaoException(e);
         }
         return goods;
@@ -381,7 +365,9 @@ public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Orde
             order.setDeleted(resultSet.getBoolean("deleted"));
 
             order.setGoods(getGoodsForOrder(conn,order.getNumber()));
-        } catch (SQLException e) {
+            LOGGER.info("Order created from result set successfully{}", order);
+        } catch (Exception e) {
+            LOGGER.error("Error of Order creating from result set{}", e);
             throw new DaoException(e);
         }
         return order;
@@ -396,7 +382,9 @@ public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Orde
                 while (resultSet.next())
                     orders.add(getEntityFromResultSet(resultSet));
             }
-        } catch (SQLException e) {
+            LOGGER.info("All Orders found successfully{}", orders);
+        } catch (Exception e) {
+            LOGGER.error("Error of Orders finding", e);
             throw new DaoException(e);
         }
         return orders;
@@ -407,8 +395,10 @@ public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Orde
         try (PreparedStatement prstm = conn.prepareStatement(sql)){
             try(ResultSet resultSet = prstm.executeQuery()){
                 if (resultSet.next()) return true;
+                LOGGER.info("Order with ID = "+id+" is exist{}", resultSet.next());
             }
         } catch (Exception e) {
+            LOGGER.error("Error of Order finding", e);
             throw new DaoException(e);
         }
         return false;
