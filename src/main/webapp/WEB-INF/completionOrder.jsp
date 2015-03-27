@@ -26,7 +26,7 @@
                         <div class="center">
                             <label for="Date"><fmt:message key="orders.message.delivery.date"/></label>
                         </div>
-                        <input type="text" name="deliverydate" placeholder="Date" class="form-control datepicker"
+                        <input type="text" name="deliverydate" placeholder="<fmt:message key="orders.message.date"/>" class="form-control datepicker"
                                id="Date">
 
                         <p class="text-center error-message" id="dateInput"></p>
@@ -36,7 +36,7 @@
                                 key="orders.message.delivery.time"/></label></div>
                         <select class="form-control" name="deliverytime" class="form-control" id="PeriodTime">
                             <c:forEach var="status" items="${periods}">
-                                <option value="${status.id}">${status.period}</option>
+                                <option value="${status.id}">${status.describe}</option>
                             </c:forEach>
                         </select>
                     </div>

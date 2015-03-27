@@ -4,9 +4,8 @@ import com.epam.star.action.Action;
 import com.epam.star.action.ActionException;
 import com.epam.star.action.ActionResult;
 import com.epam.star.action.MappedAction;
-import com.epam.star.dao.H2dao.*;
-import com.epam.star.dao.util.PaginatedList;
-import com.epam.star.dao.util.Pagination;
+import com.epam.star.dao.H2dao.DaoFactory;
+import com.epam.star.dao.H2dao.DaoManager;
 import com.epam.star.entity.Goods;
 import com.epam.star.entity.Period;
 import org.slf4j.Logger;
@@ -27,23 +26,10 @@ public class ShowDispatcherPageAction implements Action {
     public ActionResult execute(HttpServletRequest request) throws ActionException, SQLException {
         DaoManager daoManager = DaoFactory.getInstance().getDaoManager();
 
-        H2ClientDao clientDao = daoManager.getClientDao();
-        H2OrderDao orderDao = daoManager.getOrderDao();
-
         List<Period> periods = daoManager.getPeriodDao().getAllPeriods();
         List<Goods> goods = daoManager.getGoodsDao().getAllGoods();
 
         request.getSession().setAttribute("entityName", "Client");
-
-        Pagination pagination = new Pagination();
-        PaginatedList clients = pagination.paginationEntity(request, (AbstractH2Dao) clientDao, "clients");
-        PaginatedList orders = pagination.paginationEntity(request, (AbstractH2Dao) orderDao, "orders");
-
-//        H2OrderDao2 orderDao2 = daoManager.getOrderDao2();
-//        PaginatedList<Order2> orders = pagination.paginationEntity(request, orderDao2, "orders");
-
-        request.setAttribute("clientsPaginatedList",clients);
-        request.setAttribute("ordersPaginatedList",orders);
 
         HttpSession session = request.getSession();
         session.setAttribute("periods", periods);

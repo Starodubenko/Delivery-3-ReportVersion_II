@@ -5,6 +5,7 @@ import com.epam.star.entity.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.sql.Time;
 
 import static com.epam.star.action.util.ActionUtil.getImageFromRequestPart;
 
@@ -29,7 +30,7 @@ public class GetEntityUpdate<T extends AbstractEntity> {
         }
 
         if (entityName.toLowerCase().equals("goods")){
-            return getGoods(request, daoManager);
+            return getGoods(request, daoManager, (Goods) oldEntity);
         }
 
         if (entityName.toLowerCase().equals("image")){
@@ -99,10 +100,10 @@ public class GetEntityUpdate<T extends AbstractEntity> {
 
     private static AbstractEntity getPeriod(HttpServletRequest request, DaoManager daoManager, Period oldPeriod) {
 
-        H2PeriodDao periodDao = daoManager.getPeriodDao();
-
-        if (request.getParameter("period") != null && oldPeriod.getId() == Integer.valueOf(request.getParameter("period")))
-            oldPeriod.setPeriod(periodDao.findById(Integer.valueOf(request.getParameter("period"))).getPeriod());
+        if (request.getParameter("period") != null && !oldPeriod.getPeriod().equals(Time.valueOf(request.getParameter("period"))))
+            oldPeriod.setPeriod(Time.valueOf(request.getParameter("period")));
+        if (request.getParameter("describe") != null && !oldPeriod.getDescribe().equals(request.getParameter("describe")))
+            oldPeriod.setDescribe(request.getParameter("describe"));
         if (request.getParameter("deleted") != null && oldPeriod.isDeleted() != Boolean.valueOf(request.getParameter("deleted")))
             oldPeriod.setDeleted(Boolean.valueOf(request.getParameter("deleted")));
 
@@ -124,8 +125,18 @@ public class GetEntityUpdate<T extends AbstractEntity> {
         return image;
     }
 
-    private static AbstractEntity getGoods(HttpServletRequest request, DaoManager daoManager) {
-        return null;
+    private static AbstractEntity getGoods(HttpServletRequest request, DaoManager daoManager, Goods oldGoods) {
+
+        if (request.getParameter("goodsImageFileName") != null && !oldGoods.getImage().getFilename().equals(request.getParameter("goodsImageFileName")))
+            oldGoods.setImage(getImageFromRequestPart(request,"goodsImageFileName"));
+        if (request.getParameter("goodsname") != null && !oldGoods.getGoodsName().equals(request.getParameter("goodsname")))
+            oldGoods.setGoodsName(request.getParameter("goodsname"));
+        if (request.getParameter("price") != null && !oldGoods.getPrice().equals(new BigDecimal(request.getParameter("price"))))
+            oldGoods.setPrice(new BigDecimal(request.getParameter("price")));
+        if (request.getParameter("deleted") != null && oldGoods.isDeleted() != Boolean.valueOf(request.getParameter("deleted")))
+            oldGoods.setDeleted(Boolean.valueOf(request.getParameter("deleted")));
+
+        return oldGoods;
     }
 
     private static AbstractEntity getDiscount(HttpServletRequest request, Discount oldDiscount) {

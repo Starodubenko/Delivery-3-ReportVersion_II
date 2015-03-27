@@ -111,8 +111,7 @@ public class H2DiscountDao extends AbstractH2Dao implements DiscountDao {
     }
 
     @Override
-    public String insert(Discount discount) {
-        String message = "Status do not added";
+    public Discount insert(Discount discount) {
 
         try (PreparedStatement prstm = conn.prepareStatement(ADD_STATUS)){
             prstm.setString(1, null);
@@ -120,13 +119,16 @@ public class H2DiscountDao extends AbstractH2Dao implements DiscountDao {
             prstm.setInt(3, discount.getPercentage());
             prstm.setBoolean(4, discount.isDeleted());
             prstm.execute();
-            message = "Status added successfully";
+
+            ResultSet generatedKeys = prstm.getGeneratedKeys();
+            generatedKeys.next();
+            discount.setId(generatedKeys.getInt("SCOPE_IDENTITY()"));
             LOGGER.info("Discount inserted successfully{}", discount);
         } catch (Exception e) {
             LOGGER.error("Error of Discount inserting{}", e);
             throw new DaoException(e);
         }
-        return message;
+        return discount;
     }
 
     @Override

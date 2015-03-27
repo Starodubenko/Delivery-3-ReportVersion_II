@@ -91,21 +91,23 @@ public class H2StatusDao extends AbstractH2Dao implements StatusDao {
     }
 
     @Override
-    public String insert(Status status) throws DaoException {
-        String statuss = "Status do not added";
+    public Status insert(Status status) throws DaoException {
 
         try (PreparedStatement prstm = conn.prepareStatement(ADD_STATUS)){
             prstm.setString(1, null);
             prstm.setString(2, status.getStatusName());
             prstm.setBoolean(3, status.isDeleted());
             prstm.execute();
-            statuss = "Status added successfully";
+
+            ResultSet generatedKeys = prstm.getGeneratedKeys();
+            generatedKeys.next();
+            status.setId(generatedKeys.getInt("SCOPE_IDENTITY()"));
             LOGGER.info("Status added successfully{}", status);
         } catch (Exception e) {
             LOGGER.error("Error of Status adding{}", e);
             throw new DaoException(e);
         }
-        return statuss;
+        return status;
     }
 
     @Override

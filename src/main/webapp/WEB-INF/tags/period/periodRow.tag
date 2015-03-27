@@ -15,6 +15,10 @@
                     <input id="period${entity.getId()}" name="period" type="text" class="form-control edit-field" style="display: none;" value="${entity.getPeriod()}"/>
                 </td>
                 <td>
+                    <label class="field" for="describe${entity.getId()}">${entity.getDescribe()}</label>
+                    <input id="describe${entity.getId()}" name="describe" type="text" class="form-control edit-field" style="display: none;" value="${entity.getDescribe()}"/>
+                </td>
+                <td>
                     <label class="field" for="deleted${entity.getId()}">
                         <c:choose>
                             <c:when test="${entity.isDeleted() eq true}"><fmt:message key="message.yes"/></c:when>
@@ -39,6 +43,7 @@
         <tr>
             <td class="id"></td>
             <td><input name="period" type="text" class="form-control edit-field" style="display: none;"/></td>
+            <td><input name="describe" type="text" class="form-control edit-field" style="display: none;"/></td>
             <td></td>
             <td>
                 <button type="button" class="btn btn-primary" id="add"><fmt:message key="button.add"/>

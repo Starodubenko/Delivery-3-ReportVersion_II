@@ -99,7 +99,19 @@ public class GetEntity {
     }
 
     private static AbstractEntity getGoods(HttpServletRequest request, DaoManager daoManager) {
-        return null;
+
+        Goods goods = new Goods();
+
+//        if (request.getParameter("goodsImageFileName") != null)
+            goods.setImage(getImageFromRequestPart(request,"goodsImageFileName"));
+        if (request.getParameter("goodsname") != null)
+            goods.setGoodsName(request.getParameter("goodsname"));
+        if (request.getParameter("price") != null)
+            goods.setPrice(new BigDecimal(request.getParameter("price")));
+        if (request.getParameter("deleted") != null)
+            goods.setDeleted(Boolean.valueOf(request.getParameter("deleted")));
+
+        return goods;
     }
 
     private static AbstractEntity getDiscount(HttpServletRequest request, DaoManager daoManager) {
@@ -110,7 +122,6 @@ public class GetEntity {
     private static Client getClient(HttpServletRequest request, DaoManager daoManager){
 
         H2PositionDao positionDao = daoManager.getPositionDao();
-        H2ImageDao imageDao = daoManager.getImageDao();
         H2DiscountDao discountDao = daoManager.getDiscountDao();
 
         Client client = new Client();

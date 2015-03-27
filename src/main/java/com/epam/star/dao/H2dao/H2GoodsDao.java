@@ -125,8 +125,7 @@ public class H2GoodsDao extends AbstractH2Dao implements GoodsDao {
     }
 
     @Override
-    public String insert(Goods goods) {
-        String status = "Goods do not added";
+    public Goods insert(Goods goods) {
 
         try (PreparedStatement prstm = conn.prepareStatement(ADD_GOODS)){
             prstm.setString(1, null);
@@ -135,13 +134,16 @@ public class H2GoodsDao extends AbstractH2Dao implements GoodsDao {
             prstm.setInt(4, goods.getImage().getId());
             prstm.setBoolean(5, goods.isDeleted());
             prstm.execute();
-            status = "Goods added successfully";
+
+            ResultSet generatedKeys = prstm.getGeneratedKeys();
+            generatedKeys.next();
+            goods.setId(generatedKeys.getInt("SCOPE_IDENTITY()"));
             LOGGER.info("Goods added successfully{}", goods);
         } catch (Exception e) {
             LOGGER.error("Error of Goods adding{}", e);
             throw new DaoException(e);
         }
-        return status;
+        return goods;
     }
 
     @Override

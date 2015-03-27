@@ -137,6 +137,10 @@ $(document).ready(function () {
         $(".image").trigger('click');
     });
 
+    $("#goods-form").on("click",".image-block",function(){
+        $(".image").trigger('click');
+    });
+
     function readURL(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
@@ -168,6 +172,43 @@ $(document).ready(function () {
             success: function (data) {
                 $('#avatarInput').html(data);
                 $("#avatarInput").show().delay(1500).fadeOut();
+            }
+        });
+    });
+
+    $(".edit-field-block-button").on("click", "#updateGoods", function () {
+
+        var id = $('#id').val();
+
+        $.post("updateGoods?"+$("#goods-form").serialize(),
+            {
+                id:id
+            },
+            function (data) {
+                $('#goodsmessage').html(data);
+            })
+    });
+
+    $(".edit-field-block-button").on("click", "#addGoods", function () {
+
+        var form = document.getElementById('goods-form');
+        var formData = new FormData(form);
+        formData.append("goodsImageFileName", $(".image")[0].files[0]);
+
+        //$.post("addGoods?"+$("#goods-form").serialize(),
+        //    function (data) {
+        //        $('#goodsmessage').html(data);
+        //    })
+
+        $.ajax({
+            url: "addGoodsToDataBase",
+            type: "POST",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                $('#goodsmessage').html(data);
             }
         });
     });

@@ -108,21 +108,23 @@ public class H2PayCardStatusDao extends AbstractH2Dao implements PayCardStatusDa
     }
 
     @Override
-    public String insert(StatusPayCard statusPayCard) throws DaoException {
-        String statuss = "StatusPayCard do not added";
+    public StatusPayCard insert(StatusPayCard statusPayCard) throws DaoException {
 
         try (PreparedStatement prstm = conn.prepareStatement(ADD_STATUS_PAY_CARD)){
             prstm.setString(1, null);
             prstm.setString(2, statusPayCard.getStatusName());
             prstm.setBoolean(3, statusPayCard.isDeleted());
             prstm.execute();
-            statuss = "StatusPayCard added successfully";
+
+            ResultSet generatedKeys = prstm.getGeneratedKeys();
+            generatedKeys.next();
+            statusPayCard.setId(generatedKeys.getInt("SCOPE_IDENTITY()"));
             LOGGER.info("Pay card status added successfully{}", statusPayCard);
         } catch (Exception e) {
             LOGGER.error("Error of Pay card status adding{}", e);
             throw new DaoException(e);
         }
-        return statuss;
+        return statusPayCard;
     }
 
     @Override

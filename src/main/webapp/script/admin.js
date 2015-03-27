@@ -235,29 +235,10 @@ $(document).ready(function () {
             formData.append(field.name, field.value);
         });
 
-        console.info(formData);
-
-        //formData.append(Data);
-
-        //$.ajax(
-        //{
-        //    url : "save-entity",
-        //    type: "POST",
-        //    data : Data,
-        //    cache: false,
-        //    contentType: 'multipart/form-data',
-        //    processData: false,
-        //    success:function(data)
-        //    {
-        //        $('.table-data-base').html(data);
-        //    }
-        //});
-
         $.ajax({
             url: "save-entity",
             type: "POST",
             data: formData,
-            //mimeType: "multipart/form-data",
             cache: false,
             contentType: false,
             processData: false,
@@ -269,28 +250,28 @@ $(document).ready(function () {
     });
 
 
-    $('.table-data-base').on('click', '.edit', function () {
-
-        if (!this.checked) {
-            var entityName = $('#entityName').val();
-            rowNumber = $(this).parents('tr').get(0).rowIndex;
-
-            var field = {};
-            var data = $(".table-data-base tr:eq(" + rowNumber + ") > td .edit-field").serializeArray();
-            data.push(field["entityName"] = entityName);
-
-            //$(".table-data-base tr:eq("+rowNumber+") > td .edit-field").each(function(){
-            //    var field = {};
-            //    field[(this).getAttribute("name")] = (this).value;
-            //    data.push(field);
-            //});
-
-            //$.post("save-entity", $('#entity-line'+rowNumber).serialize() +"&entityName=" + entityName,
-            //    function (data) {
-            //        $('#result').html(data.result);
-            //    })
-        }
-    });
+    //$('.table-data-base').on('click', '.edit', function () {
+    //
+    //    if (!this.checked) {
+    //        var entityName = $('#entityName').val();
+    //        rowNumber = $(this).parents('tr').get(0).rowIndex;
+    //
+    //        var field = {};
+    //        var data = $(".table-data-base tr:eq(" + rowNumber + ") > td .edit-field").serializeArray();
+    //        data.push(field["entityName"] = entityName);
+    //
+    //        //$(".table-data-base tr:eq("+rowNumber+") > td .edit-field").each(function(){
+    //        //    var field = {};
+    //        //    field[(this).getAttribute("name")] = (this).value;
+    //        //    data.push(field);
+    //        //});
+    //
+    //        //$.post("save-entity", $('#entity-line'+rowNumber).serialize() +"&entityName=" + entityName,
+    //        //    function (data) {
+    //        //        $('#result').html(data.result);
+    //        //    })
+    //    }
+    //});
 
     $('.table-data-base').on('click', '.delete', function () {
 
@@ -388,5 +369,9 @@ $(document).ready(function () {
             $('#back').removeClass("disabledd");
         }
     }
+
+    $('.table-data-base').on('click', '#addGoods', function () {
+        location.href = "editGoods?purpose=add";
+    });
 });
 

@@ -114,6 +114,8 @@ public class GetEntityFields {
 
         if (request.getParameter("period") != null && !request.getParameter("period").equals(""))
             fieldsMap.put("period", request.getParameter("period"));
+        if (request.getParameter("describe") != null && !request.getParameter("describe").equals(""))
+            fieldsMap.put("describe", request.getParameter("describe"));
         if (request.getParameter("deleted") == null) fieldsMap.put("deleted", "false");
         else fieldsMap.put("deleted", "true");
 

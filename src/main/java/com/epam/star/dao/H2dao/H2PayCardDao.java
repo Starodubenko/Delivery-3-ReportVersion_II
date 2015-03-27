@@ -140,8 +140,7 @@ public class H2PayCardDao extends AbstractH2Dao implements PayCardDao {
     }
 
     @Override
-    public String insert(PayCard payCard) throws DaoException {
-        String status = "PayCard do not added";
+    public PayCard insert(PayCard payCard) throws DaoException {
 
         PreparedStatement prstm = null;
         try {
@@ -153,7 +152,10 @@ public class H2PayCardDao extends AbstractH2Dao implements PayCardDao {
             prstm.setInt(5, payCard.getStatusPayCard().getId());
             prstm.setBoolean(6, payCard.isDeleted());
             prstm.execute();
-            status = "PayCard added successfully";
+
+            ResultSet generatedKeys = prstm.getGeneratedKeys();
+            generatedKeys.next();
+            payCard.setId(generatedKeys.getInt("SCOPE_IDENTITY()"));
             LOGGER.info("Pay card added successfully{}", payCard);
         } catch (Exception e) {
             LOGGER.error("Error of Pay card adding{}", e);
@@ -161,7 +163,7 @@ public class H2PayCardDao extends AbstractH2Dao implements PayCardDao {
         } finally {
             closeStatement(prstm, null);
         }
-        return status;
+        return payCard;
     }
 
     @Override

@@ -40,27 +40,21 @@
                     </button>
                 </td>
                 <td>
-                    <a href="<c:url value="/do/editGoods?goodsId=${entity.getId()}"/>"><fmt:message key="client.edit.goods"/></a>
-                    <input type="checkbox" class="checkbox edit" id="${entity.getId()}"/>
-                    <label class="checkbox-label" for="${entity.getId()}"></label>
+                    <a href="<c:url value="/do/editGoods?goodsId=${entity.getId()}&purpose=update"/>"><fmt:message key="client.edit.goods"/></a>
                 </td>
             </tr>
         </form>
     </c:forEach>
-    <form id="saveForm">
         <tr>
             <td></td>
-            <td><input name="goods_name" type="text" class="form-control edit-field" style="display: none;"/></td>
-            <td><input name="price" type="text" class="form-control edit-field" style="display: none;"/></td>
-            <td><input name="image" type="text" class="form-control edit-field" style="display: none;"/></td>
+            <td></td>
+            <td></td>
+            <td></td>
             <td></td>
             <td>
-                <button type="button" class="btn btn-primary" id="add"><fmt:message key="button.add"/>
-                </button>
-                <button type="button" class="btn btn-primary" id="save" style="display: none;">
-                    <fmt:message key="button.save"/>
+                <button type="button" class="btn btn-primary" id="addGoods">
+                    <fmt:message key="button.add"/>
                 </button>
             </td>
         </tr>
-    </form>
 </fmt:bundle>

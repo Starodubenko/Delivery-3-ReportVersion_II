@@ -105,6 +105,11 @@
     padding-bottom: 20px;
 }
 
+.edit-field-block-button{
+    float: left;
+    margin-left: 210px;
+}
+
 .edit-field-block{
     margin: 10px 10px 10px 0;
     width: 300px;
@@ -223,6 +228,27 @@
     -moz-transform: scale(0.9);
     -o-transform: scale(0.9);
 }
+
+
+#goods-form img {
+    -moz-transition: all 0.1s ease-out;
+    -o-transition: all 0.1s ease-out;
+    -webkit-transition: all 0.1s ease-out;
+}
+
+#goods-form img:hover{
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -o-transform: scale(1.1);
+    cursor: hand;
+}
+
+#goods-form img:active{
+    -webkit-transform: scale(0.9);
+    -moz-transform: scale(0.9);
+    -o-transform: scale(0.9);
+}
+
 
 .order-function-button{
     width: 30px;

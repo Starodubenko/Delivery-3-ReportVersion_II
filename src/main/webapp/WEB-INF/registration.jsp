@@ -98,6 +98,7 @@
         </div>
 
         <script src="<c:url value="/script/registration.js"/>"></script>
+        <script src="<c:url value="/script/pswStrength.js"/>"></script>
     </t:gbody>
     </html>
 </fmt:bundle>

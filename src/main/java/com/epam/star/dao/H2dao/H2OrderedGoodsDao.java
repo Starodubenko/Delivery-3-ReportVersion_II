@@ -117,8 +117,7 @@ public class H2OrderedGoodsDao extends AbstractH2Dao implements OrderedGoodsDao{
     }
 
 
-    public String insert(OrderedGoods goods) throws DaoException {
-        String status = "Goods do not added";
+    public OrderedGoods insert(OrderedGoods goods) throws DaoException {
 
         try (PreparedStatement prstm = conn.prepareStatement(ADD_GOODS)){
             prstm.setString(1, null);
@@ -127,13 +126,16 @@ public class H2OrderedGoodsDao extends AbstractH2Dao implements OrderedGoodsDao{
             prstm.setInt(4, goods.getGoodsCount());
             prstm.setBoolean(5, goods.isDeleted());
             prstm.execute();
-            status = "Ordered goods added successfully";
+
+            ResultSet generatedKeys = prstm.getGeneratedKeys();
+            generatedKeys.next();
+            goods.setId(generatedKeys.getInt("SCOPE_IDENTITY()"));
             LOGGER.info("Ordered goods added successfully{}", goods);
         } catch (Exception e) {
             LOGGER.error("Error of Ordered goods adding{}", e);
             throw new DaoException(e);
         }
-        return status;
+        return goods;
     }
 
 

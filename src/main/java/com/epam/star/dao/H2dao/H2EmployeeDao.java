@@ -72,9 +72,11 @@ public class H2EmployeeDao extends AbstractH2Dao implements EmployeeDao {
                 " where POSITION_ID != 11 and Lower(LOGIN) = " + "Lower('" + login + "')" + "and PASSWORD = " + "'" + password + "'";
 
         Employee employee = null;
-        try (PreparedStatement prstm = conn.prepareStatement(sql);ResultSet resultSet = prstm.executeQuery();){
-            if (resultSet.next())
-                employee = getEntityFromResultSet(resultSet);
+        try (PreparedStatement prstm = conn.prepareStatement(sql)){
+            try(ResultSet resultSet = prstm.executeQuery()){
+                if (resultSet.next())
+                    employee = getEntityFromResultSet(resultSet);
+            }
         } catch (SQLException e) {
             throw new DaoException(e);
         }
@@ -101,8 +103,7 @@ public class H2EmployeeDao extends AbstractH2Dao implements EmployeeDao {
     }
 
     @Override
-    public String insert(Employee employee) {
-        String status = "Employee do not added";
+    public Employee insert(Employee employee) {
 
         try (PreparedStatement prstm = conn.prepareStatement(ADD_EMPLOYEE)){
             prstm.setString(1, null);
@@ -124,13 +125,16 @@ public class H2EmployeeDao extends AbstractH2Dao implements EmployeeDao {
             prstm.setInt(17, employee.getDiscount().getId());
             prstm.setBoolean(18, employee.isDeleted());
             prstm.execute();
-            status = "Employee added successfully";
+
+            ResultSet generatedKeys = prstm.getGeneratedKeys();
+            generatedKeys.next();
+            employee.setId(generatedKeys.getInt("SCOPE_IDENTITY()"));
             LOGGER.info("Employee inserted successfully{}", employee);
         } catch (Exception e) {
             LOGGER.error("Error of Employee inserting{}", e);
             throw new DaoException(e);
         }
-        return status;
+        return employee;
     }
 
     @Override

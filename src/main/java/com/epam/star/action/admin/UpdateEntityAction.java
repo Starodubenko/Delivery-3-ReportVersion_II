@@ -22,7 +22,8 @@ public class UpdateEntityAction implements Action {
     private static final Logger LOGGER = LoggerFactory.getLogger(UpdateEntityAction.class);
     private static final UtilDao UTIL_DAO = new UtilDao();
 
-    ActionResult reviewentity = new ActionResult("changeEntity",true);
+//    ActionResult reviewentity = new ActionResult("changeEntity",true);
+    ActionResult reviewentity = new ActionResult("json");
     GetEntityUpdate entityForUpdate = new GetEntityUpdate();
 
     @Override
@@ -41,7 +42,7 @@ public class UpdateEntityAction implements Action {
                 daoManager.beginTransaction();
                 dao.updateEntity(newEntity);
 
-                LOGGER.error("Entity updated successful{}", entity);
+                LOGGER.info("Entity updated successful{}", entity);
                 daoManager.commit();
             } catch (Exception e) {
                 LOGGER.error("During updating entity an error was occurred{}", entity);

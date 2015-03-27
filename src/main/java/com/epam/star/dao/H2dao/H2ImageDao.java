@@ -192,8 +192,7 @@ public class H2ImageDao extends AbstractH2Dao implements ImageDao {
     }
 
     @Override
-    public String insert(Image image) {
-        String status = "Image do not added";
+    public Image insert(Image image) {
 
         try (PreparedStatement prstm = conn.prepareStatement(INSERT_IMAGE)){
             prstm.setString(1, null);
@@ -201,13 +200,16 @@ public class H2ImageDao extends AbstractH2Dao implements ImageDao {
             prstm.setBytes(3, image.getContent());
             prstm.setBoolean(4, image.isDeleted());
             prstm.execute();
-            status = "Image added successfully";
+
+            ResultSet generatedKeys = prstm.getGeneratedKeys();
+            generatedKeys.next();
+            image.setId(generatedKeys.getInt("SCOPE_IDENTITY()"));
             LOGGER.info("Image added successfully{}", image);
         } catch (Exception e) {
             LOGGER.error("Error of Image adding{}", e);
             throw new DaoException(e);
         }
-        return status;
+        return image;
     }
 
     @Override

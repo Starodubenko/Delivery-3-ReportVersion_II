@@ -66,7 +66,6 @@ public class ImageServlet extends HttpServlet {
         Image image;
         if (!imagiesCash.containsKey(id)) {
             try {
-//            image = imageDao.findByFilename(filename);
                 image = imageDao.findById(id);
                 imagiesCash.put(image.getId(), image);
             } catch (DaoException e) {
@@ -74,7 +73,6 @@ public class ImageServlet extends HttpServlet {
             }
         } else {
             image = imagiesCash.get(id);
-//            response.setHeader();
         }
 
         if (image == null) {

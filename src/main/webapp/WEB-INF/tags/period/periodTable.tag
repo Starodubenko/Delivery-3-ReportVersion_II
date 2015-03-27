@@ -9,6 +9,7 @@
         <thead>
             <th><fmt:message key="clients.message.ID"/></th>
             <th><fmt:message key="message.period"/></th>
+            <th><fmt:message key="message.period.describe"/></th>
             <th><fmt:message key="message.deleted"/></th>
             <th></th>
             <th><fmt:message key="message.edit"/></th>

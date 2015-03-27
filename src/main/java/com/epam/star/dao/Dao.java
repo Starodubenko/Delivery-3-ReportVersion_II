@@ -11,7 +11,7 @@ public interface Dao<T extends AbstractEntity> {
 
     public T findById(int ID);
 
-    public String insert(T entity);
+    public T insert(T entity);
 
     public String deleteEntity(int ID);
 

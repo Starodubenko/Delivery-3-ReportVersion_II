@@ -79,10 +79,6 @@ public class DaoManager implements AutoCloseable {
         return new H2EmployeeDao(connection, this);
     }
 
-    public H2OrderDao getOrderDao() {
-        return new H2OrderDao(connection, this);
-    }
-
     public H2PeriodDao getPeriodDao() {
         return new H2PeriodDao(connection, this);
     }

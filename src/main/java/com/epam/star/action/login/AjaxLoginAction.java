@@ -61,20 +61,21 @@ public class AjaxLoginAction implements Action {
                 if (user.getRole().equals(positionDao.findByPositionName("Dispatcher"))) json.put("roleView", "dispatcher");
                 if (user.getRole().equals(positionDao.findByPositionName("Admin"))) json.put("roleView", "admin");
             }
+
+            Order2 cart = (Order2) request.getSession().getAttribute("shoppingCart");
+            if (cart != null) {
+                Order2 userCart = orderDao2.findCart(user);
+                for (Map.Entry<Goods, Integer> goods : cart.getGoods().entrySet()) {
+                    userCart.addGoods(goods.getKey());
+                    userCart.setGoodsCount(goods.getKey(), goods.getValue());
+                }
+                request.getSession().setAttribute("shoppingCart", userCart);
+            }
         } else {
             json.put("loginError", "login.error");
         }
 
-        Order2 cart = (Order2) request.getSession().getAttribute("shoppingCart");
-        Order2 userCart = orderDao2.findCart(user);
-        for (Map.Entry<Goods, Integer> goods : cart.getGoods().entrySet()) {
-            userCart.addGoods(goods.getKey());
-            userCart.setGoodsCount(goods.getKey(),goods.getValue());
-        }
-
-        request.getSession().setAttribute("shoppingCart", userCart);
         request.setAttribute("json", json);
-
         daoManager.closeConnection();
         return result;
     }

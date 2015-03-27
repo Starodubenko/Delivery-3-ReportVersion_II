@@ -216,8 +216,7 @@ public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Orde
     }
 
 
-    public String insert(Order2 order) {
-        String status = "Order do not added";
+    public Order2 insert(Order2 order) {
 
         try (PreparedStatement prstm = conn.prepareStatement(INSERT_ORDER)){
             prstm.setString(1, null);
@@ -232,13 +231,16 @@ public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Orde
             prstm.setInt(10, order.getStatus().getId());
             prstm.setBoolean(11, order.isDeleted());
             prstm.execute();
-            status = "Order added successfully";
+
+            ResultSet generatedKeys = prstm.getGeneratedKeys();
+            generatedKeys.next();
+            order.setId(generatedKeys.getInt("SCOPE_IDENTITY()"));
             LOGGER.info("Order added successfully{}", order);
         } catch (Exception e) {
             LOGGER.error("Error of Order adding{}", e);
             throw new DaoException(e);
         }
-        return status;
+        return order;
     }
 
     public String deleteEntity(int ID) throws DaoException {

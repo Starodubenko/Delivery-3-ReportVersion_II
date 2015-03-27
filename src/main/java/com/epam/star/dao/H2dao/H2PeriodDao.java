@@ -13,10 +13,10 @@ import java.util.List;
 @MappedDao("Period")
 public class H2PeriodDao extends AbstractH2Dao implements PeriodDao {
     private static final Logger LOGGER = LoggerFactory.getLogger(H2ClientDao.class);
-    private static final String ADD_PERIOD = "INSERT INTO period VALUES (?, ?, ?)";
+    private static final String ADD_PERIOD = "INSERT INTO period VALUES (?, ?, ?, ?)";
     private static final String FULL_DELETE_PERIOD = "DELETE FROM PERIOD WHERE ID = ?";
     private static final String DELETE_PERIOD = "UPDATE period SET DELETED = ? WHERE id = ?";
-    private static final String UPDATE_PERIOD = "UPDATE period SET id = ?, period = ?, DELETED = ? WHERE id = ?";
+    private static final String UPDATE_PERIOD = "UPDATE period SET id = ?, period = ?, DESCRIBE = ?, DELETED = ? WHERE id = ?";
 
     private static final String NECESSARY_COLUMNS =
             " PERIOD.ID, PERIOD.PERIOD ";
@@ -106,21 +106,24 @@ public class H2PeriodDao extends AbstractH2Dao implements PeriodDao {
     }
 
     @Override
-    public String insert(Period period) throws DaoException {
-        String statuss = "Period do not added";
+    public Period insert(Period period) throws DaoException {
 
         try (PreparedStatement prstm = conn.prepareStatement(ADD_PERIOD)){
             prstm.setString(1, null);
             prstm.setTime(2, period.getPeriod());
-            prstm.setBoolean(3, period.isDeleted());
+            prstm.setString(3, period.getDescribe());
+            prstm.setBoolean(4, period.isDeleted());
             prstm.execute();
-            statuss = "Period added successfully";
+
+            ResultSet generatedKeys = prstm.getGeneratedKeys();
+            generatedKeys.next();
+            period.setId(generatedKeys.getInt("SCOPE_IDENTITY()"));
             LOGGER.info("Period added successfully{}", period);
         } catch (Exception e) {
             LOGGER.error("Error of Period adding{}", e);
             throw new DaoException(e);
         }
-        return statuss;
+        return period;
     }
 
     @Override
@@ -148,8 +151,9 @@ public class H2PeriodDao extends AbstractH2Dao implements PeriodDao {
             prstm = conn.prepareStatement(UPDATE_PERIOD);
             prstm.setInt(1, period.getId());
             prstm.setTime(2, period.getPeriod());
-            prstm.setBoolean(3, period.isDeleted());
-            prstm.setInt(4, period.getId());
+            prstm.setString(3, period.getDescribe());
+            prstm.setBoolean(4, period.isDeleted());
+            prstm.setInt(5, period.getId());
             prstm.executeUpdate();
             LOGGER.info("Period updated successfully{}", period);
         } catch (Exception e) {
@@ -167,6 +171,7 @@ public class H2PeriodDao extends AbstractH2Dao implements PeriodDao {
         try {
             period.setId(resultSet.getInt("id"));
             period.setPeriod(resultSet.getTime("period"));
+            period.setDescribe(resultSet.getString("describe"));
             period.setDeleted(resultSet.getBoolean("deleted"));
             LOGGER.info("Period created from result set successfully{}", period.getPeriod());
         } catch (Exception e) {

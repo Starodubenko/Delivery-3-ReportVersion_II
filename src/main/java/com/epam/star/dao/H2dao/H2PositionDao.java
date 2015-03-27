@@ -91,21 +91,23 @@ public class H2PositionDao extends AbstractH2Dao implements PositionDao {
     }
 
     @Override
-    public String insert(Position position) throws DaoException {
-        String statuss = "Position do not added";
+    public Position insert(Position position) throws DaoException {
 
         try (PreparedStatement prstm = conn.prepareStatement(ADD_POSITION)){
             prstm.setString(1, null);
             prstm.setString(2, position.getPositionName());
             prstm.setBoolean(3, position.isDeleted());
             prstm.execute();
-            statuss = "Position added successfully";
+
+            ResultSet generatedKeys = prstm.getGeneratedKeys();
+            generatedKeys.next();
+            position.setId(generatedKeys.getInt("SCOPE_IDENTITY()"));
             LOGGER.info("Position added successfully{}", position);
         } catch (Exception e) {
             LOGGER.error("Error of Position adding{}", e);
             throw new DaoException(e);
         }
-        return statuss;
+        return position;
     }
 
     @Override

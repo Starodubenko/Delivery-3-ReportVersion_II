@@ -93,8 +93,7 @@ public class H2ContactDao extends AbstractH2Dao implements ContactDao {
     }
 
     @Override
-    public String insert(Contact contact) {
-        String status = "Contact do not added";
+    public Contact insert(Contact contact) {
 
         try (PreparedStatement prstm = conn.prepareStatement(ADD_CONTACT)) {
             prstm.setString(1, null);
@@ -103,13 +102,16 @@ public class H2ContactDao extends AbstractH2Dao implements ContactDao {
             prstm.setString(4, contact.getPart());
             prstm.setBoolean(5, contact.isDeleted());
             prstm.execute();
-            status = "Contact added successfully";
+
+            ResultSet generatedKeys = prstm.getGeneratedKeys();
+            generatedKeys.next();
+            contact.setId(generatedKeys.getInt("SCOPE_IDENTITY()"));
             LOGGER.info("Contact added successfully{}", contact);
         } catch (Exception e) {
             LOGGER.error("Error of Contact adding{}", e);
             throw new DaoException(e);
         }
-        return status;
+        return contact;
     }
 
     @Override

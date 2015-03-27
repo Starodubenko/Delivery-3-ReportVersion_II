@@ -7,6 +7,7 @@ import com.epam.star.action.MappedAction;
 import com.epam.star.dao.Dao;
 import com.epam.star.dao.H2dao.DaoFactory;
 import com.epam.star.dao.H2dao.DaoManager;
+import com.epam.star.dao.util.UtilDao;
 import com.epam.star.entity.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,7 @@ import java.sql.SQLException;
 public class DeleteEntityAction implements Action {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DeleteEntityAction.class);
+    private static final UtilDao UTIL_DAO = new UtilDao();
 
     ActionResult reviewentity = new ActionResult("changeEntity",true);
 
@@ -25,7 +27,9 @@ public class DeleteEntityAction implements Action {
     public ActionResult execute(HttpServletRequest request) throws ActionException, SQLException {
 
         try (DaoManager daoManager = DaoFactory.getInstance().getDaoManager()) {
-            String entityName = request.getParameter("entityName");
+            String entityNameForJSP = UTIL_DAO.getString("entityName", request);
+            String entityName = entityNameForJSP.substring(0, entityNameForJSP.length() - 1);
+
             Integer id = Integer.valueOf(request.getParameter("id"));
 
             Dao dao = daoManager.getDao(entityName);

@@ -225,7 +225,7 @@ public class H2ClientDao extends AbstractH2Dao implements ClientDao {
     }
 
     @Override
-    public String insert(Client client) {
+    public Client insert(Client client) {
         String status = "Client do not added";
 
         try (PreparedStatement prstm = conn.prepareStatement(ADD_CLIENT)) {
@@ -248,13 +248,16 @@ public class H2ClientDao extends AbstractH2Dao implements ClientDao {
             prstm.setInt(17, client.getDiscount().getId());
             prstm.setBoolean(18, client.isDeleted());
             prstm.execute();
-            status = "Client added successfully";
+
+            ResultSet generatedKeys = prstm.getGeneratedKeys();
+            generatedKeys.next();
+            client.setId(generatedKeys.getInt("SCOPE_IDENTITY()"));
             LOGGER.info("Client added successfully{}", client);
         } catch (Exception e) {
             LOGGER.error("Error of Client adding{}", e);
             throw new DaoException(e);
         }
-        return status;
+        return client;
     }
 
 
