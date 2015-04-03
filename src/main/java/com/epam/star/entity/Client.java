@@ -9,7 +9,6 @@ import java.util.List;
 @Table(name = "users")
 public class Client extends AbstractEntity {
 
-    @Column(nullable = true)
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "avatar_id")
     private AvatarImage avatar;

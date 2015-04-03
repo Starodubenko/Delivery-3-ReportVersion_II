@@ -14,7 +14,6 @@ public class Order extends Cart {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private Client user;
-    @Column(nullable = true)
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "period_id")
     private Period period;
@@ -26,11 +25,9 @@ public class Order extends Cart {
     private String additionalInfo;
     @Column(nullable = true)
     private boolean paid;
-    @Column(nullable = true)
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "discount_id")
     private Discount discount;
-    @Column(nullable = true)
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "status_id")
     private Status status;

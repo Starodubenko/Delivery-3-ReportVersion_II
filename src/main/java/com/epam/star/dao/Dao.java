@@ -9,20 +9,15 @@ import java.util.Map;
 
 public interface Dao<T extends AbstractEntity> {
 
-    public T findById(int ID);
+    T findById(int ID);
 
-    public T insert(T entity);
+    void insert(T entity);
 
-    public String deleteEntity(int ID);
+    void deleteEntity(T entity);
 
-    public String updateEntity(T entity);
+    T updateEntity(T entity);
 
-    public List<T> findAll();
+    List<T> findAll();
 
-    public PaginatedList<T> findRangee(int pageNumber, int rowsCount, Map<String,String> fields, String entityName, String orderBy);
-
-    void setConn(Connection connection);
-    void setDaoManager(com.epam.star.dao.H2dao.DaoManager daoManager);
-
-    public String getTableName();
+    PaginatedList<T> findRangee(int pageNumber, int rowsCount, Map<String,String> fields, String entityName, String orderBy);
 }
