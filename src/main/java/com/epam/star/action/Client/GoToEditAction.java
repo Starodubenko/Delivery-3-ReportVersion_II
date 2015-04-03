@@ -30,10 +30,10 @@ public class GoToEditAction implements Action {
 
         Client user = null;
         if (request.getParameter("userId") != null)
-//        user = clientDao.findById(Integer.valueOf(request.getParameter("userId")));
+//        user = clientDao.findById(Integer.valueOf(request.getParameter("userId")));TODO
         user = employeeDao.findById(Integer.valueOf(request.getParameter("userId")));
         if ( user == null) user = (Client) request.getSession().getAttribute("user");
-        Image userAvatar = imageDao.findById(user.getAvatar());
+//        Image userAvatar = imageDao.findById(user.getAvatar()); TODO
 
         String simpleName = user.getClass().getSimpleName();
         if (simpleName.equals("Employee")) {
@@ -44,7 +44,7 @@ public class GoToEditAction implements Action {
 
         request.setAttribute("positions",positions);
         request.setAttribute("discounts", discounts);
-        request.setAttribute("userAvatar", userAvatar);
+//        request.setAttribute("userAvatar", userAvatar);TODO
         daoManager.closeConnection();
         return clientEdit;
     }

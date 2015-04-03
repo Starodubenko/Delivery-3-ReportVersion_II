@@ -1,9 +1,16 @@
 package com.epam.star.entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+
 @MappedEntityForAdmin("Contact")
+@Entity
 public class Contact extends AbstractEntity {
+    @Column
     private String owner;
+    @Column
     private String telephone;
+    @Column
     private String part;
 
     public String getPart() {

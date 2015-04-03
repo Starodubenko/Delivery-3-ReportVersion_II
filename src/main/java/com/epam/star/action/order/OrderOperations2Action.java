@@ -7,7 +7,7 @@ import com.epam.star.action.MappedAction;
 import com.epam.star.dao.H2dao.*;
 import com.epam.star.dao.util.UtilDao;
 import com.epam.star.entity.Client;
-import com.epam.star.entity.Order2;
+import com.epam.star.entity.Order;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +56,7 @@ public class OrderOperations2Action implements Action {
         String actor = request.getParameter("actor");
         String operation = request.getParameter("typeOfOperation");
 
-        Order2 order = null;
+        Order order = null;
         Integer id = utilDao.getIntValue(request.getParameter("id"));
         if (id != null) order = orderDao.findById(id);
 
@@ -114,7 +114,7 @@ public class OrderOperations2Action implements Action {
         return json;
     }
 
-    private BigDecimal fundsOperation(Order2 order, String operation) {
+    private BigDecimal fundsOperation(Order order, String operation) {
 
         BigDecimal percent = new BigDecimal(order.getDiscount().getPercentage()).divide(new BigDecimal(100));
         BigDecimal orderCost = order.getTotalSum();

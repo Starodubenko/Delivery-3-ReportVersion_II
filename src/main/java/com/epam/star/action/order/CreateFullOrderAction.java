@@ -41,7 +41,7 @@ public class CreateFullOrderAction implements Action {
         Client user = (Client) request.getSession().getAttribute("user");
         String paymentType = request.getParameter("paymentType");
 
-        Order2 order = null;
+        Order order = null;
         boolean haveMoney = false;
         try {
             H2OrderDao2 orderDao = daoManager.getOrderDao2();
@@ -53,13 +53,13 @@ public class CreateFullOrderAction implements Action {
                 Boolean isInsert = false;
                 if (haveMoney && paymentType.equals("online")) {
                     orderDao.insert(order);
-                    insertOrderedGoods(order.getGoods(), daoManager, order.getNumber());
+//                    insertOrderedGoods(order.getOrderedGoods(), daoManager, order.getNumber()); TODO
                     isInsert = true;
                 } else jsonObject.put("payment", "order.not.enough.money");
 
                 if (paymentType.equals("cache")) {
                     orderDao.insert(order);
-                    insertOrderedGoods(order.getGoods(), daoManager, order.getNumber());
+//                    insertOrderedGoods(order.getOrderedGoods(), daoManager, order.getNumber());TODO
                     isInsert = true;
                 }
 
@@ -88,21 +88,21 @@ public class CreateFullOrderAction implements Action {
         return client;
     }
 
-    private boolean checkBalance(Client client, Order2 order) {
+    private boolean checkBalance(Client client, Order order) {
         if (client.getVirtualBalance().intValue()
                 < order.getTotalSum().intValue() * (1 - (double) client.getDiscount().getPercentage() / 100))
             return false;
         else return true;
     }
 
-    private Order2 createOrder(HttpServletRequest request, DaoManager daoManager, JSONObject jsonObject) throws ActionException, UnsupportedEncodingException, ParseException {
+    private Order createOrder(HttpServletRequest request, DaoManager daoManager, JSONObject jsonObject) throws ActionException, UnsupportedEncodingException, ParseException {
 
         Validator validator = new Validator(daoManager);
 
         Cart cart = (Cart) request.getSession().getAttribute("shoppingCart");
 
 
-        Order2 order = null;
+        Order order = null;
         String idString = request.getParameter("id");
         int userId = -1;
         if (idString != null)
@@ -116,8 +116,8 @@ public class CreateFullOrderAction implements Action {
             PeriodDao periodDao = daoManager.getPeriodDao();
             StatusDao statusDao = daoManager.getStatusDao();
 
-            order = new Order2();
-            order.setGoods(cart.getGoods());
+            order = new Order();
+            order.setOrderedGoods(cart.getOrderedGoods());
             order.setNumber(rnd.nextInt(999999));
             order.setUser(user);
             order.setPeriod(periodDao.findById(Integer.valueOf(request.getParameter("deliverytime"))));
@@ -162,10 +162,10 @@ public class CreateFullOrderAction implements Action {
 
     private void insertOrderedGoods(Map<Goods, Integer> goods, DaoManager daoManager, int orderNumber) {
 
-        H2OrderedGoodsDao orderedGoodsDao = daoManager.getOrderedGoodsDao();
+        H2OrderedGoodsDao orderedGoodsDao = daoManager.getOrderedGoodsDao(); //TODO
         for (Map.Entry<Goods, Integer> good : goods.entrySet()) {
             OrderedGoods orderedGoods = new OrderedGoods();
-            orderedGoods.setOrderNumber(orderNumber);
+//            orderedGoods.setOrderNumber(orderNumber);
             orderedGoods.setGoods(good.getKey());
             orderedGoods.setGoodsCount(good.getValue());
             orderedGoodsDao.insert(orderedGoods);

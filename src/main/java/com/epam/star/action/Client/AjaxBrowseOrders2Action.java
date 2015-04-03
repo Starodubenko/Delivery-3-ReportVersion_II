@@ -8,7 +8,7 @@ import com.epam.star.dao.H2dao.DaoFactory;
 import com.epam.star.dao.H2dao.DaoManager;
 import com.epam.star.dao.H2dao.H2OrderDao2;
 import com.epam.star.entity.Client;
-import com.epam.star.entity.Order2;
+import com.epam.star.entity.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +29,7 @@ public class AjaxBrowseOrders2Action implements Action {
 
         List todayOrders = orderDao.findAllByClientIdToday(user.getId());
         List pastOrders = orderDao.findAllByClientIdLastDays(user.getId());
-        List<Order2> allOrders = orderDao.findAllByClientId(user.getId());
+        List<Order> allOrders = orderDao.findAllByClientId(user.getId());
 
         request.setAttribute("todayOrders", todayOrders);
         request.setAttribute("pastOrders", pastOrders);

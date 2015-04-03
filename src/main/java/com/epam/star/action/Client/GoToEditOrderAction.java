@@ -8,7 +8,7 @@ import com.epam.star.dao.H2dao.DaoFactory;
 import com.epam.star.dao.H2dao.DaoManager;
 import com.epam.star.dao.H2dao.H2OrderDao2;
 import com.epam.star.dao.util.UtilDao;
-import com.epam.star.entity.Order2;
+import com.epam.star.entity.Order;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
@@ -25,7 +25,7 @@ public class GoToEditOrderAction implements Action {
         DaoManager daoManager = DaoFactory.getInstance().getDaoManager();
         H2OrderDao2 orderDao = daoManager.getOrderDao2();
 
-        Order2 order = null;
+        Order order = null;
         Integer id = utilDao.getIntValue(request.getParameter("id"));
         if (id != null) order = orderDao.findById(id);
 

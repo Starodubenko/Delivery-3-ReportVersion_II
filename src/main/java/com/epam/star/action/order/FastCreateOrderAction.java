@@ -48,16 +48,16 @@ public class FastCreateOrderAction implements Action {
         try {
             H2OrderDao2 orderDao = daoManager.getOrderDao2();
 
-            Order2 order = createOrder(request, daoManager, jsonObject);
+            Order order = createOrder(request, daoManager, jsonObject);
 
             if (order != null) {
-                orderDao.insert(order);
-                insertOrderedGoods(order.getGoods(), daoManager, order.getNumber());
-
-                Cart cart = (Cart) request.getSession().getAttribute(SHOPPING_CART);
-                cart.clear();
-                request.getSession().setAttribute(SHOPPING_CART, cart);
-                jsonObject.put("ok",true);
+//                orderDao.insert(order); TODO
+//                insertOrderedGoods(order.getOrderedGoods(), daoManager, order.getNumber());
+//
+//                Cart cart = (Cart) request.getSession().getAttribute(SHOPPING_CART);
+//                cart.clear();
+//                request.getSession().setAttribute(SHOPPING_CART, cart);
+//                jsonObject.put("ok",true);
             }
             daoManager.commit();
         } catch (Exception e) {
@@ -75,7 +75,7 @@ public class FastCreateOrderAction implements Action {
         return client;
     }
 
-    private Order2 createOrder(HttpServletRequest request, DaoManager daoManager, JSONObject jsonObject) throws ActionException, UnsupportedEncodingException, ParseException {
+    private Order createOrder(HttpServletRequest request, DaoManager daoManager, JSONObject jsonObject) throws ActionException, UnsupportedEncodingException, ParseException {
 
         Validator validator = new Validator(daoManager);
 
@@ -89,9 +89,9 @@ public class FastCreateOrderAction implements Action {
 
         Map<String, String[]> parameterMap = request.getParameterMap();
 
-        Order2 order;
-        order = new Order2();
-        order.setGoods(cart.getGoods());
+        Order order;
+        order = new Order();
+        order.setOrderedGoods(cart.getOrderedGoods());
         order.setNumber(rnd.nextInt(999999));
         order.setUser(user);
         order.setPeriod(periodDao.findById(Integer.valueOf(request.getParameter(DELIVERY_TIME))));
@@ -123,7 +123,6 @@ public class FastCreateOrderAction implements Action {
         H2OrderedGoodsDao orderedGoodsDao = daoManager.getOrderedGoodsDao();
         for (Map.Entry<Goods, Integer> good : goods.entrySet()) {
             OrderedGoods orderedGoods = new OrderedGoods();
-            orderedGoods.setOrderNumber(orderNumber);
             orderedGoods.setGoods(good.getKey());
             orderedGoods.setGoodsCount(good.getValue());
             orderedGoodsDao.insert(orderedGoods);

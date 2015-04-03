@@ -11,8 +11,8 @@ import com.epam.star.dao.H2dao.DaoManager;
 import com.epam.star.dao.H2dao.H2OrderDao2;
 import com.epam.star.dao.PositionDao;
 import com.epam.star.entity.Client;
-import com.epam.star.entity.Goods;
-import com.epam.star.entity.Order2;
+import com.epam.star.entity.Order;
+import com.epam.star.entity.OrderedGoods;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
-import java.util.Map;
 
 @MappedAction("POST/ajaxLogin")
 public class AjaxLoginAction implements Action {
@@ -57,17 +56,17 @@ public class AjaxLoginAction implements Action {
 
             if (page.equals("/do/completion-order")) json.put("roleView", "completion-order");
             else {
-                if (user.getRole().equals(positionDao.findByPositionName("Client"))) json.put("roleView", "client");
-                if (user.getRole().equals(positionDao.findByPositionName("Dispatcher"))) json.put("roleView", "dispatcher");
-                if (user.getRole().equals(positionDao.findByPositionName("Admin"))) json.put("roleView", "admin");
+                if (user.getPosition().equals(positionDao.findByPositionName("Client"))) json.put("roleView", "client");
+                if (user.getPosition().equals(positionDao.findByPositionName("Dispatcher"))) json.put("roleView", "dispatcher");
+                if (user.getPosition().equals(positionDao.findByPositionName("Admin"))) json.put("roleView", "admin");
             }
 
-            Order2 cart = (Order2) request.getSession().getAttribute("shoppingCart");
+            Order cart = (Order) request.getSession().getAttribute("shoppingCart");
             if (cart != null) {
-                Order2 userCart = orderDao2.findCart(user);
-                for (Map.Entry<Goods, Integer> goods : cart.getGoods().entrySet()) {
-                    userCart.addGoods(goods.getKey());
-                    userCart.setGoodsCount(goods.getKey(), goods.getValue());
+                Order userCart = orderDao2.findCart(user);
+                for (OrderedGoods goods : cart.getOrderedGoods()) {
+                    userCart.addGoods(goods.getGoods());
+                    userCart.setGoodsCount(goods.getGoods(), goods.getGoodsCount());
                 }
                 request.getSession().setAttribute("shoppingCart", userCart);
             }

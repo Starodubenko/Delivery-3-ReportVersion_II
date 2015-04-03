@@ -4,7 +4,7 @@ import com.epam.star.action.Action;
 import com.epam.star.action.ActionException;
 import com.epam.star.action.ActionResult;
 import com.epam.star.action.MappedAction;
-import com.epam.star.entity.Order2;
+import com.epam.star.entity.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +24,7 @@ public class LogoutAction implements Action {
 
     @Override
     public ActionResult execute(HttpServletRequest request) throws ActionException, SQLException {
-        Order2 cart = (Order2)request.getSession().getAttribute(SHOPPING_CART);
+        Order cart = (Order)request.getSession().getAttribute(SHOPPING_CART);
         request.getSession().invalidate();
 
         request.getSession().setAttribute(SHOPPING_CART,cart);

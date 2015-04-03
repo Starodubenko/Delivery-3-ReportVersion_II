@@ -1,8 +1,24 @@
 package com.epam.star.entity;
 
+import javax.persistence.*;
+import java.util.List;
+
 @MappedEntityForAdmin("Status")
+@Entity
 public class Status extends AbstractEntity {
-    String statusName;
+
+    @Column
+    private String statusName;
+    @OneToMany(mappedBy = "status", fetch = FetchType.EAGER)
+    private List<Order> orders;
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
 
     @Override
     public boolean equals(Object o) {

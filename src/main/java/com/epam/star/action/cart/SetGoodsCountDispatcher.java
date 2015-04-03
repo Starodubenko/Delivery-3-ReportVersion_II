@@ -7,9 +7,9 @@ import com.epam.star.action.MappedAction;
 import com.epam.star.dao.H2dao.DaoFactory;
 import com.epam.star.dao.H2dao.DaoManager;
 import com.epam.star.dao.H2dao.H2GoodsDao;
+import com.epam.star.entity.Cart;
 import com.epam.star.entity.Client;
 import com.epam.star.entity.Goods;
-import com.epam.star.entity.interfaces.ShoppingCart;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +33,7 @@ public class SetGoodsCountDispatcher implements Action{
 
         Client user = (Client) request.getSession().getAttribute("userForOrder");
 
-        ShoppingCart shoppingCart = (ShoppingCart) session.getAttribute("shoppingCartForClient");
+        Cart shoppingCart = (Cart) session.getAttribute("shoppingCartForClient");
         String goods_name = request.getParameter("goods_name");
         int goodsCount = Integer.valueOf(request.getParameter("goods_count"));
 

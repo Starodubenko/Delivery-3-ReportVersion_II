@@ -54,7 +54,7 @@ public class PaymentAction implements Action {
 
                 user.setVirtualBalance(newBal);
 
-                Position userRole = user.getRole();
+                Position userRole = user.getPosition();
                 Position clientRole = userPositionDao.findByPositionName("Client");
 
                 if (userRole.equals(clientRole)) {

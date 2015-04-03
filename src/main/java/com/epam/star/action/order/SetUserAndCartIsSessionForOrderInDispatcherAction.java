@@ -8,7 +8,7 @@ import com.epam.star.dao.H2dao.DaoFactory;
 import com.epam.star.dao.H2dao.DaoManager;
 import com.epam.star.dao.H2dao.H2ClientDao;
 import com.epam.star.entity.Client;
-import com.epam.star.entity.Order2;
+import com.epam.star.entity.Order;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
@@ -29,7 +29,7 @@ public class SetUserAndCartIsSessionForOrderInDispatcherAction implements Action
         Client user = clientDao.findById(id);
 
         request.getSession().setAttribute("userForOrder", user);
-        request.getSession().setAttribute("shoppingCartForClient", new Order2());
+        request.getSession().setAttribute("shoppingCartForClient", new Order());
         daoManager.closeConnection();
 
         return result;

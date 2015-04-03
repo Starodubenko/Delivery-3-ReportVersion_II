@@ -1,15 +1,24 @@
 package com.epam.star.entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 
 @MappedEntityForAdmin("Employee")
+@Entity
 public class Employee extends Client {
+
+    @Column(nullable = true)
     private String identityCard;
+    @Column(nullable = true)
     private String workBook;
+    @Column(nullable = true)
     private String RNN;
+    @Column(nullable = true)
     private String SIK;
 
-    public Employee(int id, String address, Integer avatar, Discount discount, String firstName, String lastName, String login, String middleName, String mobilephone, String password, Position role, String telephone, BigDecimal virtualBalance, String identityCard, String RNN, String SIK, String workBook) {
+    public Employee(int id, String address, AvatarImage avatar, Discount discount, String firstName, String lastName, String login, String middleName, String mobilephone, String password, Position role, String telephone, BigDecimal virtualBalance, String identityCard, String RNN, String SIK, String workBook) {
         super(id, address, avatar, discount, firstName, lastName, login, middleName, mobilephone, password, role, telephone, virtualBalance);
         this.identityCard = identityCard;
         this.RNN = RNN;

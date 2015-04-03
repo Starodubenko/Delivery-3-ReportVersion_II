@@ -1,11 +1,22 @@
 package com.epam.star.entity;
 
+import javax.persistence.*;
+
+@MappedSuperclass
 public abstract class AbstractEntity {
+
+    public AbstractEntity() {}
+
     protected AbstractEntity(int id) {
         this.id = id;
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column
+    private boolean deleted;
 
     public boolean isDeleted() {
         return deleted;
@@ -13,12 +24,6 @@ public abstract class AbstractEntity {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
-    }
-
-    private boolean deleted;
-
-    public AbstractEntity() {
-
     }
 
     public int getId() {

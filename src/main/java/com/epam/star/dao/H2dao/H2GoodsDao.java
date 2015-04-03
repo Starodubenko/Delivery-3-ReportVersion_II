@@ -127,22 +127,23 @@ public class H2GoodsDao extends AbstractH2Dao implements GoodsDao {
     @Override
     public Goods insert(Goods goods) {
 
-        try (PreparedStatement prstm = conn.prepareStatement(ADD_GOODS)){
-            prstm.setString(1, null);
-            prstm.setString(2, goods.getGoodsName());
-            prstm.setBigDecimal(3, goods.getPrice());
-            prstm.setInt(4, goods.getImage().getId());
-            prstm.setBoolean(5, goods.isDeleted());
-            prstm.execute();
-
-            ResultSet generatedKeys = prstm.getGeneratedKeys();
-            generatedKeys.next();
-            goods.setId(generatedKeys.getInt("SCOPE_IDENTITY()"));
-            LOGGER.info("Goods added successfully{}", goods);
-        } catch (Exception e) {
-            LOGGER.error("Error of Goods adding{}", e);
-            throw new DaoException(e);
-        }
+        //TODO
+//        try (PreparedStatement prstm = conn.prepareStatement(ADD_GOODS)){
+//            prstm.setString(1, null);
+//            prstm.setString(2, goods.getGoodsName());
+//            prstm.setBigDecimal(3, goods.getPrice());
+//            prstm.setInt(4, goods.getImages().getId());
+//            prstm.setBoolean(5, goods.isDeleted());
+//            prstm.execute();
+//
+//            ResultSet generatedKeys = prstm.getGeneratedKeys();
+//            generatedKeys.next();
+//            goods.setId(generatedKeys.getInt("SCOPE_IDENTITY()"));
+//            LOGGER.info("Goods added successfully{}", goods);
+//        } catch (Exception e) {
+//            LOGGER.error("Error of Goods adding{}", e);
+//            throw new DaoException(e);
+//        }
         return goods;
     }
 
@@ -166,21 +167,21 @@ public class H2GoodsDao extends AbstractH2Dao implements GoodsDao {
     @Override
     public String updateEntity(Goods goods) {
         String status = "Goods do not updated";
-
-        try (PreparedStatement prstm = conn.prepareStatement(UPDATE_GOODS)){
-            prstm.setInt(1, goods.getId());
-            prstm.setString(2, goods.getGoodsName());
-            prstm.setBigDecimal(3, goods.getPrice());
-            prstm.setInt(4, goods.getImage().getId());
-            prstm.setBoolean(5, goods.isDeleted());
-            prstm.setInt(6, goods.getId());
-            prstm.executeUpdate();
-            status = "Goods updated successfully";
-            LOGGER.info("Goods updated successfully{}", goods);
-        } catch (Exception e) {
-            LOGGER.error("Error of Goods updating{}", e);
-            throw new DaoException(e);
-        }
+//TODO
+//        try (PreparedStatement prstm = conn.prepareStatement(UPDATE_GOODS)){
+//            prstm.setInt(1, goods.getId());
+//            prstm.setString(2, goods.getGoodsName());
+//            prstm.setBigDecimal(3, goods.getPrice());
+//            prstm.setInt(4, goods.getImages().getId());
+//            prstm.setBoolean(5, goods.isDeleted());
+//            prstm.setInt(6, goods.getId());
+//            prstm.executeUpdate();
+//            status = "Goods updated successfully";
+//            LOGGER.info("Goods updated successfully{}", goods);
+//        } catch (Exception e) {
+//            LOGGER.error("Error of Goods updating{}", e);
+//            throw new DaoException(e);
+//        }
         return status;
     }
 
@@ -194,7 +195,7 @@ public class H2GoodsDao extends AbstractH2Dao implements GoodsDao {
             goods.setId(resultSet.getInt("id"));
             goods.setGoodsName(UTIL_DAO.getString(resultSet.getString("goods_name")));
             goods.setPrice(resultSet.getBigDecimal("price"));
-            goods.setImage(imageDao.findById(resultSet.getInt("image")));
+//            goods.setImages(imageDao.findById(resultSet.getInt("image")));TODO
             goods.setDeleted(resultSet.getBoolean("deleted"));
             LOGGER.info("Goods created from result set successfully{}", goods);
         } catch (Exception e) {

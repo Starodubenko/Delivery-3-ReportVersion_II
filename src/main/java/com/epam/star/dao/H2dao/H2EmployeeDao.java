@@ -119,7 +119,7 @@ public class H2EmployeeDao extends AbstractH2Dao implements EmployeeDao {
             prstm.setString(11, employee.getWorkBook());
             prstm.setString(12, employee.getRNN());
             prstm.setString(13, employee.getSIK());
-            prstm.setInt(14, employee.getRole().getId());
+            prstm.setInt(14, employee.getPosition().getId());
             prstm.setBigDecimal(15, employee.getVirtualBalance());
             prstm.setInt(16, 0);
             prstm.setInt(17, employee.getDiscount().getId());
@@ -172,9 +172,9 @@ public class H2EmployeeDao extends AbstractH2Dao implements EmployeeDao {
             prstm.setString(11, employee.getWorkBook());
             prstm.setString(12, employee.getRNN());
             prstm.setString(13, employee.getSIK());
-            prstm.setInt(14, employee.getRole().getId());
+            prstm.setInt(14, employee.getPosition().getId());
             prstm.setBigDecimal(15, employee.getVirtualBalance());
-            prstm.setInt(16, employee.getAvatar());
+//            prstm.setInt(16, employee.getAvatar()); TODO
             prstm.setInt(17, employee.getDiscount().getId());
             prstm.setBoolean(18, employee.isDeleted());
             prstm.setInt(19, employee.getId());
@@ -196,7 +196,7 @@ public class H2EmployeeDao extends AbstractH2Dao implements EmployeeDao {
         Employee employee = new Employee();
         try {
             employee.setId(resultSet.getInt("id"));
-            employee.setAvatar(resultSet.getInt("avatar"));
+//            employee.setAvatar(resultSet.getInt("avatar")); TODO
             employee.setLogin(resultSet.getString("login"));
             employee.setPassword(resultSet.getString("password"));
             employee.setFirstName(resultSet.getString("firstname"));
@@ -209,7 +209,7 @@ public class H2EmployeeDao extends AbstractH2Dao implements EmployeeDao {
             employee.setWorkBook(resultSet.getString("workbook"));
             employee.setRNN(resultSet.getString("rnn"));
             employee.setSIK(resultSet.getString("sik"));
-            employee.setRole(positionDao.findById(resultSet.getInt("position_id")));
+            employee.setPosition(positionDao.findById(resultSet.getInt("position_id")));
             employee.setVirtualBalance(new BigDecimal(resultSet.getInt("virtual_balance")));
             employee.setDiscount(discountDao.findById(resultSet.getInt("discount")));
             employee.setDeleted(resultSet.getBoolean("deleted"));

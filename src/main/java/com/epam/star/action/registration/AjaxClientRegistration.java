@@ -42,9 +42,9 @@ public class AjaxClientRegistration implements Action {
                 PositionDao positionDao = daoManager.getPositionDao();
                 H2DiscountDao discountDao = daoManager.getDiscountDao();
 
-                client.setRole(positionDao.findByPositionName("Client"));
+                client.setPosition(positionDao.findByPositionName("Client"));
                 client.setVirtualBalance(new BigDecimal(0));
-                client.setAvatar(0);
+//                client.setAvatar(0); TODO
                 client.setDiscount(discountDao.findById(4));
                 clientDao.insert(client);
                 client = clientDao.findByLogin(client.getLogin());

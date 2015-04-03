@@ -1,27 +1,53 @@
 package com.epam.star.entity;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @MappedEntityForAdmin("Client")
+@Entity
+@Table(name = "users")
 public class Client extends AbstractEntity {
 
-    private Integer avatar;
+    @Column(nullable = true)
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "avatar_id")
+    private AvatarImage avatar;
+    @Column
     private String login;
+    @Column
     private String password;
+    @Column(nullable = true)
     private String firstName;
+    @Column(nullable = true)
     private String lastName;
+    @Column(nullable = true)
     private String middleName;
+    @Column(nullable = true)
     private String address;
+    @Column
     private String telephone;
+    @Column(nullable = true)
     private String mobilephone;
-    private Position role;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="position_id")
+    private Position position;
+    @Column
     private BigDecimal virtualBalance;
+    @Column(nullable = true)
+    private String email;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="discount_id")
     private Discount discount;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    private List<Order> orders;
+
 
     public Client() {
     }
 
-    public Client(int id, String address, Integer avatar, Discount discount, String firstName, String lastName, String login, String middleName, String mobilephone, String password, Position role, String telephone, BigDecimal virtualBalance) {
+    public Client(int id, String address, AvatarImage avatar, Discount discount, String firstName, String lastName, String login, String middleName, String mobilephone, String password, Position position, String telephone, BigDecimal virtualBalance) {
         super(id);
         this.address = address;
         this.avatar = avatar;
@@ -32,16 +58,32 @@ public class Client extends AbstractEntity {
         this.middleName = middleName;
         this.mobilephone = mobilephone;
         this.password = password;
-        this.role = role;
+        this.position = position;
         this.telephone = telephone;
         this.virtualBalance = virtualBalance;
     }
 
-    public Integer getAvatar() {
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    public AvatarImage getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(Integer avatar) {
+    public void setAvatar(AvatarImage avatar) {
         this.avatar = avatar;
     }
 
@@ -53,12 +95,12 @@ public class Client extends AbstractEntity {
         this.mobilephone = mobilephone;
     }
 
-    public Position getRole() {
-        return role;
+    public Position getPosition() {
+        return position;
     }
 
-    public void setRole(Position role) {
-        this.role = role;
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     public BigDecimal getVirtualBalance() {

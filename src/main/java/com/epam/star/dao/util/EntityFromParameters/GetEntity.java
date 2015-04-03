@@ -103,7 +103,8 @@ public class GetEntity {
         Goods goods = new Goods();
 
 //        if (request.getParameter("goodsImageFileName") != null)
-            goods.setImage(getImageFromRequestPart(request,"goodsImageFileName"));
+
+//            goods.setImages(getImageFromRequestPart(request, "goodsImageFileName")); TODO
         if (request.getParameter("goodsname") != null)
             goods.setGoodsName(request.getParameter("goodsname"));
         if (request.getParameter("price") != null)
@@ -134,9 +135,9 @@ public class GetEntity {
         client.setAddress(request.getParameter("address"));
         client.setTelephone(request.getParameter("telephone"));
         client.setMobilephone(request.getParameter("mobilephone"));
-        client.setRole(positionDao.findByPositionName(request.getParameter("position_id")));
+        client.setPosition(positionDao.findByPositionName(request.getParameter("position_id")));
         client.setVirtualBalance(new BigDecimal(request.getParameter("virtual_balance")));
-        client.setAvatar(Integer.valueOf(request.getParameter("avatar")));
+//        client.setAvatar(Integer.valueOf(request.getParameter("avatar"))); TODO
         client.setDiscount(discountDao.findById(Integer.valueOf(request.getParameter("discount"))));
         if (request.getParameter("deleted").equals("on")) client.setDeleted(true);
         else client.setDeleted(false);
@@ -164,9 +165,9 @@ public class GetEntity {
         employee.setWorkBook(request.getParameter("workbook"));
         employee.setRNN(request.getParameter("rnn"));
         employee.setSIK(request.getParameter("sik"));
-        employee.setRole(positionDao.findByPositionName(request.getParameter("position_id")));
+        employee.setPosition(positionDao.findByPositionName(request.getParameter("position_id")));
         employee.setVirtualBalance(new BigDecimal(request.getParameter("virtual_balance")));
-        employee.setAvatar(Integer.valueOf(request.getParameter("avatar")));
+//        employee.setAvatar(Integer.valueOf(request.getParameter("avatar"))); TODO
         employee.setDiscount(discountDao.findById(Integer.valueOf(request.getParameter("discount"))));
         if (request.getParameter("deleted").equals("on")) employee.setDeleted(true);
         else employee.setDeleted(false);

@@ -41,9 +41,9 @@ public class UpdateUserAvatarAction implements Action {
                 Image image = getImageFromRequestPart(request, IMAGE);
                 imageDao.insert(image);
                 Image imageForUser = imageDao.findLastAddedImage();
-                if (currentUser.getAvatar() != null) imageDao.deleteEntity(currentUser.getAvatar().intValue());
-
-                currentUser.setAvatar(imageForUser.getId());
+//                if (currentUser.getAvatar() != null) imageDao.deleteEntity(currentUser.getAvatar());TODO
+//
+//                currentUser.setAvatar(imageForUser.getId());
                 clientDao.updateEntity(currentUser);
 
                 daoManager.commit();

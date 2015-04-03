@@ -121,7 +121,7 @@ public class H2OrderedGoodsDao extends AbstractH2Dao implements OrderedGoodsDao{
 
         try (PreparedStatement prstm = conn.prepareStatement(ADD_GOODS)){
             prstm.setString(1, null);
-            prstm.setInt(2, goods.getOrderNumber());
+//            prstm.setInt(2, goods.getOrderNumber());
             prstm.setInt(3, goods.getGoods().getId());
             prstm.setInt(4, goods.getGoodsCount());
             prstm.setBoolean(5, goods.isDeleted());
@@ -176,7 +176,7 @@ public class H2OrderedGoodsDao extends AbstractH2Dao implements OrderedGoodsDao{
 
         try (PreparedStatement prstm = conn.prepareStatement(UPDATE_GOODS)){
             prstm.setInt(1, goods.getId());
-            prstm.setInt(2, goods.getOrderNumber());
+//            prstm.setInt(2, goods.getOrderNumber());
             prstm.setInt(3, goods.getGoods().getId());
             prstm.setInt(4, goods.getGoodsCount());
             prstm.setBoolean(5, goods.isDeleted());
@@ -199,7 +199,7 @@ public class H2OrderedGoodsDao extends AbstractH2Dao implements OrderedGoodsDao{
         OrderedGoods goods = new OrderedGoods();
         try {
             goods.setId(resultSet.getInt("id"));
-            goods.setOrderNumber(resultSet.getInt("order_number"));
+//            goods.setOrderNumber(resultSet.getInt("order_number"));
             goods.setGoods(goodsDao.findById(resultSet.getInt("goods_id")));
             goods.setGoodsCount(resultSet.getInt("goods_count"));
             goods.setDeleted(resultSet.getBoolean("deleted"));

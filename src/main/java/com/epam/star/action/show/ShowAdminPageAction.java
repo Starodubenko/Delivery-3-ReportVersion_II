@@ -54,7 +54,7 @@ public class ShowAdminPageAction implements Action {
         }
 
         if (request.getSession().getAttribute("entitiesNames") == null)
-        request.getSession().setAttribute("entitiesNames", UtilEntity.getEntityNames());
+        request.getSession().setAttribute("entitiesNames", UtilEntity.getEntityNamesForAdmin());
 
         return admin;
     }

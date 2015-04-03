@@ -11,7 +11,7 @@ import com.epam.star.dao.H2dao.H2OrderDao2;
 import com.epam.star.dao.util.PaginatedList;
 import com.epam.star.dao.util.Pagination;
 import com.epam.star.entity.Client;
-import com.epam.star.entity.Order2;
+import com.epam.star.entity.Order;
 import com.epam.star.entity.Period;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +30,7 @@ public class ShowCompletionOrderPageAction implements Action {
     @Override
     public ActionResult execute(HttpServletRequest request) throws ActionException, SQLException {
 
-        Order2 cart = (Order2)request.getSession().getAttribute("shoppingCart");
+        Order cart = (Order)request.getSession().getAttribute("shoppingCart");
         if (cart.getGoodsCount() < 1) return shoppingCart;
 
         DaoManager daoManager = DaoFactory.getInstance().getDaoManager();
@@ -40,7 +40,7 @@ public class ShowCompletionOrderPageAction implements Action {
 
         Client user = (Client)request.getSession().getAttribute("user");
         Pagination pagination = new Pagination();
-        PaginatedList<Order2> orders = pagination.paginationEntity(request, orderDao2, "orders");
+        PaginatedList<Order> orders = pagination.paginationEntity(request, orderDao2, "orders");
 
         List<Period> periods = daoManager.getPeriodDao().getAllPeriods();
         request.setAttribute("periods", periods);

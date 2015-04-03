@@ -22,7 +22,7 @@ public class GetRefFieldOptions {
         }
 
 //        if (entityName.toLowerCase().equals("goods")){
-//            return getGoods(request, daoManager);
+//            return getOrderedGoods(request, daoManager);
 //        }
 //
 //        if (entityName.toLowerCase().equals("image")){

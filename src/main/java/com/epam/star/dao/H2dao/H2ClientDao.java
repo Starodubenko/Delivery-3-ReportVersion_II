@@ -242,7 +242,7 @@ public class H2ClientDao extends AbstractH2Dao implements ClientDao {
             prstm.setString(11, null);
             prstm.setString(12, null);
             prstm.setString(13, null);
-            prstm.setInt(14, client.getRole().getId());
+            prstm.setInt(14, client.getPosition().getId());
             prstm.setBigDecimal(15, client.getVirtualBalance());
             prstm.setInt(16, 0);
             prstm.setInt(17, client.getDiscount().getId());
@@ -292,9 +292,9 @@ public class H2ClientDao extends AbstractH2Dao implements ClientDao {
             prstm.setString(7, client.getAddress());
             prstm.setString(8, client.getTelephone());
             prstm.setString(9, client.getMobilephone());
-            prstm.setInt(10, client.getRole().getId());
+            prstm.setInt(10, client.getPosition().getId());
             prstm.setBigDecimal(11, client.getVirtualBalance());
-            prstm.setInt(12, client.getAvatar().intValue());
+//            prstm.setInt(12, client.getAvatar().intValue());TODO
             prstm.setInt(13, client.getDiscount().getId());
             prstm.setBoolean(14, client.isDeleted());
             prstm.setInt(15, client.getId());
@@ -358,7 +358,7 @@ public class H2ClientDao extends AbstractH2Dao implements ClientDao {
         Client client = new Client();
         try {
             client.setId(resultSet.getInt("id"));
-            client.setAvatar(resultSet.getInt("avatar"));
+//            client.setAvatar(resultSet.getInt("avatar"));TODO
             client.setLogin(resultSet.getString("login"));
             client.setPassword(resultSet.getString("password"));
             client.setFirstName(resultSet.getString("firstname"));
@@ -367,7 +367,7 @@ public class H2ClientDao extends AbstractH2Dao implements ClientDao {
             client.setAddress(resultSet.getString("address"));
             client.setTelephone(resultSet.getString("telephone"));
             client.setMobilephone(resultSet.getString("mobilephone"));
-            client.setRole(positionDao.findById(resultSet.getInt("position_id")));
+            client.setPosition(positionDao.findById(resultSet.getInt("position_id")));
             client.setVirtualBalance(new BigDecimal(resultSet.getInt("virtual_balance")));
             client.setDiscount(discountDao.findById(resultSet.getInt("discount")));
             client.setDeleted(resultSet.getBoolean("deleted"));

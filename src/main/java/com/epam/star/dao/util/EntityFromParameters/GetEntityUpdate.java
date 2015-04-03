@@ -127,14 +127,15 @@ public class GetEntityUpdate<T extends AbstractEntity> {
 
     private static AbstractEntity getGoods(HttpServletRequest request, DaoManager daoManager, Goods oldGoods) {
 
-        if (request.getParameter("goodsImageFileName") != null && !oldGoods.getImage().getFilename().equals(request.getParameter("goodsImageFileName")))
-            oldGoods.setImage(getImageFromRequestPart(request,"goodsImageFileName"));
-        if (request.getParameter("goodsname") != null && !oldGoods.getGoodsName().equals(request.getParameter("goodsname")))
-            oldGoods.setGoodsName(request.getParameter("goodsname"));
-        if (request.getParameter("price") != null && !oldGoods.getPrice().equals(new BigDecimal(request.getParameter("price"))))
-            oldGoods.setPrice(new BigDecimal(request.getParameter("price")));
-        if (request.getParameter("deleted") != null && oldGoods.isDeleted() != Boolean.valueOf(request.getParameter("deleted")))
-            oldGoods.setDeleted(Boolean.valueOf(request.getParameter("deleted")));
+        //TODO
+//        if (request.getParameter("goodsImageFileName") != null && !oldGoods.getImages().getFilename().equals(request.getParameter("goodsImageFileName")))
+//            oldGoods.setImages(getImageFromRequestPart(request, "goodsImageFileName"));
+//        if (request.getParameter("goodsname") != null && !oldGoods.getGoodsName().equals(request.getParameter("goodsname")))
+//            oldGoods.setGoodsName(request.getParameter("goodsname"));
+//        if (request.getParameter("price") != null && !oldGoods.getPrice().equals(new BigDecimal(request.getParameter("price"))))
+//            oldGoods.setPrice(new BigDecimal(request.getParameter("price")));
+//        if (request.getParameter("deleted") != null && oldGoods.isDeleted() != Boolean.valueOf(request.getParameter("deleted")))
+//            oldGoods.setDeleted(Boolean.valueOf(request.getParameter("deleted")));
 
         return oldGoods;
     }
@@ -175,12 +176,12 @@ public class GetEntityUpdate<T extends AbstractEntity> {
         if (request.getParameter("mobilephone") != null && !client.getMobilephone().equals(request.getParameter("mobilephone")))
             client.setMobilephone(request.getParameter("mobilephone"));
 
-        if (request.getParameter("position_id") != null && client.getRole().getId() != Integer.valueOf(request.getParameter("position_id")))
-            client.setRole(positionDao.findById(Integer.valueOf(request.getParameter("position_id"))));
+        if (request.getParameter("position_id") != null && client.getPosition().getId() != Integer.valueOf(request.getParameter("position_id")))
+            client.setPosition(positionDao.findById(Integer.valueOf(request.getParameter("position_id"))));
         if (request.getParameter("virtual_balance") != null && client.getVirtualBalance().intValue() != Integer.valueOf(request.getParameter("virtual_balance")))
             client.setVirtualBalance(new BigDecimal(request.getParameter("virtual_balance")));
         if (request.getParameter("avatar") != null && !client.getAvatar().equals(Integer.valueOf(request.getParameter("avatar"))))
-            client.setAvatar(Integer.valueOf(request.getParameter("avatar")));
+//            client.setAvatar(Integer.valueOf(request.getParameter("avatar")));TODO
         if (request.getParameter("discount") != null && client.getDiscount().getId() != Integer.valueOf(request.getParameter("discount")))
             client.setDiscount(discountDao.findById(Integer.valueOf(request.getParameter("discount"))));
         if (request.getParameter("deleted") != null && client.isDeleted() != Boolean.valueOf(request.getParameter("deleted")))
@@ -209,9 +210,9 @@ public class GetEntityUpdate<T extends AbstractEntity> {
         employee.setWorkBook(request.getParameter("workbook"));
         employee.setRNN(request.getParameter("rnn"));
         employee.setSIK(request.getParameter("sik"));
-        employee.setRole(positionDao.findByPositionName(request.getParameter("position_id")));
+        employee.setPosition(positionDao.findByPositionName(request.getParameter("position_id")));
         employee.setVirtualBalance(new BigDecimal(request.getParameter("virtual_balance")));
-        employee.setAvatar(Integer.valueOf(request.getParameter("avatar")));
+//        employee.setAvatar(Integer.valueOf(request.getParameter("avatar")));TODO
         employee.setDiscount(discountDao.findById(Integer.valueOf(request.getParameter("discount"))));
         if (request.getParameter("deleted") != null && employee.isDeleted() != Boolean.valueOf(request.getParameter("deleted")))
             employee.setDeleted(Boolean.valueOf(request.getParameter("deleted")));

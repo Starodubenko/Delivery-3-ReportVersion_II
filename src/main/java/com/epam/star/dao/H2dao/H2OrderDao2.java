@@ -5,7 +5,7 @@ import com.epam.star.dao.MappedDao;
 import com.epam.star.dao.Order2Dao;
 import com.epam.star.entity.Client;
 import com.epam.star.entity.Goods;
-import com.epam.star.entity.Order2;
+import com.epam.star.entity.Order;
 import com.epam.star.entity.OrderedGoods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@MappedDao("Order2")
+@MappedDao("Order")
 public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Order2Dao {
     private static final Logger LOGGER = LoggerFactory.getLogger(H2OrderDao2.class);
     private static final String INSERT_ORDER = "INSERT INTO  USER_ORDER VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -78,14 +78,14 @@ public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Orde
         return TABLE;
     }
 
-    public List<Order2> findAllByClientIdToday(int id) {
+    public List<Order> findAllByClientIdToday(int id) {
         String sql = "SELECT *" +
                 " FROM USER_ORDER" +
                 " where " +
                 "user_id = " + id + " and " +
                 "order_date = CAST(GETDATE() AS DATE) AND not DELETED " +
                 "ORDER BY USER_ORDER.ORDER_DATE DESC, USER_ORDER.ID DESC";
-        List<Order2> orders = new ArrayList<>();
+        List<Order> orders = new ArrayList<>();
         try (PreparedStatement prstm = conn.prepareStatement(sql)){
             try(ResultSet resultSet = prstm.executeQuery()){
                 while (resultSet.next())
@@ -99,14 +99,14 @@ public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Orde
         return orders;
     }
 
-    public List<Order2> findAllByClientIdLastDays(int id) {
+    public List<Order> findAllByClientIdLastDays(int id) {
         String sql = "SELECT *" +
                 " FROM USER_ORDER" +
                 " where " +
                 "user_id = " + id + " and " +
                 "order_date != CAST(GETDATE() AS DATE) AND not DELETED " +
                 "ORDER BY USER_ORDER.ORDER_DATE DESC, USER_ORDER.ID DESC";
-        List<Order2> orders = new ArrayList<>();
+        List<Order> orders = new ArrayList<>();
         try (PreparedStatement prstm = conn.prepareStatement(sql)){
             try(ResultSet resultSet = prstm.executeQuery()){
                 while (resultSet.next())
@@ -121,13 +121,13 @@ public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Orde
     }
 
     @Override
-    public List<Order2> findAllByClientId(int id) {
+    public List<Order> findAllByClientId(int id) {
         String sql = "SELECT *" +
                 " FROM USER_ORDER" +
                 " where " +
                 "user_id = " + id + " AND not DELETED " +
                 "ORDER BY USER_ORDER.ORDER_DATE DESC, USER_ORDER.ID DESC";
-        List<Order2> orders = new ArrayList<>();
+        List<Order> orders = new ArrayList<>();
         try (PreparedStatement prstm = conn.prepareStatement(sql)){
             try(ResultSet resultSet = prstm.executeQuery()){
                 while (resultSet.next())
@@ -161,9 +161,9 @@ public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Orde
     }
 
 
-    public Order2 findCart(T user) {
+    public Order findCart(T user) {
         String sql = "SELECT * FROM USER_ORDER WHERE STATUS_ID = 5 AND USER_ID = " + user.getId();
-        Order2 order = null;
+        Order order = null;
         try (PreparedStatement prstm = conn.prepareStatement(sql)) {
             try (ResultSet resultSet = prstm.executeQuery()) {
                 if (resultSet.next()) {
@@ -179,9 +179,9 @@ public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Orde
     }
 
 
-    public Order2 findById(int ID) throws DaoException {
+    public Order findById(int ID) throws DaoException {
         String sql = "SELECT * FROM USER_ORDER WHERE id = " + ID;
-        Order2 order = null;
+        Order order = null;
         try (PreparedStatement prstm = conn.prepareStatement(sql)) {
             try (ResultSet resultSet = prstm.executeQuery()) {
                 if (resultSet.next()) {
@@ -216,7 +216,7 @@ public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Orde
     }
 
 
-    public Order2 insert(Order2 order) {
+    public Order insert(Order order) {
 
         try (PreparedStatement prstm = conn.prepareStatement(INSERT_ORDER)){
             prstm.setString(1, null);
@@ -260,7 +260,7 @@ public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Orde
     }
 
 
-    public String updateEntity(Order2 order) {
+    public String updateEntity(Order order) {
 
         try (PreparedStatement prstm = conn.prepareStatement(UPDATE_ORDER)){
             prstm.setInt(1, order.getId());
@@ -334,7 +334,7 @@ public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Orde
 
         try {
             goods.setId(resultSet.getInt("id"));
-            goods.setOrderNumber(resultSet.getInt("order_number"));
+//            goods.setOrderNumber(resultSet.getInt("order_number"));
             goods.setGoods(goodsDao.findById(resultSet.getInt("goods_id")));
             goods.setGoodsCount(resultSet.getInt("goods_count"));
             goods.setDeleted(resultSet.getBoolean("deleted"));
@@ -346,8 +346,8 @@ public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Orde
         return goods;
     }
 
-    public Order2 getEntityFromResultSet(ResultSet resultSet) throws DaoException{
-        Order2 order = new Order2();
+    public Order getEntityFromResultSet(ResultSet resultSet) throws DaoException{
+        Order order = new Order();
         H2PeriodDao periodDao = daoManager.getPeriodDao();
         H2StatusDao statusDao = daoManager.getStatusDao();
         H2ClientDao clientDao = daoManager.getClientDao();
@@ -366,7 +366,7 @@ public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Orde
             order.setStatus(statusDao.findById(resultSet.getInt("status_id")));
             order.setDeleted(resultSet.getBoolean("deleted"));
 
-            order.setGoods(getGoodsForOrder(conn,order.getNumber()));
+//            order.setOrderedGoods(getGoodsForOrder(conn, order.getNumber()));TODO
             LOGGER.info("Order created from result set successfully{}", order);
         } catch (Exception e) {
             LOGGER.error("Error of Order creating from result set{}", e);
@@ -376,9 +376,9 @@ public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Orde
     }
 
     @Override
-    public List<Order2> findAll() {
+    public List<Order> findAll() {
         String sql = "SELECT * FROM USER_ORDER";
-        List<Order2> orders = new ArrayList<>();
+        List<Order> orders = new ArrayList<>();
         try (PreparedStatement prstm = conn.prepareStatement(sql)){
             try(ResultSet resultSet = prstm.executeQuery()){
                 while (resultSet.next())

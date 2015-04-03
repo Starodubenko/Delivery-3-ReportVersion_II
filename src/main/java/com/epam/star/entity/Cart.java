@@ -1,76 +1,81 @@
 package com.epam.star.entity;
 
-import com.epam.star.entity.interfaces.ShoppingCart;
-
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
-public class Cart extends AbstractEntity implements ShoppingCart {
+@Entity
+@Table(name = "user_order")
+public class Cart extends AbstractEntity{
 
-    private Map<Goods, Integer> goods = new HashMap<>();
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
+    private Set<OrderedGoods> orderedGoods;
 
-    public Map<Goods, Integer> getGoods() {
-        return goods;
+    public Set<OrderedGoods> getOrderedGoods() {
+        return orderedGoods;
     }
 
-    public void setGoods(Map<Goods, Integer> cart) {
-        this.goods = cart;
+    public void setOrderedGoods(Set<OrderedGoods> orderedGoods) {
+        this.orderedGoods = orderedGoods;
     }
 
-    @Override
     public BigDecimal getTotalSum() {
         BigDecimal totalSum = new BigDecimal(0);
 
-        for (Map.Entry<Goods, Integer> goods : this.goods.entrySet()) {
-            BigDecimal price = goods.getKey().getPrice();
-            Integer count = goods.getValue().intValue();
+        for (OrderedGoods orderedGood : orderedGoods) {
+            BigDecimal price = orderedGood.getGoods().getPrice();
+            Integer count = orderedGood.getGoodsCount();
             BigDecimal cost = price.multiply(new BigDecimal(count));
             totalSum = totalSum.add(cost);
         }
+
         return totalSum;
     }
 
-    @Override
     public int getGoodsCount() {
-        return goods.size();
+        return orderedGoods.size();
     }
 
-    @Override
     public void addGoods(Goods goods) {
-        this.goods.put(goods, 1);
+        this.orderedGoods.add(new OrderedGoods(goods, 1));
     }
 
-    @Override
     public void setGoodsCount(Goods goods, int count) {
-        for (Map.Entry<Goods, Integer> entry : this.goods.entrySet()) {
-            if (entry.getKey().equals(goods)) entry.setValue(count);
+
+        for (OrderedGoods orderedGood : orderedGoods) {
+            if (orderedGood.getGoods().equals(goods)) orderedGood.setGoodsCount(count);
         }
     }
 
-    @Override
     public void removeGoods(Goods goods) {
-        this.goods.remove(goods);
+        this.orderedGoods.remove(goods);
     }
 
-    @Override
     public BigDecimal getCostByGoodsId(int id) {
-        for (Map.Entry<Goods, Integer> entry : goods.entrySet()) {
-            if (entry.getKey().getId() == id) {
-                return entry.getKey().getPrice().multiply(new BigDecimal(entry.getValue()));
+
+        for (OrderedGoods orderedGood : orderedGoods) {
+            if (orderedGood.getGoods().getId() == id) {
+                return orderedGood.getGoods().getPrice().multiply(new BigDecimal(orderedGood.getGoodsCount()));
             }
         }
         return null;
     }
 
-    @Override
     public List<Goods> getGoodsList() {
-        return new ArrayList<>(goods.keySet());
+
+        List<Goods> goods = new ArrayList<>();
+        for (OrderedGoods orderedGood : orderedGoods) {
+            goods.add(orderedGood.getGoods());
+        }
+        return goods;
     }
 
     public void clear() {
-        goods.clear();
+        orderedGoods.clear();
     }
 }

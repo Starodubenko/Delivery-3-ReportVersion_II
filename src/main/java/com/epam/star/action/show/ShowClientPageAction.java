@@ -37,7 +37,7 @@ public class ShowClientPageAction implements Action {
 
         Client currentClient = (Client) request.getSession().getAttribute("user");
         Client user = clientDao.findByLogin(currentClient.getLogin());
-        Image clientAvatar = imageDao.findById(user.getAvatar());
+//        Image clientAvatar = imageDao.findById(user.getAvatar());TODO
 
         int clientOrdersCount = orderDao2.getClientOrdersCount(user.getId());
 
@@ -48,7 +48,7 @@ public class ShowClientPageAction implements Action {
         session.setAttribute("periods", periods);
         session.setAttribute("goods", goods);
         session.setAttribute("ordersCount", clientOrdersCount);
-        session.setAttribute("clientAvatar", clientAvatar);
+//        session.setAttribute("clientAvatar", clientAvatar);TODO
         request.setAttribute("clientBalance", user.getVirtualBalance());
 
         request.setAttribute("orderSuccessful",session.getAttribute("orderSuccessful"));

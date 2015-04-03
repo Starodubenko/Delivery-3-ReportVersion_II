@@ -1,13 +1,21 @@
 package com.epam.star.entity;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 @MappedEntityForAdmin("PayCard")
+@Entity
+@Table(name = "pay_card")
 public class PayCard extends AbstractEntity {
 
+    @Column
     private String serialNumber;
+    @Column
     private String secretNumber;
+    @Column
     private BigDecimal balance;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "status_id")
     private StatusPayCard statusPayCard;
 
     public StatusPayCard getStatusPayCard() {

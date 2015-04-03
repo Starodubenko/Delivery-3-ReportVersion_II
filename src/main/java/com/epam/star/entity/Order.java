@@ -1,97 +1,46 @@
 package com.epam.star.entity;
 
-import java.math.BigDecimal;
+
+import javax.persistence.*;
 import java.sql.Date;
 
-public class Order extends AbstractEntity {
+@MappedEntityForAdmin("Order")
+@Entity
+public class Order extends Cart {
 
+    @Column
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int number;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private Client user;
-    private int count;
+    @Column(nullable = true)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "period_id")
     private Period period;
-    private Goods goods;
+    @Column(nullable = true)
     private Date deliveryDate;
-    private String additionalInfo;
-    private Status status;
+    @Column(nullable = true)
     private Date orderDate;
-    private BigDecimal orderCost;
+    @Column(nullable = true)
+    private String additionalInfo;
+    @Column(nullable = true)
+    private boolean paid;
+    @Column(nullable = true)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "discount_id")
+    private Discount discount;
+    @Column(nullable = true)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "status_id")
+    private Status status;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Order)) return false;
-
-        Order order = (Order) o;
-
-        if (count != order.count) return false;
-        if (!additionalInfo.equals(order.additionalInfo)) return false;
-        if (!deliveryDate.equals(order.deliveryDate)) return false;
-        if (!goods.equals(order.goods)) return false;
-        if (!orderCost.equals(order.orderCost)) return false;
-        if (!orderDate.equals(order.orderDate)) return false;
-        if (!paid.equals(order.paid)) return false;
-        if (!period.equals(order.period)) return false;
-        if (!status.equals(order.status)) return false;
-        if (!user.equals(order.user)) return false;
-
-        return true;
+    public Status getStatus() {
+        return status;
     }
 
-    @Override
-    public int hashCode() {
-        int result = user.hashCode();
-        result = 31 * result + count;
-        result = 31 * result + period.hashCode();
-        result = 31 * result + goods.hashCode();
-        result = 31 * result + deliveryDate.hashCode();
-        result = 31 * result + additionalInfo.hashCode();
-        result = 31 * result + status.hashCode();
-        result = 31 * result + orderDate.hashCode();
-        result = 31 * result + orderCost.hashCode();
-        result = 31 * result + paid.hashCode();
-        return result;
-    }
-
-    public BigDecimal getPaid() {
-
-        return paid;
-    }
-
-    public void setPaid(BigDecimal paid) {
-        this.paid = paid;
-    }
-
-    private BigDecimal paid;
-
-    public BigDecimal getOrderCost() {
-        return orderCost;
-    }
-
-    public void setOrderCost(BigDecimal orderCost) {
-        this.orderCost = orderCost;
-    }
-
-    public void setOrderDate(Date orderDate) {
-        this.orderDate = orderDate;
-    }
-
-    public void setDeliveryDate(Date deliveryDate) {
-        this.deliveryDate = deliveryDate;
-    }
-
-    public Date getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(java.util.Date orderDate) {
-        this.orderDate = new Date(orderDate.getTime());
-    }
-
-    public Date getDeliveryDate() {
-        return deliveryDate;
-    }
-
-    public void setDeliveryDate(java.util.Date deliveryDate) {
-        this.deliveryDate = new Date(deliveryDate.getTime());
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public String getAdditionalInfo() {
@@ -102,45 +51,59 @@ public class Order extends AbstractEntity {
         this.additionalInfo = additionalInfo;
     }
 
-    public int getCount() {
-        return count;
+    public Date getDeliveryDate() {
+        return deliveryDate;
     }
 
-    public void setCount(int count) {
-        if (goods != null) orderCost = goods.getPrice().multiply(new BigDecimal(count));
-        this.count = count;
+    public void setDeliveryDate(java.util.Date deliveryDate) {
+        this.deliveryDate = new Date(deliveryDate.getTime());
     }
 
-    public Client getUser() {
-        return user;
+    public Discount getDiscount() {
+        return discount;
     }
 
-    public void setUser(Client user) {
-        this.user = user;
+    public void setDiscount(Discount discount) {
+        this.discount = discount;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public Date getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(java.util.Date orderDate) {
+        this.orderDate = new Date(orderDate.getTime());
+    }
+
+    public boolean isPaid() {
+        return paid;
+    }
+
+    public void setPaid(boolean paid) {
+        this.paid = paid;
     }
 
     public Period getPeriod() {
         return period;
     }
 
-    public void setPeriod(Period period) {
-        this.period = period;
+    public void setPeriod(Period periodId) {
+        this.period = periodId;
     }
 
-    public Goods getGoods() {
-        return goods;
+    public Client getUser() {
+        return user;
     }
 
-    public void setGoods(Goods goods) {
-        orderCost = goods.getPrice().multiply(new BigDecimal(count));
-        this.goods = goods;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setUser(Client userID) {
+        this.user = userID;
     }
 }

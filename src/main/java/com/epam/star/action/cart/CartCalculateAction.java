@@ -6,8 +6,8 @@ import com.epam.star.action.ActionResult;
 import com.epam.star.action.MappedAction;
 import com.epam.star.dao.H2dao.DaoFactory;
 import com.epam.star.dao.H2dao.DaoManager;
+import com.epam.star.entity.Cart;
 import com.epam.star.entity.Client;
-import com.epam.star.entity.interfaces.ShoppingCart;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +30,7 @@ public class CartCalculateAction implements Action {
 
         HttpSession session = request.getSession();
 
-        ShoppingCart shoppingCart = (ShoppingCart) session.getAttribute("shoppingCartForClient");
+        Cart shoppingCart = (Cart) session.getAttribute("shoppingCartForClient");
         Client user = (Client) session.getAttribute("userForOrder");
 
         JSONObject jsonObject = new JSONObject();

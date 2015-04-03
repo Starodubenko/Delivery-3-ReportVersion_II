@@ -8,7 +8,7 @@ public class UtilEntity {
 
     private static SortedSet<String> result = new TreeSet<>();
 
-    public static SortedSet<String> getEntityNames (){
+    public static SortedSet<String> getEntityNamesForAdmin(){
         Reflections reflections = new Reflections(UtilEntity.class.getPackage().getName());
         Set<Class<?>> entities = reflections.getTypesAnnotatedWith(MappedEntityForAdmin.class);
 

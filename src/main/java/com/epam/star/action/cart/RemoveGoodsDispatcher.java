@@ -7,8 +7,8 @@ import com.epam.star.action.MappedAction;
 import com.epam.star.dao.H2dao.DaoFactory;
 import com.epam.star.dao.H2dao.DaoManager;
 import com.epam.star.dao.H2dao.H2GoodsDao;
+import com.epam.star.entity.Cart;
 import com.epam.star.entity.Goods;
-import com.epam.star.entity.interfaces.ShoppingCart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +30,7 @@ public class RemoveGoodsDispatcher implements Action {
         H2GoodsDao goodsDao = daoManager.getGoodsDao();
         HttpSession session = request.getSession();
 
-        ShoppingCart shoppingCart = (ShoppingCart) session.getAttribute("shoppingCartForClient");
+        Cart shoppingCart = (Cart) session.getAttribute("shoppingCartForClient");
 
         String goodsName = request.getParameter("goods_name");
         Goods goods = goodsDao.findByGoodsName(goodsName);

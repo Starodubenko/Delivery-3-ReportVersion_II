@@ -35,7 +35,7 @@ public class AddGoodsAction implements Action {
         if (goods != null) {
             daoManager.beginTransaction();
             try {
-                goods.setImage(imageDao.insert(goods.getImage()));
+//                goods.setImages(imageDao.insert(goods.getImages()));TODO
                 goodsDao.insert(goods);
 
                 daoManager.commit();

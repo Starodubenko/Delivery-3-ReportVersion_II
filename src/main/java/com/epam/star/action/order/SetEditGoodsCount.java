@@ -7,8 +7,8 @@ import com.epam.star.action.MappedAction;
 import com.epam.star.dao.H2dao.DaoFactory;
 import com.epam.star.dao.H2dao.DaoManager;
 import com.epam.star.dao.H2dao.H2GoodsDao;
+import com.epam.star.entity.Cart;
 import com.epam.star.entity.Goods;
-import com.epam.star.entity.interfaces.ShoppingCart;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@ public class SetEditGoodsCount implements Action{
         H2GoodsDao goodsDao = daoManager.getGoodsDao();
         HttpSession session = request.getSession();
 
-        ShoppingCart shoppingCart = (ShoppingCart) session.getAttribute("editOrder");
+        Cart shoppingCart = (Cart) session.getAttribute("editOrder");
         int goodsId = Integer.valueOf(request.getParameter("id"));
         int goodsCount = Integer.valueOf(request.getParameter("goods-count"));
 

@@ -30,7 +30,7 @@ public class GoToEditAction implements Action {
         goods = goodsDao.findById(Integer.valueOf(request.getParameter("goodsId")));
         request.getSession().setAttribute("editGoods", goods);
         if (goods != null)
-        request.setAttribute("goodsImage", goods.getImage());
+        request.setAttribute("goodsImage", goods.getImages());
         request.setAttribute("purpose",request.getParameter("purpose"));
         daoManager.closeConnection();
         return clientEdit;

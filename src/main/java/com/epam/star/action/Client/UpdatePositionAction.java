@@ -34,7 +34,7 @@ public class UpdatePositionAction implements Action {
         if (currentUser != null) {
             daoManager.beginTransaction();
             try {
-                currentUser.setRole(positionDao.findByPositionName(request.getParameter("position_name")));
+                currentUser.setPosition(positionDao.findByPositionName(request.getParameter("position_name")));
                 clientDao.updateEntity(currentUser);
 
                 daoManager.commit();

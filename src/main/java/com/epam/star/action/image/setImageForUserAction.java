@@ -43,9 +43,9 @@ public class setImageForUserAction implements Action {
 
             imageDao.insert(image);
             Image imageForUser = imageDao.findLastAddedImage();
-            if (user.getAvatar() != null) imageDao.deleteEntity(user.getAvatar().intValue());
+//            if (user.getAvatar() != null) imageDao.deleteEntity(user.getAvatar().intValue());TODO
 
-            user.setAvatar(imageForUser.getId());
+//            user.setAvatar(imageForUser.getId());TODO
             clientDao.updateEntity(user);
 
             daoManager.commit();

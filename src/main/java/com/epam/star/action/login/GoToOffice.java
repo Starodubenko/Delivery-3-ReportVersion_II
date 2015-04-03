@@ -29,8 +29,8 @@ public class GoToOffice implements Action {
         PositionDao positionDao = daoManager.getPositionDao();
 
         Client user = (Client) request.getSession().getAttribute("user");
-        if (user.getRole().equals(positionDao.findByPositionName("Dispatcher"))) return dispatcher;
-        if (user.getRole().equals(positionDao.findByPositionName("Admin"))) return admin;
+        if (user.getPosition().equals(positionDao.findByPositionName("Dispatcher"))) return dispatcher;
+        if (user.getPosition().equals(positionDao.findByPositionName("Admin"))) return admin;
 
         daoManager.closeConnection();
 

@@ -11,7 +11,8 @@ import com.epam.star.dao.util.PaginatedList;
 import com.epam.star.dao.util.Pagination;
 import com.epam.star.entity.Cart;
 import com.epam.star.entity.Goods;
-import com.epam.star.entity.Order2;
+import com.epam.star.entity.Order;
+import com.epam.star.entity.OrderedGoods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,13 +36,13 @@ public class ShowServicesPageAction implements Action {
         PaginatedList<Goods> goods = pagination.paginationEntity(request, goodsDao, "goods");
         Cart shoppingCart = (Cart) request.getSession().getAttribute("shoppingCart");
         if (shoppingCart == null){
-            shoppingCart = new Order2();
+            shoppingCart = new Order();
             request.getSession().setAttribute("shoppingCart", shoppingCart);
         }
 
         for (Goods good : goods) {
-            for (Goods goods1 : shoppingCart.getGoods().keySet()) {
-                if (good.equals(goods1))
+            for (OrderedGoods orderedGoods : shoppingCart.getOrderedGoods()) {
+                if (good.equals(orderedGoods.getGoods()))
                     good.setInCart(true);
             }
         }

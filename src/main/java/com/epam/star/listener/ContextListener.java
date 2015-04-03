@@ -13,13 +13,13 @@ public class ContextListener implements ServletContextListener{
     }
 
     public void contextInitialized(ServletContextEvent sce) {
-        ServletContext servletContext = sce.getServletContext();
-        servletContext.setAttribute("daoFactory", DaoFactory.getInstance());
+//        ServletContext servletContext = sce.getServletContext();TODO
+//        servletContext.setAttribute("daoFactory", DaoFactory.getInstance());
     }
 
     public void contextDestroyed(ServletContextEvent sce) {
-        ServletContext servletContext = sce.getServletContext();
-        DaoFactory dbManager = (DaoFactory) servletContext.getAttribute("daoFactory");
-        dbManager.destroy();
+//        ServletContext servletContext = sce.getServletContext();TODO
+//        DaoFactory dbManager = (DaoFactory) servletContext.getAttribute("daoFactory");
+//        dbManager.destroy();
     }
 }

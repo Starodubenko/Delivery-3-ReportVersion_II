@@ -6,15 +6,14 @@ import com.epam.star.dao.H2dao.H2OrderDao2;
 import com.epam.star.dao.H2dao.H2OrderedGoodsDao;
 import com.epam.star.dao.StatusDao;
 import com.epam.star.entity.Client;
-import com.epam.star.entity.Goods;
-import com.epam.star.entity.Order2;
+import com.epam.star.entity.Order;
 import com.epam.star.entity.OrderedGoods;
 
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 
 public class SessionListener implements HttpSessionListener{
@@ -41,28 +40,28 @@ public class SessionListener implements HttpSessionListener{
         H2OrderDao2 orderDao2 = daoManager.getOrderDao2();
         StatusDao orderStatusDao = daoManager.getStatusDao();
 
-        Order2 cart = (Order2)se.getSession().getAttribute(SHOPPING_CART);
+        Order cart = (Order)se.getSession().getAttribute(SHOPPING_CART);
         Client user = (Client)se.getSession().getAttribute(USER);
 
 
         if (orderDao2.isAlreadyExist(cart.getId())){
             orderDao2.updateEntity(cart);
-            if (cart.getGoods().size() > 0)
-                updateOrderedGoods(cart.getGoods(),daoManager,cart.getNumber());
+            if (cart.getOrderedGoods().size() > 0)
+                updateOrderedGoods(cart.getOrderedGoods(),daoManager,cart.getNumber());
         } else {
-            cart.setGoods(cart.getGoods());
+            cart.setOrderedGoods(cart.getOrderedGoods());
             cart.setNumber(rnd.nextInt(999999));
             cart.setUser(user);
             cart.setStatus(orderStatusDao.findByStatusName(STATUS_NAME));
             orderDao2.insert(cart);
-            updateOrderedGoods(cart.getGoods(), daoManager, cart.getNumber());
+            updateOrderedGoods(cart.getOrderedGoods(), daoManager, cart.getNumber());
         }
 
 
         daoManager.closeConnection();
     }
 
-    private void updateOrderedGoods(Map<Goods, Integer> goods, DaoManager daoManager, int orderNumber) {
+    private void updateOrderedGoods(Set<OrderedGoods> goods, DaoManager daoManager, int orderNumber) {
 
         H2OrderedGoodsDao orderedGoodsDao = daoManager.getOrderedGoodsDao();
 
@@ -71,17 +70,16 @@ public class SessionListener implements HttpSessionListener{
             orderedGoodsDao.fullDeleteEntity(goodsInDataBase.getId());
         }
 
-        for (Map.Entry<Goods, Integer> good : goods.entrySet()) {
-            OrderedGoods orderedGood = orderedGoodsDao.findByOrderNumberAndGoods(orderNumber, good.getKey());
+        for (OrderedGoods good : goods) {
+            OrderedGoods orderedGood = orderedGoodsDao.findByOrderNumberAndGoods(orderNumber, good.getGoods());
 
             if (orderedGood != null) {
-                orderedGood.setGoodsCount(good.getValue());
+                orderedGood.setGoodsCount(good.getGoodsCount());
                 orderedGoodsDao.updateEntity(orderedGood);
             } else {
                 orderedGood = new OrderedGoods();
-                orderedGood.setOrderNumber(orderNumber);
-                orderedGood.setGoods(good.getKey());
-                orderedGood.setGoodsCount(good.getValue());
+                orderedGood.setGoods(good.getGoods());
+                orderedGood.setGoodsCount(good.getGoodsCount());
                 orderedGoodsDao.insert(orderedGood);
             }
         }

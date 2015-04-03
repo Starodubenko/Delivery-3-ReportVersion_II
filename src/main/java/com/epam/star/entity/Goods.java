@@ -1,14 +1,44 @@
 package com.epam.star.entity;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @MappedEntityForAdmin("Goods")
+@Entity
 public class Goods extends AbstractEntity {
 
-    private Image image;
+    @OneToMany(mappedBy = "goods", cascade = CascadeType.ALL,
+                fetch = FetchType.EAGER)
+    private Set<Image> images;
+    @Column
     private String goodsName;
+    @Column
     private BigDecimal price;
+    @Column
+    private BigDecimal countOnStoreHouse;
+    @Column
     private boolean inCart;
+    @OneToOne(mappedBy = "goods", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private OrderedGoods orderedGoods;
+
+    public OrderedGoods getOrderedGoods() {
+        return orderedGoods;
+    }
+
+    public void setOrderedGoods(OrderedGoods orderedGoods) {
+        this.orderedGoods = orderedGoods;
+    }
+
+    public BigDecimal getCountOnStoreHouse() {
+        return countOnStoreHouse;
+    }
+
+    public void setCountOnStoreHouse(BigDecimal countOnStoreHouse) {
+        this.countOnStoreHouse = countOnStoreHouse;
+    }
 
     public boolean isInCart() {
         return inCart;
@@ -18,12 +48,12 @@ public class Goods extends AbstractEntity {
         this.inCart = inCart;
     }
 
-    public Image getImage() {
-        return image;
+    public Set<Image> getImages() {
+        return images;
     }
 
-    public void setImage(Image image) {
-        this.image = image;
+    public void setImages(Set<Image> images) {
+        this.images = images;
     }
 
     public BigDecimal getPrice() {
@@ -52,7 +82,7 @@ public class Goods extends AbstractEntity {
 
         if (inCart != goods.inCart) return false;
         if (goodsName != null ? !goodsName.equals(goods.goodsName) : goods.goodsName != null) return false;
-        if (image != null ? !image.equals(goods.image) : goods.image != null) return false;
+        if (images != null ? !images.equals(goods.images) : goods.images != null) return false;
         if (price != null ? !price.equals(goods.price) : goods.price != null) return false;
 
         return true;
@@ -60,7 +90,7 @@ public class Goods extends AbstractEntity {
 
     @Override
     public int hashCode() {
-        int result = image != null ? image.hashCode() : 0;
+        int result = images != null ? images.hashCode() : 0;
         result = 31 * result + (goodsName != null ? goodsName.hashCode() : 0);
         result = 31 * result + (price != null ? price.hashCode() : 0);
         result = 31 * result + (inCart ? 1 : 0);
