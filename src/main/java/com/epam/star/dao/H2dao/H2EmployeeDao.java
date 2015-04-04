@@ -103,7 +103,7 @@ public class H2EmployeeDao extends AbstractH2Dao implements EmployeeDao {
     }
 
     @Override
-    public Employee insert(Employee employee) {
+    public void insert(Employee employee) {
 
         try (PreparedStatement prstm = conn.prepareStatement(ADD_EMPLOYEE)){
             prstm.setString(1, null);
@@ -134,28 +134,33 @@ public class H2EmployeeDao extends AbstractH2Dao implements EmployeeDao {
             LOGGER.error("Error of Employee inserting{}", e);
             throw new DaoException(e);
         }
-        return employee;
+//        return employee;
     }
 
     @Override
-    public String deleteEntity(int ID) throws DaoException {
-        String status = "Employee do not deleted";
+    public void deleteEntity(Employee entity) {
 
-        try (PreparedStatement prstm = conn.prepareStatement(DELETE_EMPLOYEE)){
-            prstm.setBoolean(1, true);
-            prstm.setInt(2, ID);
-            prstm.execute();
-            status = "Employee deleted successfully ";
-            LOGGER.info("Employee marked as deleted successfully{}", ID);
-        } catch (Exception e) {
-            LOGGER.error("Error of Employee marking as deleted{}", e);
-            throw new DaoException(e);
-        }
-        return status;
     }
 
+//    @Override
+//    public String deleteEntity(int ID) throws DaoException {
+//        String status = "Employee do not deleted";
+//
+//        try (PreparedStatement prstm = conn.prepareStatement(DELETE_EMPLOYEE)){
+//            prstm.setBoolean(1, true);
+//            prstm.setInt(2, ID);
+//            prstm.execute();
+//            status = "Employee deleted successfully ";
+//            LOGGER.info("Employee marked as deleted successfully{}", ID);
+//        } catch (Exception e) {
+//            LOGGER.error("Error of Employee marking as deleted{}", e);
+//            throw new DaoException(e);
+//        }
+//        return status;
+//    }
+
     @Override
-    public String updateEntity(Employee employee) {
+    public Employee updateEntity(Employee employee) {
         String status = "Employee do not updated";
 
         try (PreparedStatement prstm = conn.prepareStatement(UPDATE_EMPLOYEE)){
@@ -185,7 +190,7 @@ public class H2EmployeeDao extends AbstractH2Dao implements EmployeeDao {
             LOGGER.error("Error of Employee updating{}", e);
             throw new DaoException(e);
         }
-        return status;
+        return null;
     }
 
     @Override

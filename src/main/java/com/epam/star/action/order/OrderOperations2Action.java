@@ -50,7 +50,7 @@ public class OrderOperations2Action implements Action {
     public ActionResult execute(HttpServletRequest request) throws ActionException, SQLException {
         DaoManager daoManager = DaoFactory.getInstance().getDaoManager();
         H2StatusDao statusDao = daoManager.getStatusDao();
-        H2OrderDao2 orderDao = daoManager.getOrderDao2();
+        H2OrderDao orderDao = daoManager.getOrderDao2();
         H2ClientDao clientDao = daoManager.getClientDao();
 
         String actor = request.getParameter("actor");

@@ -6,7 +6,7 @@ import com.epam.star.action.ActionResult;
 import com.epam.star.action.MappedAction;
 import com.epam.star.dao.H2dao.DaoFactory;
 import com.epam.star.dao.H2dao.DaoManager;
-import com.epam.star.dao.H2dao.H2OrderDao2;
+import com.epam.star.dao.H2dao.H2OrderDao;
 import com.epam.star.dao.H2dao.H2OrderedGoodsDao;
 import com.epam.star.dao.PeriodDao;
 import com.epam.star.dao.StatusDao;
@@ -44,7 +44,7 @@ public class CreateFullOrderAction implements Action {
         Order order = null;
         boolean haveMoney = false;
         try {
-            H2OrderDao2 orderDao = daoManager.getOrderDao2();
+            H2OrderDao orderDao = daoManager.getOrderDao2();
 
             order = createOrder(request, daoManager, jsonObject);
 

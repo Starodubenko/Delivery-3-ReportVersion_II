@@ -6,7 +6,7 @@ import com.epam.star.action.ActionResult;
 import com.epam.star.action.MappedAction;
 import com.epam.star.dao.H2dao.DaoFactory;
 import com.epam.star.dao.H2dao.DaoManager;
-import com.epam.star.dao.H2dao.H2OrderDao2;
+import com.epam.star.dao.H2dao.H2OrderDao;
 import com.epam.star.entity.Client;
 import com.epam.star.entity.Order;
 import org.slf4j.Logger;
@@ -24,7 +24,7 @@ public class AjaxBrowseOrders2Action implements Action {
     public ActionResult execute(HttpServletRequest request) throws ActionException {
         DaoManager daoManager = DaoFactory.getInstance().getDaoManager();
 
-        H2OrderDao2 orderDao = daoManager.getOrderDao2();
+        H2OrderDao orderDao = daoManager.getOrderDao2();
         Client user = (Client) request.getSession().getAttribute("user");
 
         List todayOrders = orderDao.findAllByClientIdToday(user.getId());

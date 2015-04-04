@@ -93,7 +93,7 @@ public class H2ContactDao extends AbstractH2Dao implements ContactDao {
     }
 
     @Override
-    public Contact insert(Contact contact) {
+    public void insert(Contact contact) {
 
         try (PreparedStatement prstm = conn.prepareStatement(ADD_CONTACT)) {
             prstm.setString(1, null);
@@ -111,45 +111,50 @@ public class H2ContactDao extends AbstractH2Dao implements ContactDao {
             LOGGER.error("Error of Contact adding{}", e);
             throw new DaoException(e);
         }
-        return contact;
+//        return contact;
     }
 
     @Override
-    public String deleteEntity(int ID) throws DaoException {
-        String status = "Contact do not deleted";
+    public void deleteEntity(Contact entity) {
 
-        try (PreparedStatement prstm = conn.prepareStatement(DELETE_CONTACT)) {
-            prstm.setBoolean(1, true);
-            prstm.setInt(2, ID);
-            prstm.execute();
-            status = "Contact deleted successfully";
-            LOGGER.info("Contact marked as deleted successfully{}", ID);
-        } catch (Exception e) {
-            LOGGER.error("Error of Contact marking as deleted{}", e);
-            throw new DaoException(e);
-        }
-        return status;
     }
 
+//    @Override
+//    public String deleteEntity(int ID) throws DaoException {
+////        String status = "Contact do not deleted";
+////
+////        try (PreparedStatement prstm = conn.prepareStatement(DELETE_CONTACT)) {
+////            prstm.setBoolean(1, true);
+////            prstm.setInt(2, ID);
+////            prstm.execute();
+////            status = "Contact deleted successfully";
+////            LOGGER.info("Contact marked as deleted successfully{}", ID);
+////        } catch (Exception e) {
+////            LOGGER.error("Error of Contact marking as deleted{}", e);
+////            throw new DaoException(e);
+////        }
+//        return null;
+//    }
+
     @Override
-    public String updateEntity(Contact contact) {
+    public Contact updateEntity(Contact contact) {
         String status = "Contact do not updated";
-
-        try (PreparedStatement prstm = conn.prepareStatement(UPDATE_CONTACT)) {
-            prstm.setInt(1, contact.getId());
-            prstm.setString(2, contact.getTelephone());
-            prstm.setString(3, contact.getOwner());
-            prstm.setString(4, contact.getPart());
-            prstm.setBoolean(5, contact.isDeleted());
-            prstm.setInt(6, contact.getId());
-            prstm.executeUpdate();
-            status = "Contact updated successfully";
-            LOGGER.info("Contact updated successfully{}", contact);
-        } catch (Exception e) {
-            LOGGER.error("Error of Contact updating{}", e);
-            throw new DaoException(e);
-        }
-        return status;
+//
+//        try (PreparedStatement prstm = conn.prepareStatement(UPDATE_CONTACT)) {
+//            prstm.setInt(1, contact.getId());
+//            prstm.setString(2, contact.getTelephone());
+//            prstm.setString(3, contact.getOwner());
+//            prstm.setString(4, contact.getPart());
+//            prstm.setBoolean(5, contact.isDeleted());
+//            prstm.setInt(6, contact.getId());
+//            prstm.executeUpdate();
+//            status = "Contact updated successfully";
+//            LOGGER.info("Contact updated successfully{}", contact);
+//        } catch (Exception e) {
+//            LOGGER.error("Error of Contact updating{}", e);
+//            throw new DaoException(e);
+//        }
+        return null;
     }
 
     @Override

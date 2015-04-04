@@ -59,10 +59,10 @@ public class DaoManager implements AutoCloseable {
 
         Dao dao = daosMap.get(name);
 
-        if (dao != null) {
-            dao.setConn(connection);
-            dao.setDaoManager(this);
-        }
+//        if (dao != null) {
+//            dao.setConn(connection);
+//            dao.setDaoManager(this);
+//        }
         return dao;
     }
 
@@ -115,8 +115,8 @@ public class DaoManager implements AutoCloseable {
         return new H2OrderedGoodsDao(connection, this);
     }
 
-    public H2OrderDao2 getOrderDao2() {
-        return new H2OrderDao2(connection, this);
+    public H2OrderDao getOrderDao2() {
+        return new H2OrderDao(connection, this);
     }
 
     @Override

@@ -7,7 +7,7 @@ import com.epam.star.action.MappedAction;
 import com.epam.star.dao.DiscountDao;
 import com.epam.star.dao.H2dao.DaoFactory;
 import com.epam.star.dao.H2dao.DaoManager;
-import com.epam.star.dao.H2dao.H2OrderDao2;
+import com.epam.star.dao.H2dao.H2OrderDao;
 import com.epam.star.dao.H2dao.H2OrderedGoodsDao;
 import com.epam.star.dao.PeriodDao;
 import com.epam.star.dao.StatusDao;
@@ -46,7 +46,7 @@ public class FastCreateOrderAction implements Action {
 
         JSONObject jsonObject = new JSONObject();
         try {
-            H2OrderDao2 orderDao = daoManager.getOrderDao2();
+            H2OrderDao orderDao = daoManager.getOrderDao2();
 
             Order order = createOrder(request, daoManager, jsonObject);
 

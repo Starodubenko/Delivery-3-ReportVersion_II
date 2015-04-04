@@ -8,6 +8,7 @@ import com.epam.star.dao.ClientDao;
 import com.epam.star.dao.H2dao.DaoFactory;
 import com.epam.star.dao.H2dao.DaoManager;
 import com.epam.star.dao.H2dao.H2DiscountDao;
+import com.epam.star.dao.HibernateDao.HibernateClientDao;
 import com.epam.star.dao.PositionDao;
 import com.epam.star.entity.Client;
 import com.epam.star.util.Validator;
@@ -15,6 +16,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -26,18 +28,20 @@ public class AjaxClientRegistration implements Action {
     private ActionResult result = new ActionResult("json");
     private ActionResult error = new ActionResult("message");
 
+    @Inject
+    private ClientDao clientDao = new HibernateClientDao();
+
     @Override
     public ActionResult execute(HttpServletRequest request) throws ActionException, SQLException {
         DaoManager daoManager = DaoFactory.getInstance().getDaoManager();
 
-        ClientDao clientDao = daoManager.getClientDao();
+//        ClientDao clientDao = daoManager.getClientDao();
         Validator validator = new Validator(daoManager);
         JSONObject jsonObject = new JSONObject();
 
         Client client = createClient(request, validator, jsonObject);
 
         if (client != null) {
-            daoManager.beginTransaction();
             try {
                 PositionDao positionDao = daoManager.getPositionDao();
                 H2DiscountDao discountDao = daoManager.getDiscountDao();
@@ -47,13 +51,12 @@ public class AjaxClientRegistration implements Action {
 //                client.setAvatar(0); TODO
                 client.setDiscount(discountDao.findById(4));
                 clientDao.insert(client);
-                client = clientDao.findByLogin(client.getLogin());
+//                client = clientDao.findByLogin(client.getLogin());
 
                 LOGGER.info("Client created successful, {}", client);
                 request.getSession().setAttribute("user", client);
-                jsonObject.put("goToPC","client");
+                jsonObject.put("goToPC", "client");
 
-                daoManager.commit();
             } catch (Exception e) {
                 daoManager.rollback();
                 request.setAttribute("message", "client.creation.error");

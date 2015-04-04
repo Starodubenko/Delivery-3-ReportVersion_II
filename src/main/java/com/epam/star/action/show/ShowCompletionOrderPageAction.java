@@ -7,7 +7,7 @@ import com.epam.star.action.MappedAction;
 import com.epam.star.dao.H2dao.DaoFactory;
 import com.epam.star.dao.H2dao.DaoManager;
 import com.epam.star.dao.H2dao.H2ClientDao;
-import com.epam.star.dao.H2dao.H2OrderDao2;
+import com.epam.star.dao.H2dao.H2OrderDao;
 import com.epam.star.dao.util.PaginatedList;
 import com.epam.star.dao.util.Pagination;
 import com.epam.star.entity.Client;
@@ -35,7 +35,7 @@ public class ShowCompletionOrderPageAction implements Action {
 
         DaoManager daoManager = DaoFactory.getInstance().getDaoManager();
 
-        H2OrderDao2 orderDao2 = daoManager.getOrderDao2();
+        H2OrderDao orderDao2 = daoManager.getOrderDao2();
         H2ClientDao clientDao = daoManager.getClientDao();
 
         Client user = (Client)request.getSession().getAttribute("user");

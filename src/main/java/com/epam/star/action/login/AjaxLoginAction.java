@@ -8,7 +8,7 @@ import com.epam.star.dao.ClientDao;
 import com.epam.star.dao.EmployeeDao;
 import com.epam.star.dao.H2dao.DaoFactory;
 import com.epam.star.dao.H2dao.DaoManager;
-import com.epam.star.dao.H2dao.H2OrderDao2;
+import com.epam.star.dao.H2dao.H2OrderDao;
 import com.epam.star.dao.PositionDao;
 import com.epam.star.entity.Client;
 import com.epam.star.entity.Order;
@@ -34,7 +34,7 @@ public class AjaxLoginAction implements Action {
         EmployeeDao employeeDao = daoManager.getEmployeeDao();
         ClientDao clientDao = daoManager.getClientDao();
         PositionDao positionDao = daoManager.getPositionDao();
-        H2OrderDao2 orderDao2 = daoManager.getOrderDao2();
+        H2OrderDao orderDao2 = daoManager.getOrderDao2();
 
         String login = request.getParameter("authenticationLogin");
         String password = request.getParameter("authenticationPassword");

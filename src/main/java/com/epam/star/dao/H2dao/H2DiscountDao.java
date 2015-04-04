@@ -111,7 +111,7 @@ public class H2DiscountDao extends AbstractH2Dao implements DiscountDao {
     }
 
     @Override
-    public Discount insert(Discount discount) {
+    public void insert(Discount discount) {
 
         try (PreparedStatement prstm = conn.prepareStatement(ADD_STATUS)){
             prstm.setString(1, null);
@@ -128,28 +128,33 @@ public class H2DiscountDao extends AbstractH2Dao implements DiscountDao {
             LOGGER.error("Error of Discount inserting{}", e);
             throw new DaoException(e);
         }
-        return discount;
+//        return discount;
     }
 
     @Override
-    public String deleteEntity(int ID) throws DaoException {
-        String status = "Status do not deleted";
+    public void deleteEntity(Discount entity) {
 
-        try (PreparedStatement prstm = conn.prepareStatement(DELETE_STATUS)){
-            prstm.setBoolean(1, true);
-            prstm.setInt(2, ID);
-            prstm.execute();
-            status = "Status deleted successfully ";
-            LOGGER.info("Discount marked as deleted successfully{}", ID);
-        } catch (Exception e) {
-            LOGGER.error("Error of Discount marking as deleted{}", e);
-            throw new DaoException(e);
-        }
-        return status;
     }
 
+//    @Override
+//    public String deleteEntity(int ID) throws DaoException {
+//        String status = "Status do not deleted";
+//
+//        try (PreparedStatement prstm = conn.prepareStatement(DELETE_STATUS)){
+//            prstm.setBoolean(1, true);
+//            prstm.setInt(2, ID);
+//            prstm.execute();
+//            status = "Status deleted successfully ";
+//            LOGGER.info("Discount marked as deleted successfully{}", ID);
+//        } catch (Exception e) {
+//            LOGGER.error("Error of Discount marking as deleted{}", e);
+//            throw new DaoException(e);
+//        }
+//        return status;
+//    }
+
     @Override
-    public String updateEntity(Discount discount) {
+    public Discount updateEntity(Discount discount) {
 
         try (PreparedStatement prstm = conn.prepareStatement(UPDATE_STATUS)){
             prstm.setInt(1, discount.getId());

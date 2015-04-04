@@ -2,7 +2,7 @@ package com.epam.star.dao.H2dao;
 
 import com.epam.star.dao.GoodsDao;
 import com.epam.star.dao.MappedDao;
-import com.epam.star.dao.Order2Dao;
+import com.epam.star.dao.OrderDao;
 import com.epam.star.entity.Client;
 import com.epam.star.entity.Goods;
 import com.epam.star.entity.Order;
@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 @MappedDao("Order")
-public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Order2Dao {
-    private static final Logger LOGGER = LoggerFactory.getLogger(H2OrderDao2.class);
+public class H2OrderDao<T extends Client> extends AbstractH2Dao implements OrderDao {
+    private static final Logger LOGGER = LoggerFactory.getLogger(H2OrderDao.class);
     private static final String INSERT_ORDER = "INSERT INTO  USER_ORDER VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String RANGE_ORDERS = "SELECT * FROM ORDERS LIMIT ? OFFSET ?";
     private static final String FULL_DELETE_ORDER = "DELETE FROM USER_ORDER WHERE ID = ?";
@@ -60,11 +60,11 @@ public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Orde
     private static final String IMPORTANT_FILTER = "";
 
 
-    protected H2OrderDao2() {
+    protected H2OrderDao() {
         super(null, null);
     }
 
-    protected H2OrderDao2(Connection conn, DaoManager daoManager) {
+    protected H2OrderDao(Connection conn, DaoManager daoManager) {
         super(conn, daoManager);
     }
 
@@ -216,7 +216,7 @@ public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Orde
     }
 
 
-    public Order insert(Order order) {
+    public void insert(Order order) {
 
         try (PreparedStatement prstm = conn.prepareStatement(INSERT_ORDER)){
             prstm.setString(1, null);
@@ -240,7 +240,12 @@ public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Orde
             LOGGER.error("Error of Order adding{}", e);
             throw new DaoException(e);
         }
-        return order;
+//        return order;
+    }
+
+    @Override
+    public void deleteEntity(Order entity) {
+
     }
 
     public String deleteEntity(int ID) throws DaoException {
@@ -260,7 +265,7 @@ public class H2OrderDao2<T extends Client> extends AbstractH2Dao implements Orde
     }
 
 
-    public String updateEntity(Order order) {
+    public Order updateEntity(Order order) {
 
         try (PreparedStatement prstm = conn.prepareStatement(UPDATE_ORDER)){
             prstm.setInt(1, order.getId());

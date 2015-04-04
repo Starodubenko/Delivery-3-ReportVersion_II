@@ -6,7 +6,7 @@ import com.epam.star.action.ActionResult;
 import com.epam.star.action.MappedAction;
 import com.epam.star.dao.H2dao.DaoFactory;
 import com.epam.star.dao.H2dao.DaoManager;
-import com.epam.star.dao.H2dao.H2OrderDao2;
+import com.epam.star.dao.H2dao.H2OrderDao;
 import com.epam.star.dao.H2dao.H2OrderedGoodsDao;
 import com.epam.star.entity.Order;
 import org.slf4j.Logger;
@@ -29,7 +29,7 @@ public class SaveEditedOrderAction implements Action {
         Order order = (Order) request.getSession().getAttribute("editOrder");
 
         H2OrderedGoodsDao orderedGoodsDao = daoManager.getOrderedGoodsDao();
-        H2OrderDao2 orderDao2 = daoManager.getOrderDao2();
+        H2OrderDao orderDao2 = daoManager.getOrderDao2();
 
 //        Map<Goods, Integer> goods = order.getOrderedGoods(); TODO
 //        List<OrderedGoods> byOrderNumber = orderedGoodsDao.findByOrderNumber(order.getNumber());

@@ -1,5 +1,7 @@
 package com.epam.star.dao.util;
 
+import com.epam.star.dao.ClientDao;
+
 import javax.enterprise.inject.Produces;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

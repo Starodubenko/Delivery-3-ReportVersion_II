@@ -108,7 +108,7 @@ public class H2PayCardStatusDao extends AbstractH2Dao implements PayCardStatusDa
     }
 
     @Override
-    public StatusPayCard insert(StatusPayCard statusPayCard) throws DaoException {
+    public void insert(StatusPayCard statusPayCard) throws DaoException {
 
         try (PreparedStatement prstm = conn.prepareStatement(ADD_STATUS_PAY_CARD)){
             prstm.setString(1, null);
@@ -124,29 +124,34 @@ public class H2PayCardStatusDao extends AbstractH2Dao implements PayCardStatusDa
             LOGGER.error("Error of Pay card status adding{}", e);
             throw new DaoException(e);
         }
-        return statusPayCard;
+//        return statusPayCard;
     }
 
     @Override
-    public String deleteEntity(int ID) throws DaoException {
-        String status = "Status pay card not marked as deleted";
+    public void deleteEntity(StatusPayCard entity) {
 
-        try (PreparedStatement prstm = conn.prepareStatement(DELETE_STATUS_PAY_CARD)){
-            prstm.setBoolean(1, true);
-            prstm.setInt(2, ID);
-            prstm.executeUpdate();
-            status = "Status pay card marked as deleted";
-            LOGGER.info("Pay card status marked as deleted successfully{}", ID);
-        } catch (Exception e) {
-            LOGGER.error("Error of Pay card status marking as deleted{}", e);
-            throw new DaoException(e);
-        }
-
-        return status;
     }
 
+//    @Override
+//    public String deleteEntity(int ID) throws DaoException {
+//        String status = "Status pay card not marked as deleted";
+//
+//        try (PreparedStatement prstm = conn.prepareStatement(DELETE_STATUS_PAY_CARD)){
+//            prstm.setBoolean(1, true);
+//            prstm.setInt(2, ID);
+//            prstm.executeUpdate();
+//            status = "Status pay card marked as deleted";
+//            LOGGER.info("Pay card status marked as deleted successfully{}", ID);
+//        } catch (Exception e) {
+//            LOGGER.error("Error of Pay card status marking as deleted{}", e);
+//            throw new DaoException(e);
+//        }
+//
+//        return status;
+//    }
+
     @Override
-    public String updateEntity(StatusPayCard statusPayCard) throws DaoException {
+    public StatusPayCard updateEntity(StatusPayCard statusPayCard) throws DaoException {
 
         try (PreparedStatement prstm = conn.prepareStatement(UPDATE_STATUS_PAY_CARD)){
             prstm.setInt(1, statusPayCard.getId());

@@ -140,7 +140,7 @@ public class H2PayCardDao extends AbstractH2Dao implements PayCardDao {
     }
 
     @Override
-    public PayCard insert(PayCard payCard) throws DaoException {
+    public void insert(PayCard payCard) throws DaoException {
 
         PreparedStatement prstm = null;
         try {
@@ -163,29 +163,34 @@ public class H2PayCardDao extends AbstractH2Dao implements PayCardDao {
         } finally {
             closeStatement(prstm, null);
         }
-        return payCard;
+//        return payCard;
     }
 
     @Override
-    public String deleteEntity(int ID) throws DaoException {
-        String status = "Pay card not marked as deleted";
+    public void deleteEntity(PayCard entity) {
 
-        try (PreparedStatement prstm = conn.prepareStatement(DELETE_PAYCARD)){
-            prstm.setBoolean(1, true);
-            prstm.setInt(2, ID);
-            prstm.executeUpdate();
-            status = "Pay card marked as deleted";
-            LOGGER.info("Pay card deleted marked as deleted successfully{}", ID);
-        } catch (Exception e) {
-            LOGGER.error("Error of Pay card marking as deleted{}", e);
-            throw new DaoException(e);
-        }
-
-        return status;
     }
 
+//    @Override
+//    public String deleteEntity(int ID) throws DaoException {
+//        String status = "Pay card not marked as deleted";
+//
+//        try (PreparedStatement prstm = conn.prepareStatement(DELETE_PAYCARD)){
+//            prstm.setBoolean(1, true);
+//            prstm.setInt(2, ID);
+//            prstm.executeUpdate();
+//            status = "Pay card marked as deleted";
+//            LOGGER.info("Pay card deleted marked as deleted successfully{}", ID);
+//        } catch (Exception e) {
+//            LOGGER.error("Error of Pay card marking as deleted{}", e);
+//            throw new DaoException(e);
+//        }
+//
+//        return status;
+//    }
+
     @Override
-    public String updateEntity(PayCard payCard) throws DaoException {
+    public PayCard updateEntity(PayCard payCard) throws DaoException {
         PreparedStatement prstm = null;
         try {
             prstm = conn.prepareStatement(UPDATE_PAYCARD);

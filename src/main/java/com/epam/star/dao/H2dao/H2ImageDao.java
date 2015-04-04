@@ -192,7 +192,7 @@ public class H2ImageDao extends AbstractH2Dao implements ImageDao {
     }
 
     @Override
-    public Image insert(Image image) {
+    public void insert(Image image) {
 
         try (PreparedStatement prstm = conn.prepareStatement(INSERT_IMAGE)){
             prstm.setString(1, null);
@@ -209,28 +209,33 @@ public class H2ImageDao extends AbstractH2Dao implements ImageDao {
             LOGGER.error("Error of Image adding{}", e);
             throw new DaoException(e);
         }
-        return image;
+//        return image;
     }
 
     @Override
-    public String deleteEntity(int ID) {
-        String status = "Image do not deleted";
+    public void deleteEntity(Image entity) {
 
-        try (PreparedStatement prstm = conn.prepareStatement(DELETE_IMAGE)){
-            prstm.setBoolean(1, true);
-            prstm.setInt(2, ID);
-            prstm.execute();
-            status = "Image successfully deleted";
-            LOGGER.info("Image marked as deleted successfully{}", ID);
-        } catch (Exception e) {
-            LOGGER.error("Error of Image marking as deleted{}", e);
-            throw new DaoException(e);
-        }
-        return status;
     }
 
+//    @Override
+//    public String deleteEntity(int ID) {
+//        String status = "Image do not deleted";
+//
+//        try (PreparedStatement prstm = conn.prepareStatement(DELETE_IMAGE)){
+//            prstm.setBoolean(1, true);
+//            prstm.setInt(2, ID);
+//            prstm.execute();
+//            status = "Image successfully deleted";
+//            LOGGER.info("Image marked as deleted successfully{}", ID);
+//        } catch (Exception e) {
+//            LOGGER.error("Error of Image marking as deleted{}", e);
+//            throw new DaoException(e);
+//        }
+//        return status;
+//    }
+
     @Override
-    public String updateEntity(Image image) {
+    public Image updateEntity(Image image) {
         return null;
     }
 

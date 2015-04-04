@@ -36,7 +36,7 @@ public class DeleteEntityAction implements Action {
             AbstractEntity entity = dao.findById(id);
             try {
                 daoManager.beginTransaction();
-                dao.deleteEntity(id);
+//                dao.deleteEntity(id);
 
                 LOGGER.error("Delete entity was successful{}", entity);
                 daoManager.commit();

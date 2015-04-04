@@ -91,7 +91,7 @@ public class H2StatusDao extends AbstractH2Dao implements StatusDao {
     }
 
     @Override
-    public Status insert(Status status) throws DaoException {
+    public void insert(Status status) throws DaoException {
 
         try (PreparedStatement prstm = conn.prepareStatement(ADD_STATUS)){
             prstm.setString(1, null);
@@ -107,29 +107,34 @@ public class H2StatusDao extends AbstractH2Dao implements StatusDao {
             LOGGER.error("Error of Status adding{}", e);
             throw new DaoException(e);
         }
-        return status;
+//        return status;
     }
 
     @Override
-    public String deleteEntity(int ID) throws DaoException {
-        String status = "Status not marked as deleted";
+    public void deleteEntity(Status entity) {
 
-        try (PreparedStatement prstm = conn.prepareStatement(DELETE_STATUS)){
-            prstm.setBoolean(1, true);
-            prstm.setInt(2, ID);
-            prstm.executeUpdate();
-            status = "Status marked as deleted";
-            LOGGER.info("Status marked as deleted{}", ID);
-        } catch (Exception e) {
-            LOGGER.error("Error of Status marking as deleted{}", e);
-            throw new DaoException(e);
-        }
-
-        return status;
     }
 
+//    @Override
+//    public String deleteEntity(int ID) throws DaoException {
+//        String status = "Status not marked as deleted";
+//
+//        try (PreparedStatement prstm = conn.prepareStatement(DELETE_STATUS)){
+//            prstm.setBoolean(1, true);
+//            prstm.setInt(2, ID);
+//            prstm.executeUpdate();
+//            status = "Status marked as deleted";
+//            LOGGER.info("Status marked as deleted{}", ID);
+//        } catch (Exception e) {
+//            LOGGER.error("Error of Status marking as deleted{}", e);
+//            throw new DaoException(e);
+//        }
+//
+//        return status;
+//    }
+
     @Override
-    public String updateEntity(Status status) throws DaoException {
+    public Status updateEntity(Status status) throws DaoException {
 
         try (PreparedStatement prstm = conn.prepareStatement(UPDATE_STATUS)){
             prstm.setInt(1, status.getId());

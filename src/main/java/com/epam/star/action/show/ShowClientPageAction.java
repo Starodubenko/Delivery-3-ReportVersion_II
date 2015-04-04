@@ -7,11 +7,10 @@ import com.epam.star.action.MappedAction;
 import com.epam.star.dao.ClientDao;
 import com.epam.star.dao.H2dao.DaoFactory;
 import com.epam.star.dao.H2dao.DaoManager;
-import com.epam.star.dao.H2dao.H2OrderDao2;
+import com.epam.star.dao.H2dao.H2OrderDao;
 import com.epam.star.dao.ImageDao;
 import com.epam.star.entity.Client;
 import com.epam.star.entity.Goods;
-import com.epam.star.entity.Image;
 import com.epam.star.entity.Period;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,12 +30,13 @@ public class ShowClientPageAction implements Action {
     public ActionResult execute(HttpServletRequest request) throws ActionException, SQLException {
         DaoManager daoManager = DaoFactory.getInstance().getDaoManager();
 
-        H2OrderDao2 orderDao2 = daoManager.getOrderDao2();
+        H2OrderDao orderDao2 = daoManager.getOrderDao2();
         ClientDao clientDao = daoManager.getClientDao();
         ImageDao imageDao = daoManager.getImageDao();
 
         Client currentClient = (Client) request.getSession().getAttribute("user");
-        Client user = clientDao.findByLogin(currentClient.getLogin());
+//        Client user = clientDao.findByLogin(currentClient.getLogin());
+        Client user = null;
 //        Image clientAvatar = imageDao.findById(user.getAvatar());TODO
 
         int clientOrdersCount = orderDao2.getClientOrdersCount(user.getId());

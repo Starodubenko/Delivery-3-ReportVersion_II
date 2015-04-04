@@ -91,7 +91,7 @@ public class H2PositionDao extends AbstractH2Dao implements PositionDao {
     }
 
     @Override
-    public Position insert(Position position) throws DaoException {
+    public void insert(Position position) throws DaoException {
 
         try (PreparedStatement prstm = conn.prepareStatement(ADD_POSITION)){
             prstm.setString(1, null);
@@ -107,29 +107,34 @@ public class H2PositionDao extends AbstractH2Dao implements PositionDao {
             LOGGER.error("Error of Position adding{}", e);
             throw new DaoException(e);
         }
-        return position;
+//        return position;
     }
 
     @Override
-    public String deleteEntity(int ID) throws DaoException {
-        String status = "Position not marked as deleted";
+    public void deleteEntity(Position entity) {
 
-        try (PreparedStatement prstm = conn.prepareStatement(DELETE_POSITION)){
-            prstm.setBoolean(1, true);
-            prstm.setInt(2, ID);
-            prstm.executeUpdate();
-            status = "Position marked as deleted";
-            LOGGER.info("Position marked as deleted successfully{}", ID);
-        } catch (Exception e) {
-            LOGGER.error("Error of Position marking as deleted{}", e);
-            throw new DaoException(e);
-        }
-
-        return status;
     }
 
+//    @Override
+//    public String deleteEntity(int ID) throws DaoException {
+//        String status = "Position not marked as deleted";
+//
+//        try (PreparedStatement prstm = conn.prepareStatement(DELETE_POSITION)){
+//            prstm.setBoolean(1, true);
+//            prstm.setInt(2, ID);
+//            prstm.executeUpdate();
+//            status = "Position marked as deleted";
+//            LOGGER.info("Position marked as deleted successfully{}", ID);
+//        } catch (Exception e) {
+//            LOGGER.error("Error of Position marking as deleted{}", e);
+//            throw new DaoException(e);
+//        }
+//
+//        return status;
+//    }
+
     @Override
-    public String updateEntity(Position position) throws DaoException {
+    public Position updateEntity(Position position) throws DaoException {
 
         try (PreparedStatement prstm = conn.prepareStatement(UPDATE_PERIOD)){
             prstm.setInt(1, position.getId());

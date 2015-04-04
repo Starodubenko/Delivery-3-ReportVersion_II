@@ -117,7 +117,7 @@ public class H2OrderedGoodsDao extends AbstractH2Dao implements OrderedGoodsDao{
     }
 
 
-    public OrderedGoods insert(OrderedGoods goods) throws DaoException {
+    public void insert(OrderedGoods goods) throws DaoException {
 
         try (PreparedStatement prstm = conn.prepareStatement(ADD_GOODS)){
             prstm.setString(1, null);
@@ -135,7 +135,12 @@ public class H2OrderedGoodsDao extends AbstractH2Dao implements OrderedGoodsDao{
             LOGGER.error("Error of Ordered goods adding{}", e);
             throw new DaoException(e);
         }
-        return goods;
+//        return goods;
+    }
+
+    @Override
+    public void deleteEntity(OrderedGoods entity) {
+
     }
 
 
@@ -171,7 +176,7 @@ public class H2OrderedGoodsDao extends AbstractH2Dao implements OrderedGoodsDao{
     }
 
 
-    public String updateEntity(OrderedGoods goods) throws DaoException {
+    public OrderedGoods updateEntity(OrderedGoods goods) throws DaoException {
         String status = "Goods do not updated";
 
         try (PreparedStatement prstm = conn.prepareStatement(UPDATE_GOODS)){
@@ -188,7 +193,7 @@ public class H2OrderedGoodsDao extends AbstractH2Dao implements OrderedGoodsDao{
             LOGGER.error("Error of Ordered goods updating{}", e);
             throw new DaoException(e);
         }
-        return status;
+        return null;
     }
 
     @Override

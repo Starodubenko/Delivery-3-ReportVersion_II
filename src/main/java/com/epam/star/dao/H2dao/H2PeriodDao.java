@@ -106,7 +106,7 @@ public class H2PeriodDao extends AbstractH2Dao implements PeriodDao {
     }
 
     @Override
-    public Period insert(Period period) throws DaoException {
+    public void insert(Period period) throws DaoException {
 
         try (PreparedStatement prstm = conn.prepareStatement(ADD_PERIOD)){
             prstm.setString(1, null);
@@ -123,29 +123,34 @@ public class H2PeriodDao extends AbstractH2Dao implements PeriodDao {
             LOGGER.error("Error of Period adding{}", e);
             throw new DaoException(e);
         }
-        return period;
+//        return period;
     }
 
     @Override
-    public String deleteEntity(int ID) throws DaoException {
-        String status = "Period not marked as deleted";
+    public void deleteEntity(Period entity) {
 
-        try (PreparedStatement prstm = conn.prepareStatement(DELETE_PERIOD)){
-            prstm.setBoolean(1, true);
-            prstm.setInt(2, ID);
-            prstm.executeUpdate();
-            status = "Period marked as deleted";
-            LOGGER.info("Period marked as deleted successfully{}", ID);
-        } catch (Exception e) {
-            LOGGER.error("Error of Period marking as deleted{}", e);
-            throw new DaoException(e);
-        }
-
-        return status;
     }
 
+//    @Override
+//    public String deleteEntity(int ID) throws DaoException {
+//        String status = "Period not marked as deleted";
+//
+//        try (PreparedStatement prstm = conn.prepareStatement(DELETE_PERIOD)){
+//            prstm.setBoolean(1, true);
+//            prstm.setInt(2, ID);
+//            prstm.executeUpdate();
+//            status = "Period marked as deleted";
+//            LOGGER.info("Period marked as deleted successfully{}", ID);
+//        } catch (Exception e) {
+//            LOGGER.error("Error of Period marking as deleted{}", e);
+//            throw new DaoException(e);
+//        }
+//
+//        return status;
+//    }
+
     @Override
-    public String updateEntity(Period period) throws DaoException {
+    public Period updateEntity(Period period) throws DaoException {
         PreparedStatement prstm = null;
         try {
             prstm = conn.prepareStatement(UPDATE_PERIOD);

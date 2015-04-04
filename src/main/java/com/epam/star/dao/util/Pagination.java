@@ -53,7 +53,7 @@ public class Pagination<T extends AbstractEntity, E extends AbstractH2Dao, K ext
         String orderBy = utilDao.getString("orderBy", request);
         if (orderBy != null && (orderBy.contains("date") || orderBy.contains("time"))){
             String orderByType = orderBy.substring(orderBy.indexOf(" "), orderBy.length());
-            orderBy = orderBy + ", " + genericDao.getTableName() + ".id" + orderByType;
+//            orderBy = orderBy + ", " + genericDao.getTableName() + ".id" + orderByType;
         }
 
 

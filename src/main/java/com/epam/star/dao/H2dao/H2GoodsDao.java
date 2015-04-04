@@ -3,6 +3,7 @@ package com.epam.star.dao.H2dao;
 import com.epam.star.dao.GoodsDao;
 import com.epam.star.dao.MappedDao;
 import com.epam.star.entity.Goods;
+import com.epam.star.entity.Image;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -125,7 +126,7 @@ public class H2GoodsDao extends AbstractH2Dao implements GoodsDao {
     }
 
     @Override
-    public Goods insert(Goods goods) {
+    public void insert(Goods goods) {
 
         //TODO
 //        try (PreparedStatement prstm = conn.prepareStatement(ADD_GOODS)){
@@ -144,28 +145,33 @@ public class H2GoodsDao extends AbstractH2Dao implements GoodsDao {
 //            LOGGER.error("Error of Goods adding{}", e);
 //            throw new DaoException(e);
 //        }
-        return goods;
+//        return goods;
     }
 
     @Override
-    public String deleteEntity(int ID) throws DaoException {
-        String status = "Status do not deleted";
+    public void deleteEntity(Goods entity) {
 
-        try (PreparedStatement prstm = conn.prepareStatement(DELETE_GOODS)){
-            prstm.setBoolean(1, true);
-            prstm.setInt(2, ID);
-            prstm.execute();
-            status = "Goods deleted successfully ";
-            LOGGER.info("Goods marked as deleted successfully{}", ID);
-        } catch (Exception e) {
-            LOGGER.error("Error of Goods marking as deleted{}", e);
-            throw new DaoException(e);
-        }
-        return status;
     }
 
+//    @Override
+//    public String deleteEntity(int ID) throws DaoException {
+//        String status = "Status do not deleted";
+//
+//        try (PreparedStatement prstm = conn.prepareStatement(DELETE_GOODS)){
+//            prstm.setBoolean(1, true);
+//            prstm.setInt(2, ID);
+//            prstm.execute();
+//            status = "Goods deleted successfully ";
+//            LOGGER.info("Goods marked as deleted successfully{}", ID);
+//        } catch (Exception e) {
+//            LOGGER.error("Error of Goods marking as deleted{}", e);
+//            throw new DaoException(e);
+//        }
+//        return status;
+//    }
+
     @Override
-    public String updateEntity(Goods goods) {
+    public Goods updateEntity(Goods goods) {
         String status = "Goods do not updated";
 //TODO
 //        try (PreparedStatement prstm = conn.prepareStatement(UPDATE_GOODS)){
@@ -182,7 +188,7 @@ public class H2GoodsDao extends AbstractH2Dao implements GoodsDao {
 //            LOGGER.error("Error of Goods updating{}", e);
 //            throw new DaoException(e);
 //        }
-        return status;
+        return null;
     }
 
     @Override

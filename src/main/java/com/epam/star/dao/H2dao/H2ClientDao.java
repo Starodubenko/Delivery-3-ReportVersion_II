@@ -64,114 +64,6 @@ public class H2ClientDao extends AbstractH2Dao implements ClientDao {
     }
 
     @Override
-    public Client findByLogin(String login) throws DaoException {
-        String sql = "select * from USERS where login = " + "'" + login + "'";
-
-        Client client = null;
-        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
-            try (ResultSet resultSet = prstm.executeQuery()) {
-                if (resultSet.next())
-                    client = getEntityFromResultSet(resultSet);
-            }
-            LOGGER.info("Client found by login{}", client);
-        } catch (Exception e) {
-            LOGGER.error("Error of Client finding by login{}", e);
-            throw new DaoException(e);
-        }
-        return client;
-    }
-
-    @Override
-    public Client findByName(String name) throws DaoException {
-        String sql = "select * from USERS where firstname = " + "'" + name + "'";
-
-        Client client = null;
-        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
-            try (ResultSet resultSet = prstm.executeQuery()) {
-                if (resultSet.next())
-                    client = getEntityFromResultSet(resultSet);
-            }
-            LOGGER.info("Client found by name{}", client);
-        } catch (Exception e) {
-            LOGGER.error("Error of Client finding by name{}", e);
-            throw new DaoException(e);
-        }
-        return client;
-    }
-
-    @Override
-    public Client findBySurname(String surName) throws DaoException {
-        String sql = "select * from USERS where surname = " + "'" + surName + "'";
-
-        Client client = null;
-        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
-            try (ResultSet resultSet = prstm.executeQuery()) {
-                if (resultSet.next())
-                    client = getEntityFromResultSet(resultSet);
-            }
-            LOGGER.info("Client found by surname{}", client);
-        } catch (Exception e) {
-            LOGGER.error("Error of Client finding by surname{}", e);
-            throw new DaoException(e);
-        }
-        return client;
-    }
-
-    @Override
-    public Client findByAddress(String address) throws DaoException {
-        String sql = "select * from USERS where address= " + "'" + address + "'";
-
-        Client client = null;
-        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
-            try (ResultSet resultSet = prstm.executeQuery()) {
-                if (resultSet.next())
-                    client = getEntityFromResultSet(resultSet);
-            }
-            LOGGER.info("Client found by address{}", client);
-        } catch (Exception e) {
-            LOGGER.error("Error of Client finding by address{}", e);
-            throw new DaoException(e);
-        }
-        return client;
-    }
-
-    @Override
-    public Client findByTelephone(String telephone) throws DaoException {
-        String sql = "select * from USERS where telephone = " + "'" + telephone + "'";
-
-        Client client = null;
-        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
-            try (ResultSet resultSet = prstm.executeQuery()) {
-                if (resultSet.next())
-                    client = getEntityFromResultSet(resultSet);
-            }
-            LOGGER.info("Client found by telephone{}", client);
-        } catch (Exception e) {
-            LOGGER.error("Error of Client finding by telephone{}", e);
-            throw new DaoException(e);
-        }
-        return client;
-    }
-
-    @Override
-    public Client findByMobilephone(String mobilephone) throws DaoException {
-        String sql = "select * from USERS where surname = " + "'" + mobilephone + "'";
-
-        Client client = null;
-        try (PreparedStatement prstm = conn.prepareStatement(sql)) {
-            try (ResultSet resultSet = prstm.executeQuery()) {
-                if (resultSet.next())
-                    client = getEntityFromResultSet(resultSet);
-            }
-            LOGGER.info("Client found by mobilephone{}", client);
-        } catch (Exception e) {
-            LOGGER.error("Error of Client finding by mobilephone{}", e);
-            throw new DaoException(e);
-        }
-        return client;
-    }
-
-    @Override
     public Client findByCredentials(String login, String password) throws DaoException {
         String sql = "SELECT *" +
                 " FROM USERS" +
@@ -225,7 +117,7 @@ public class H2ClientDao extends AbstractH2Dao implements ClientDao {
     }
 
     @Override
-    public Client insert(Client client) {
+    public void insert(Client client) {
         String status = "Client do not added";
 
         try (PreparedStatement prstm = conn.prepareStatement(ADD_CLIENT)) {
@@ -257,55 +149,60 @@ public class H2ClientDao extends AbstractH2Dao implements ClientDao {
             LOGGER.error("Error of Client adding{}", e);
             throw new DaoException(e);
         }
-        return client;
-    }
-
-
-    @Override
-    public String deleteEntity(int ID) throws DaoException {
-        String status = "Client do not deleted";
-
-        try (PreparedStatement prstm = conn.prepareStatement(DELETE_CLIENT)) {
-            prstm.setBoolean(1, true);
-            prstm.setInt(2, ID);
-            prstm.execute();
-            status = "Client deleted successfully";
-            LOGGER.info("Client marked as deleted successfully{}", ID);
-        } catch (Exception e) {
-            LOGGER.error("Error of Client marking as deleted{}", e);
-            throw new DaoException(e);
-        }
-        return status;
+//        return client;
     }
 
     @Override
-    public String updateEntity(Client client) {
-        String status = "Client do not updated";
+    public void deleteEntity(Client entity) {
 
-        try (PreparedStatement prstm = conn.prepareStatement(UPDATE_CLIENT)) {
-            prstm.setInt(1, client.getId());
-            prstm.setString(2, client.getLogin());
-            prstm.setString(3, client.getPassword());
-            prstm.setString(4, client.getFirstName());
-            prstm.setString(5, client.getLastName());
-            prstm.setString(6, client.getMiddleName());
-            prstm.setString(7, client.getAddress());
-            prstm.setString(8, client.getTelephone());
-            prstm.setString(9, client.getMobilephone());
-            prstm.setInt(10, client.getPosition().getId());
-            prstm.setBigDecimal(11, client.getVirtualBalance());
-//            prstm.setInt(12, client.getAvatar().intValue());TODO
-            prstm.setInt(13, client.getDiscount().getId());
-            prstm.setBoolean(14, client.isDeleted());
-            prstm.setInt(15, client.getId());
-            prstm.executeUpdate();
-            status = "Client updated successfully";
-            LOGGER.info("Client updated successfully{}", client);
-        } catch (Exception e) {
-            LOGGER.error("Error of Client updating{}", e);
-            throw new DaoException(e);
-        }
-        return status;
+    }
+
+
+//    @Override
+//    public String deleteEntity(int ID) throws DaoException {
+//        String status = "Client do not deleted";
+//
+//        try (PreparedStatement prstm = conn.prepareStatement(DELETE_CLIENT)) {
+//            prstm.setBoolean(1, true);
+//            prstm.setInt(2, ID);
+//            prstm.execute();
+//            status = "Client deleted successfully";
+//            LOGGER.info("Client marked as deleted successfully{}", ID);
+//        } catch (Exception e) {
+//            LOGGER.error("Error of Client marking as deleted{}", e);
+//            throw new DaoException(e);
+//        }
+//        return status;
+//    }
+
+    @Override
+    public Client updateEntity(Client client) {
+//        String status = "Client do not updated";
+//
+//        try (PreparedStatement prstm = conn.prepareStatement(UPDATE_CLIENT)) {
+//            prstm.setInt(1, client.getId());
+//            prstm.setString(2, client.getLogin());
+//            prstm.setString(3, client.getPassword());
+//            prstm.setString(4, client.getFirstName());
+//            prstm.setString(5, client.getLastName());
+//            prstm.setString(6, client.getMiddleName());
+//            prstm.setString(7, client.getAddress());
+//            prstm.setString(8, client.getTelephone());
+//            prstm.setString(9, client.getMobilephone());
+//            prstm.setInt(10, client.getPosition().getId());
+//            prstm.setBigDecimal(11, client.getVirtualBalance());
+////            prstm.setInt(12, client.getAvatar().intValue());TODO
+//            prstm.setInt(13, client.getDiscount().getId());
+//            prstm.setBoolean(14, client.isDeleted());
+//            prstm.setInt(15, client.getId());
+//            prstm.executeUpdate();
+//            status = "Client updated successfully";
+//            LOGGER.info("Client updated successfully{}", client);
+//        } catch (Exception e) {
+//            LOGGER.error("Error of Client updating{}", e);
+//            throw new DaoException(e);
+//        }
+        return null;
     }
 
     @Override
