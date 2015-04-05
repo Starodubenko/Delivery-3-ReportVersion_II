@@ -7,9 +7,10 @@ import java.util.List;
 @MappedEntityForAdmin("Client")
 @Entity
 @Table(name = "users")
+@DiscriminatorColumn(name="dtype")
 public class Client extends AbstractEntity {
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "avatar_id", nullable = true)
     private AvatarImage avatar;
     @Column
@@ -28,18 +29,18 @@ public class Client extends AbstractEntity {
     private String telephone;
     @Column(nullable = true)
     private String mobilephone;
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="position_id")
     private Position position;
     @Column
     private BigDecimal virtualBalance;
     @Column(nullable = true)
     private String email;
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="discount_id")
     private Discount discount;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Order> orders;
 
 

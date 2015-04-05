@@ -4,11 +4,13 @@
 	      http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          version="3.0">
     
-    <display-name>Delivery</display-name>
+    <display-name>LiveWater</display-name>
 
     <!--<welcome-file-list>-->
         <!--<welcome-file>welcome.jsp</welcome-file>-->
     <!--</welcome-file-list>-->
+
+
 
     <servlet>
         <servlet-name>controller</servlet-name>
@@ -39,9 +41,18 @@
         <servlet-name>ErrorHandler</servlet-name>
         <servlet-class>com.epam.star.servlet.ErrorHandler</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Faces Servlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ErrorHandler</servlet-name>
         <url-pattern>/error</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
     <error-page>
         <location>/error</location>

@@ -72,6 +72,8 @@
 
         <div class="clear"></div>
 
+        <h1><a href="../index.xhtml">Go to index.xhtml</a></h1>
+
         <script src="<c:url value="/script/welcome.js"/>"></script>
     </t:gbody>
     </html>

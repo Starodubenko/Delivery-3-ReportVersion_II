@@ -1,0 +1,17 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="pattern.xhtml">
+
+    <ui:define name="body">
+        <h:form>
+            <h:outputLabel value="Login"/>
+            <h:inputText value="#{userBean.login}"/>
+            <h:outputLabel value="Password"/>
+            <h:inputText value="#{userBean.password}"/>
+
+            <h:commandButton id="login" value="do login" action="#{userBean.doLogin}"/>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

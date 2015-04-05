@@ -22,7 +22,8 @@ public class HibernateClientDao extends AbstractHibernateDao<Client> implements 
 
     @Override
     public Client findByCredentials(String login, String password) {
-        Query query = em.createQuery("select c from Client c where lower(c.login) = lower(" + login + ") and c.password = " + password);
+        Query query = em.createQuery("select c from Client c where lower(c.login) = lower('" + login + "') and c.password = '" + password + "'");
+        List<Client> resultList = query.getResultList();
         return (Client) query.getSingleResult();
     }
 
