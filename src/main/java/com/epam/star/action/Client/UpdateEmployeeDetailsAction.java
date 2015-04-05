@@ -29,7 +29,7 @@ public class UpdateEmployeeDetailsAction implements Action {
         DaoManager daoManager = DaoFactory.getInstance().getDaoManager();
 
         ClientDao clientDao = daoManager.getClientDao();
-        Validator validator = new Validator(daoManager);
+        Validator validator = new Validator();
         JSONObject jsonObject = new JSONObject();
 
         Employee currentUser = (Employee) request.getSession().getAttribute("editUser");

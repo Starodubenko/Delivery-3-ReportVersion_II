@@ -4,7 +4,7 @@ import com.epam.star.entity.Client;
 
 import java.sql.SQLException;
 
-public interface ClientDao extends Dao<Client> {
+public interface ClientDao extends Dao<Client>{
 
     public Client findByCredentials(String login, String password);
 

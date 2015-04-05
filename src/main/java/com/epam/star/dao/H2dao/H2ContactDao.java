@@ -6,6 +6,7 @@ import com.epam.star.entity.Contact;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.enterprise.inject.Alternative;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @MappedDao("Contact")
+@Alternative
 public class H2ContactDao extends AbstractH2Dao implements ContactDao {
     private static final Logger LOGGER = LoggerFactory.getLogger(H2ClientDao.class);
     private static final String ADD_CONTACT = "INSERT INTO CONTACTS VALUES (?, ?, ?, ?, ?)";
@@ -54,7 +56,7 @@ public class H2ContactDao extends AbstractH2Dao implements ContactDao {
         return TABLE;
     }
 
-    @Override
+
     public List<Contact> getContacts() throws DaoException {
         List<Contact> result = new ArrayList<>();
         String sql = "SELECT * FROM CONTACTS";

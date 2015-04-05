@@ -5,9 +5,7 @@ import com.epam.star.action.ActionException;
 import com.epam.star.action.ActionResult;
 import com.epam.star.action.MappedAction;
 import com.epam.star.dao.ClientDao;
-import com.epam.star.dao.H2dao.DaoFactory;
-import com.epam.star.dao.H2dao.DaoManager;
-import com.epam.star.dao.H2dao.H2DiscountDao;
+import com.epam.star.dao.DiscountDao;
 import com.epam.star.dao.HibernateDao.HibernateClientDao;
 import com.epam.star.dao.PositionDao;
 import com.epam.star.entity.Client;
@@ -16,35 +14,45 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.Map;
 
 @MappedAction("POST/ajaxClientRegistration")
-public class AjaxClientRegistration implements Action {
+@SessionScoped
+public class AjaxClientRegistration implements Action, Serializable{
     private static final Logger LOGGER = LoggerFactory.getLogger(AjaxClientRegistration.class);
     private ActionResult result = new ActionResult("json");
     private ActionResult error = new ActionResult("message");
 
     @Inject
-    private ClientDao clientDao = new HibernateClientDao();
+    private ClientDao clientDao;
+
+    @Inject
+    private PositionDao positionDao;
+
+    @Inject
+    private DiscountDao discountDao;
 
     @Override
     public ActionResult execute(HttpServletRequest request) throws ActionException, SQLException {
-        DaoManager daoManager = DaoFactory.getInstance().getDaoManager();
+//        DaoManager daoManager = DaoFactory.getInstance().getDaoManager();
 
 //        ClientDao clientDao = daoManager.getClientDao();
-        Validator validator = new Validator(daoManager);
+        Validator validator = new Validator();
         JSONObject jsonObject = new JSONObject();
 
         Client client = createClient(request, validator, jsonObject);
 
         if (client != null) {
             try {
-                PositionDao positionDao = daoManager.getPositionDao();
-                H2DiscountDao discountDao = daoManager.getDiscountDao();
+//                PositionDao positionDao = daoManager.getPositionDao();
+//                H2DiscountDao discountDao = daoManager.getDiscountDao();
 
                 client.setPosition(positionDao.findByPositionName("Client"));
                 client.setVirtualBalance(new BigDecimal(0));
@@ -58,11 +66,9 @@ public class AjaxClientRegistration implements Action {
                 jsonObject.put("goToPC", "client");
 
             } catch (Exception e) {
-                daoManager.rollback();
+//                daoManager.rollback();
                 request.setAttribute("message", "client.creation.error");
                 return error;
-            } finally {
-                daoManager.closeConnection();
             }
         } else LOGGER.info("Creation of a client failed, {}", client);
         return result;
@@ -80,6 +86,7 @@ public class AjaxClientRegistration implements Action {
         boolean address = validator.checkUserAddress(request.getParameter("address"));
         boolean telephone = validator.checkUserTelephone(request.getParameter("telephone"));
         boolean mobilephone = validator.checkUserMobilephone(request.getParameter("mobilephone"));
+        boolean email = validator.checkEmail(request.getParameter("email"));
         try {
             if (validator.isValide()) {
                 client.setLogin(request.getParameter("login"));
@@ -90,6 +97,7 @@ public class AjaxClientRegistration implements Action {
                 client.setAddress(request.getParameter("address"));
                 client.setTelephone(request.getParameter("telephone"));
                 client.setMobilephone(request.getParameter("mobilephone"));
+                client.setEmail(request.getParameter("email"));
                 return client;
             } else {
                 Map<String, String> invalidFields = validator.getInvalidFields();

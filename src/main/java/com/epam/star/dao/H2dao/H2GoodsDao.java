@@ -7,6 +7,7 @@ import com.epam.star.entity.Image;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.enterprise.inject.Alternative;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @MappedDao("Goods")
+@Alternative
 public class H2GoodsDao extends AbstractH2Dao implements GoodsDao {
     private static final Logger LOGGER = LoggerFactory.getLogger(H2ClientDao.class);
     private static final String ADD_GOODS = "INSERT INTO GOODS VALUES (?, ?, ?, ?, ?)";

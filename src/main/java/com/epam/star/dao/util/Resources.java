@@ -1,15 +1,13 @@
 package com.epam.star.dao.util;
 
-import com.epam.star.dao.ClientDao;
-
 import javax.enterprise.inject.Produces;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 public class Resources {
 
+    @SuppressWarnings("unused")
     @Produces
     @PersistenceContext(unitName = "primary")
-    @SuppressWarnings("unused")
     private EntityManager em;
 }

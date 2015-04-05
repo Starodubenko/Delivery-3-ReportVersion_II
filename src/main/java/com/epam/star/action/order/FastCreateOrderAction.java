@@ -77,7 +77,7 @@ public class FastCreateOrderAction implements Action {
 
     private Order createOrder(HttpServletRequest request, DaoManager daoManager, JSONObject jsonObject) throws ActionException, UnsupportedEncodingException, ParseException {
 
-        Validator validator = new Validator(daoManager);
+        Validator validator = new Validator();
 
         Cart cart = (Cart) request.getSession().getAttribute(SHOPPING_CART);
 

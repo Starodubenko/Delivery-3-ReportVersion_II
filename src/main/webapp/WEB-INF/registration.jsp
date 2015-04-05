@@ -69,6 +69,12 @@
 
                     <p class="text-center error-message" id="mobilephoneInput"></p>
                 </div>
+                <div class="form-group input-block" id="emailDiv">
+                    <label for="Email" class="field-description"><fmt:message key="clients.message.email"/></label>
+                    <input type="email" name="email" placeholder="IvanovIvan@mail.ru" class="form-control color-tooltip input" id="Email"><label class="necessary-mark"> *</label>
+
+                    <p class="text-center error-message" id="emailInput"></p>
+                </div>
             </form>
             <div class="input-block reg-button">
                 <button type="button" class="btn btn-primary" id="goRegistration"><fmt:message

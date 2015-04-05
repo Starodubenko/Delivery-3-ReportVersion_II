@@ -10,7 +10,7 @@ import java.util.List;
 public class Client extends AbstractEntity {
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "avatar_id")
+    @JoinColumn(name = "avatar_id", nullable = true)
     private AvatarImage avatar;
     @Column
     private String login;

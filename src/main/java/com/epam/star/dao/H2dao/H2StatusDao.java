@@ -6,6 +6,7 @@ import com.epam.star.entity.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.enterprise.inject.Alternative;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @MappedDao("Status")
+@Alternative
 public class H2StatusDao extends AbstractH2Dao implements StatusDao {
     private static final Logger LOGGER = LoggerFactory.getLogger(H2ClientDao.class);
     private static final String ADD_STATUS = "INSERT INTO STATUS VALUES (?, ?, ?)";

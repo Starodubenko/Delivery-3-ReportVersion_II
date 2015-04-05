@@ -10,6 +10,7 @@ import com.epam.star.entity.OrderedGoods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.enterprise.inject.Alternative;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @MappedDao("Order")
+@Alternative
 public class H2OrderDao<T extends Client> extends AbstractH2Dao implements OrderDao {
     private static final Logger LOGGER = LoggerFactory.getLogger(H2OrderDao.class);
     private static final String INSERT_ORDER = "INSERT INTO  USER_ORDER VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";

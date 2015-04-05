@@ -6,11 +6,13 @@ import com.epam.star.entity.Period;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.enterprise.inject.Alternative;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @MappedDao("Period")
+@Alternative
 public class H2PeriodDao extends AbstractH2Dao implements PeriodDao {
     private static final Logger LOGGER = LoggerFactory.getLogger(H2ClientDao.class);
     private static final String ADD_PERIOD = "INSERT INTO period VALUES (?, ?, ?, ?)";

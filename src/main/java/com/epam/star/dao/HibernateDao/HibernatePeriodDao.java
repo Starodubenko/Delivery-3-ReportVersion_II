@@ -3,7 +3,10 @@ package com.epam.star.dao.HibernateDao;
 
 import com.epam.star.dao.MappedDao;
 import com.epam.star.dao.PeriodDao;
+import com.epam.star.entity.PayCard;
 import com.epam.star.entity.Period;
+
+import javax.persistence.Query;
 import java.sql.Time;
 
 
@@ -12,11 +15,12 @@ public class HibernatePeriodDao extends AbstractHibernateDao<Period> implements 
 
     @Override
     protected Class getEntityClass() {
-        return null;
+        return Period.class;
     }
 
     @Override
     public Period findByPeriod(Time period) {
-        return null;
+        Query query = em.createQuery("select p from Period p where p.period = " + period);
+        return (Period) query.getSingleResult();
     }
 }

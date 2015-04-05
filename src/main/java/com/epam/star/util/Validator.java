@@ -1,8 +1,9 @@
 package com.epam.star.util;
 
-import com.epam.star.dao.H2dao.DaoManager;
+import com.epam.star.dao.ClientDao;
 import com.epam.star.entity.Client;
 
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -41,11 +42,9 @@ public class Validator {
     private Map<String, String> invalidFields = new HashMap<>();
 
     private Matcher matcher;
-    private DaoManager daoManager;
 
-    public Validator(DaoManager daoManager) {
-        this.daoManager = daoManager;
-    }
+    @Inject
+    private ClientDao clientDao;
 
     public boolean isValide() {
 
@@ -69,7 +68,7 @@ public class Validator {
             results.put("login.is.required.field", "false");
             return false;
         } else {
-            if (daoManager.getClientDao().alreadyExist(name)) {
+            if (clientDao.alreadyExist(name)) {
                 results.put("login.already.occupied", "false");
                 return false;
             } else {
